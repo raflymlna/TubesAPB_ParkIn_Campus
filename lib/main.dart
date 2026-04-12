@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'views/home/home_page.dart';
+import 'parking/history_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: .fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const HomePage(),
+      home: const HistoryPage(),
     );
   }
 }
