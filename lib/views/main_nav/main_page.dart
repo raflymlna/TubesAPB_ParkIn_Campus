@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../home/home_page.dart';
-import '../qr/scan_qr_page.dart';
-import '../history/history_page.dart';
+import '../../qr/scan_qr_page.dart';
+import '../../parking/history_page.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -13,11 +13,7 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   int index = 0;
 
-  final pages = [
-    const HomePage(),
-    const QRPage(),
-    const HistoryPage(),
-  ];
+  final pages = [const HomePage(), const QRPage(), const HistoryPage()];
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +22,12 @@ class _MainPageState extends State<MainPage> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: index,
         onTap: (i) => setState(() => index = i),
+        selectedItemColor: const Color(0xFF800000),
+        unselectedItemColor: Colors.grey,
+        selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
+        backgroundColor: Colors.white,
+        type: BottomNavigationBarType.fixed,
+        elevation: 10,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
           BottomNavigationBarItem(icon: Icon(Icons.qr_code), label: "QR"),

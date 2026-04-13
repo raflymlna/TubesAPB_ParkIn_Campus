@@ -1,21 +1,9 @@
 import 'package:flutter/material.dart';
-import 'core/theme/app_theme.dart';
-import 'views/auth/login_page.dart';
 
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'ParkIn Campus',
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.lightTheme,
-      home: LoginPage(),
-    );
-  }
+class AppTheme {
+  static ThemeData lightTheme = ThemeData(
+    primarySwatch: Colors.blue,
+    scaffoldBackgroundColor: Colors.grey[100],
+    appBarTheme: const AppBarTheme(backgroundColor: Colors.blue, elevation: 0),
+  );
 }
