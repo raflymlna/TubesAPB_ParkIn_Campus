@@ -36,14 +36,8 @@ class HomePage extends StatelessWidget {
                   children: [
                     _buildWebStyleCard(
                       "Parking Slot",
-                      "Book now",
+                      "Available Parking Slot",
                       "https://images.unsplash.com/photo-1506521781263-d8422e82f27a?q=80&w=600",
-                    ),
-                    const SizedBox(width: 20),
-                    _buildWebStyleCard(
-                      "Your Cost",
-                      "Pay now",
-                      "https://images.unsplash.com/photo-1726056652582-7c9d202d4018?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
                     ),
                     const SizedBox(width: 20),
                     _buildWebStyleCard(
@@ -156,10 +150,10 @@ class HomePage extends StatelessWidget {
       if (isMobile) const SizedBox(height: 40),
 
       _buildFeatureCard(
-        icon: Icons.credit_card_rounded,
-        title: "Easy to pay",
+        icon: Icons.ads_click_rounded,
+        title: "Easy to use",
         description:
-            "Connect your credit or debit card to your PayByPhone account and pay quickly and securely. Or, where available, opt for Google Pay or Apple Pay to complete transactions.",
+            "Get access to parking spots instantly with our seamless interface. No complicated forms or long queues—just open the app, find your spot, and start your journey within seconds.",
         isMobile: isMobile,
       ),
       if (!isMobile) const SizedBox(width: 40),
