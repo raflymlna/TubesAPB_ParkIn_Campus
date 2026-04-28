@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'registrasi_kendaraan_page.dart';
 
 enum VehicleType { mobil, motor }
 
@@ -12,36 +13,16 @@ class RegistrasiKendaraanSection extends StatefulWidget {
 
 class _RegistrasiKendaraanSectionState
     extends State<RegistrasiKendaraanSection> {
-  final _formKey = GlobalKey<FormState>();
-  VehicleType _vehicleType = VehicleType.mobil;
-  final TextEditingController _nomorController = TextEditingController();
-  final TextEditingController _merkController = TextEditingController();
-  final TextEditingController _modelController = TextEditingController();
-  final TextEditingController _tipeController = TextEditingController();
+  VehicleData? _registeredVehicle;
   bool _isRegistered = false;
 
   @override
   void dispose() {
-    _nomorController.dispose();
-    _merkController.dispose();
-    _modelController.dispose();
-    _tipeController.dispose();
     super.dispose();
   }
 
-  void _registerVehicle() {
-    if (_formKey.currentState?.validate() ?? false) {
-      setState(() {
-        _isRegistered = true;
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Kendaraan berhasil terdaftar')),
-      );
-    }
-  }
-
   String get _jenisLabel {
-    return _vehicleType == VehicleType.mobil ? 'Mobil' : 'Motor';
+    return _registeredVehicle?.type == VehicleType.mobil ? 'Mobil' : 'Motor';
   }
 
   @override
@@ -76,117 +57,78 @@ class _RegistrasiKendaraanSectionState
           Text(
             _isRegistered
                 ? 'Kendaraan Anda sudah terdaftar. Jika sudah lengkap, Anda dapat melanjutkan penggunaan aplikasi.'
-                : 'Anda belum mendaftarkan kendaraan. Silakan isi data kendaraan di bawah ini.',
+                : 'Anda belum mendaftarkan kendaraan. Silakan registrasi kendaraan terlebih dahulu.',
             style: const TextStyle(fontSize: 16, color: Colors.black54),
           ),
           const SizedBox(height: 24),
-          if (!_isRegistered) _buildForm(context) else _buildRegisteredInfo(),
+          if (!_isRegistered)
+            _buildRegistrationButton(context)
+          else
+            _buildRegisteredInfo(),
         ],
       ),
     );
   }
 
-  Widget _buildForm(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Column(
-        children: [
-          DropdownButtonFormField<VehicleType>(
-            value: _vehicleType,
-            decoration: _inputDecoration(
-              label: 'Jenis Kendaraan',
-              icon: Icons.directions_car_outlined,
-            ),
-            items: const [
-              DropdownMenuItem(value: VehicleType.mobil, child: Text('Mobil')),
-              DropdownMenuItem(value: VehicleType.motor, child: Text('Motor')),
-            ],
-            onChanged: (value) {
-              if (value != null) {
-                setState(() {
-                  _vehicleType = value;
-                });
-              }
-            },
+  Widget _buildRegistrationButton(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: const Color(0xFF800000),
+          foregroundColor: Colors.white,
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
           ),
-          const SizedBox(height: 16),
-          TextFormField(
-            controller: _nomorController,
-            decoration: _inputDecoration(
-              label: 'Nomor Kendaraan',
-              icon: Icons.confirmation_num_outlined,
-            ),
-            validator: (value) {
-              if (value == null || value.trim().isEmpty) {
-                return 'Nomor kendaraan wajib diisi';
-              }
-              return null;
-            },
+          padding: const EdgeInsets.symmetric(vertical: 16),
+        ),
+        onPressed: () => _showRegistrationDialog(context),
+        child: const Text(
+          'Registrasi Kendaraan',
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+        ),
+      ),
+    );
+  }
+
+  void _showRegistrationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Registrasi Kendaraan'),
+          content: const Text(
+            'Anda akan diarahkan ke halaman registrasi kendaraan. Pastikan data yang Anda masukkan benar.',
           ),
-          const SizedBox(height: 16),
-          TextFormField(
-            controller: _merkController,
-            decoration: _inputDecoration(
-              label: 'Merk Kendaraan',
-              icon: Icons.branding_watermark_outlined,
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Batal'),
             ),
-            validator: (value) {
-              if (value == null || value.trim().isEmpty) {
-                return 'Merk kendaraan wajib diisi';
-              }
-              return null;
-            },
-          ),
-          const SizedBox(height: 16),
-          TextFormField(
-            controller: _modelController,
-            decoration: _inputDecoration(
-              label: 'Model Kendaraan',
-              icon: Icons.car_rental_outlined,
-            ),
-            validator: (value) {
-              if (value == null || value.trim().isEmpty) {
-                return 'Model kendaraan wajib diisi';
-              }
-              return null;
-            },
-          ),
-          const SizedBox(height: 16),
-          TextFormField(
-            controller: _tipeController,
-            decoration: _inputDecoration(
-              label: 'Tipe Kendaraan',
-              icon: Icons.category_outlined,
-            ),
-            validator: (value) {
-              if (value == null || value.trim().isEmpty) {
-                return 'Tipe kendaraan wajib diisi';
-              }
-              return null;
-            },
-          ),
-          const SizedBox(height: 24),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
+            ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF800000),
                 foregroundColor: Colors.white,
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                padding: const EdgeInsets.symmetric(vertical: 16),
               ),
-              onPressed: _registerVehicle,
-              child: const Text(
-                'Daftar Kendaraan',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
-              ),
+              onPressed: () async {
+                final result = await Navigator.of(context).push<VehicleData>(
+                  MaterialPageRoute(
+                    builder: (context) => const RegistrasiKendaraanPage(),
+                  ),
+                );
+                if (result != null) {
+                  setState(() {
+                    _registeredVehicle = result;
+                    _isRegistered = true;
+                  });
+                }
+              },
+              child: const Text('Lanjutkan'),
             ),
-          ),
-        ],
-      ),
+          ],
+        );
+      },
     );
   }
 
@@ -237,13 +179,11 @@ class _RegistrasiKendaraanSectionState
                 ),
               ),
               const SizedBox(height: 8),
-              Text('Nomor Kendaraan: ${_nomorController.text}'),
+              Text('Nomor Kendaraan: ${_registeredVehicle?.nomor ?? ''}'),
               const SizedBox(height: 8),
-              Text('Merk Kendaraan: ${_merkController.text}'),
+              Text('Merk Kendaraan: ${_registeredVehicle?.merk ?? ''}'),
               const SizedBox(height: 8),
-              Text('Model Kendaraan: ${_modelController.text}'),
-              const SizedBox(height: 8),
-              Text('Tipe Kendaraan: ${_tipeController.text}'),
+              Text('Model Kendaraan: ${_registeredVehicle?.model ?? ''}'),
             ],
           ),
         ),
