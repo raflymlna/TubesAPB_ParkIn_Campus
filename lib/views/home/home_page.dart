@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'registrasi_kendaraan_section.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -26,6 +27,8 @@ class HomePage extends StatelessWidget {
                   color: Colors.black,
                 ),
               ),
+              const SizedBox(height: 24),
+              const RegistrasiKendaraanSection(),
               const SizedBox(height: 40),
 
               // Section 2: Barisan Card (Horizontal Scroll)
