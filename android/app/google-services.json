@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1011317361829",
+    "project_id": "parkin-campus",
+    "storage_bucket": "parkin-campus.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1011317361829:android:8dc558076d639815a9114c",
+        "android_client_info": {
+          "package_name": "com.example.park_in_campus"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxtSPE5MCQTvc_RNVZrGZGhkPjhC1skCw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
