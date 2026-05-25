@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../services/auth_service.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -19,6 +20,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   bool obscurePassword = true;
   bool obscureConfirmPassword = true;
+  bool isLoading = false;
 
   @override
   void dispose() {
@@ -272,23 +274,54 @@ class _RegisterPageState extends State<RegisterPage> {
                                     borderRadius: BorderRadius.circular(16),
                                   ),
                                 ),
-                                onPressed: () {
+                                onPressed: () async {
                                   if (_formKey.currentState!.validate()) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text('Registrasi berhasil'),
-                                      ),
+                                    setState(() {
+                                      isLoading = true;
+                                    });
+
+                                    String?
+                                    result = await AuthService().registerUser(
+                                      fullName: fullNameController.text.trim(),
+                                      email: emailController.text.trim(),
+                                      phone: phoneController.text.trim(),
+                                      password: passwordController.text.trim(),
                                     );
-                                    Navigator.pop(context);
+
+                                    setState(() {
+                                      isLoading = false;
+                                    });
+
+                                    if (result == null) {
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        const SnackBar(
+                                          content: Text('Registrasi Berhasil'),
+                                        ),
+                                      );
+
+                                      Navigator.pop(context);
+                                    } else {
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        SnackBar(content: Text(result)),
+                                      );
+                                    }
                                   }
                                 },
-                                child: const Text(
-                                  'Daftar',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
+                                child: isLoading
+                                    ? const CircularProgressIndicator(
+                                        color: Colors.white,
+                                      )
+                                    : const Text(
+                                        'Daftar',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
                               ),
                             ),
                             const SizedBox(height: 14),

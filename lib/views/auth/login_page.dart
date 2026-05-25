@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:park_in_campus/services/auth_service.dart';
 import '../main_nav/main_page.dart';
 import 'register_page.dart';
 
@@ -15,6 +16,7 @@ class _LoginPageState extends State<LoginPage> {
   final passwordController = TextEditingController();
 
   bool obscurePassword = true;
+  bool isLoading = false;
 
   @override
   void dispose() {
@@ -220,23 +222,51 @@ class _LoginPageState extends State<LoginPage> {
                                     borderRadius: BorderRadius.circular(16),
                                   ),
                                 ),
-                                onPressed: () {
+                                onPressed: () async {
                                   if (_formKey.currentState!.validate()) {
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (_) => const MainPage(),
-                                      ),
-                                    );
+                                    setState(() {
+                                      isLoading = true;
+                                    });
+
+                                    String? result = await AuthService()
+                                        .loginUser(
+                                          email: emailController.text.trim(),
+                                          password: passwordController.text
+                                              .trim(),
+                                        );
+
+                                    setState(() {
+                                      isLoading = false;
+                                    });
+
+                                    if (result == null) {
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => const MainPage(),
+                                        ),
+                                      );
+                                    } else {
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        SnackBar(content: Text(result)),
+                                      );
+                                    }
                                   }
                                 },
-                                child: const Text(
-                                  'Login',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
+
+                                child: isLoading
+                                    ? const CircularProgressIndicator(
+                                        color: Colors.white,
+                                      )
+                                    : const Text(
+                                        'Login',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
                               ),
                             ),
                             const SizedBox(height: 18),
