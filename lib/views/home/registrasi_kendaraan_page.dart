@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../widgets/license_plate_input.dart';
 
 enum VehicleType { mobil, motor }
 
@@ -40,20 +41,37 @@ class _RegistrasiKendaraanPageState extends State<RegistrasiKendaraanPage> {
   }
 
   void _registerVehicle() {
-    if (_formKey.currentState?.validate() ?? false) {
-      // Simulasi registrasi berhasil
+    // Validate standard form fields
+    if (!(_formKey.currentState?.validate() ?? false)) return;
+
+    // Validate license plate (expected format: REGION NUMBER SERIES, e.g. B 1234 AMN)
+    final plate = _nomorController.text.trim();
+      final plateRegex = RegExp(r'^[A-Z]{1,2}\s\d{1,4}\s[A-Z]{1,3}$');
+    if (plate.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Kendaraan berhasil terdaftar')),
+        const SnackBar(content: Text('Nomor kendaraan wajib diisi')),
       );
-      // Kembali ke homepage dengan data kendaraan
-      final vehicleData = VehicleData(
-        type: _vehicleType,
-        nomor: _nomorController.text,
-        merk: _merkController.text,
-        model: _modelController.text,
-      );
-      Navigator.of(context).pop(vehicleData);
+      return;
     }
+    if (!plateRegex.hasMatch(plate)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Format plat tidak valid. Contoh: B 1234 AMN')),
+      );
+      return;
+    }
+
+    // Simulasi registrasi berhasil
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Kendaraan berhasil terdaftar')),
+    );
+    // Kembali ke homepage dengan data kendaraan
+    final vehicleData = VehicleData(
+      type: _vehicleType,
+      nomor: _nomorController.text,
+      merk: _merkController.text,
+      model: _modelController.text,
+    );
+    Navigator.of(context).pop(vehicleData);
   }
 
   @override
@@ -122,17 +140,11 @@ class _RegistrasiKendaraanPageState extends State<RegistrasiKendaraanPage> {
                         },
                       ),
                       const SizedBox(height: 16),
-                      TextFormField(
-                        controller: _nomorController,
-                        decoration: _inputDecoration(
-                          label: 'Nomor Kendaraan',
-                          icon: Icons.confirmation_num_outlined,
-                        ),
-                        validator: (value) {
-                          if (value == null || value.trim().isEmpty) {
-                            return 'Nomor kendaraan wajib diisi';
-                          }
-                          return null;
+                      // License plate input (split fields: region - number - series)
+                      LicensePlateInput(
+                        initial: _nomorController.text,
+                        onChanged: (plate) {
+                          _nomorController.text = plate;
                         },
                       ),
                       const SizedBox(height: 16),

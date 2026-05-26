@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'registrasi_kendaraan_page.dart';
+import '../../widgets/license_plate_input.dart';
 
 enum VehicleType { mobil, motor }
 
@@ -15,6 +16,7 @@ class _RegistrasiKendaraanSectionState
     extends State<RegistrasiKendaraanSection> {
   VehicleData? _registeredVehicle;
   bool _isRegistered = false;
+  String _previewPlate = '';
 
   @override
   void dispose() {
@@ -62,7 +64,26 @@ class _RegistrasiKendaraanSectionState
           ),
           const SizedBox(height: 24),
           if (!_isRegistered)
-            _buildRegistrationButton(context)
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Inline plate input for quick preview
+                LicensePlateInput(
+                  onChanged: (plate) {
+                    setState(() {
+                      _previewPlate = plate;
+                    });
+                  },
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  _previewPlate.isEmpty ? 'Preview: -' : _previewPlate,
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                ),
+                const SizedBox(height: 16),
+                _buildRegistrationButton(context),
+              ],
+            )
           else
             _buildRegisteredInfo(),
         ],
