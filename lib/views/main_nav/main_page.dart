@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../home/home_page.dart';
 import '../../qr/scan_qr_page.dart';
 import '../../parking/history_page.dart';
+import '../profile/profile_page.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -13,7 +14,7 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   int index = 0;
 
-  final pages = [const HomePage(), const QRPage(), const HistoryPage()];
+  final pages = [const HomePage(), const QRPage(), const HistoryPage(), const ProfilePage(),];
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +33,7 @@ class _MainPageState extends State<MainPage> {
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
           BottomNavigationBarItem(icon: Icon(Icons.qr_code), label: "QR"),
           BottomNavigationBarItem(icon: Icon(Icons.history), label: "History"),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
         ],
       ),
     );
