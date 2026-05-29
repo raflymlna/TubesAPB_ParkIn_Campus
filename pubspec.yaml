@@ -33,9 +33,9 @@ dependencies:
   google_fonts: ^6.0.0
   qr_flutter: ^4.1.0
   mobile_scanner: ^3.5.0
-  firebase_core: ^4.0.0
+  firebase_core: ^4.9.0
   firebase_auth: ^6.0.0
-  cloud_firestore: ^6.0.0
+  cloud_firestore: ^6.4.1
   fluttertoast: ^8.2.8
   provider: ^6.1.2
 
