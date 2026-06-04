@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../parking/find_my_ride.dart';
 
 class HistoryPage extends StatelessWidget {
   const HistoryPage({super.key});
@@ -25,14 +26,43 @@ class HistoryPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              "Your Parking Activity",
-              style: TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.w900,
-                color: Colors.black,
-              ),
-            ),
-            const SizedBox(height: 30),
+  "Your Parking Activity",
+  style: TextStyle(
+    fontSize: 32,
+    fontWeight: FontWeight.w900,
+    color: Colors.black,
+  ),
+),
+
+const SizedBox(height: 20),
+
+SizedBox(
+  width: double.infinity,
+  child: ElevatedButton.icon(
+    icon: const Icon(Icons.directions_car),
+    label: const Text("Find My Ride"),
+    onPressed: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const FindMyRidePage(),
+        ),
+      );
+    },
+    style: ElevatedButton.styleFrom(
+      backgroundColor: const Color(0xFF800000),
+      foregroundColor: Colors.white,
+      padding: const EdgeInsets.symmetric(
+        vertical: 18,
+      ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+    ),
+  ),
+),
+
+const SizedBox(height: 30),
 
             Expanded(
               child: ListView(
