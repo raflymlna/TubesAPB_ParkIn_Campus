@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class QRPage extends StatefulWidget {
   const QRPage({super.key});
@@ -12,9 +13,9 @@ class _QRPageState extends State<QRPage> {
   bool isScanned = false;
   bool isParked = false;
 
-  String? currentBuilding; // 🔥 SIMPAN GEDUNG
+  String? currentBuilding; //  SIMPAN GEDUNG
 
-  void handleScan(String? code) {
+  Future<void> handleScan(String? code) async {
     if (code == null || isScanned) return;
 
     setState(() => isScanned = true);
@@ -36,33 +37,56 @@ class _QRPageState extends State<QRPage> {
     final action = parts[0].trim().toLowerCase();
     final building = parts[1].trim();
 
-    // 🟢 PARK IN
+    //  PARK IN
     if (action == "park in") {
       if (isParked) {
         showResult("Kamu sudah parkir di $currentBuilding!");
       } else {
         isParked = true;
         currentBuilding = building;
+
+        await FirebaseFirestore.instance
+            .collection('parking_history')
+            .add({
+          'location': building,
+          'checkInTime': Timestamp.now(),
+          'checkOutTime': null,
+          'status': 'Parking',
+        });
         showResult("Berhasil masuk parkir di $building");
       }
     }
 
-    // 🔴 PARK OUT
+    //  PARK OUT
     else if (action == "park out") {
       if (!isParked) {
         showResult("Kamu belum parkir!");
-      } 
+      }
       else if (building != currentBuilding) {
         showResult("Kamu parkir di $currentBuilding!");
-      } 
-      else {
-        isParked = false;
-        currentBuilding = null;
-        showResult("Berhasil keluar parkir dari $building");
       }
+      else {
+        final query = await FirebaseFirestore.instance
+        .collection('parking_history')
+        .where('location', isEqualTo: building)
+        .where('status', isEqualTo: 'Parking')
+        .limit(1)
+        .get();
+            
+      if (query.docs.isNotEmpty) {
+        await query.docs.first.reference.update({
+          'status': 'Out',
+          'checkOutTime': Timestamp.now(),
+        });
+      }
+      isParked = false;
+      currentBuilding = null;
+                
+      showResult("Berhasil keluar parkir dari $building");
     }
+  }
 
-    // ❌ TIDAK DIKENALI
+    //  TIDAK DIKENALI
     else {
       showResult("QR tidak dikenali!");
     }
@@ -179,7 +203,7 @@ class _QRPageState extends State<QRPage> {
   }
 }
 
-// 🎨 Overlay
+//  Overlay
 class ScannerOverlay extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
