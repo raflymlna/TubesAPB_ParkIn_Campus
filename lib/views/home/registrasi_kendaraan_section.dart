@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'registrasi_kendaraan_page.dart';
-import '../../widgets/license_plate_input.dart';
-
-enum VehicleType { mobil, motor }
+import '../../services/vehicle_service.dart';
+import '../../models/vehicle_model.dart';
 
 class RegistrasiKendaraanSection extends StatefulWidget {
   const RegistrasiKendaraanSection({super.key});
@@ -12,20 +11,8 @@ class RegistrasiKendaraanSection extends StatefulWidget {
       _RegistrasiKendaraanSectionState();
 }
 
-class _RegistrasiKendaraanSectionState
-    extends State<RegistrasiKendaraanSection> {
-  VehicleData? _registeredVehicle;
-  bool _isRegistered = false;
-  String _previewPlate = '';
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  String get _jenisLabel {
-    return _registeredVehicle?.type == VehicleType.mobil ? 'Mobil' : 'Motor';
-  }
+class _RegistrasiKendaraanSectionState extends State<RegistrasiKendaraanSection> {
+  final _vehicleService = VehicleService();
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +35,7 @@ class _RegistrasiKendaraanSectionState
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            'Registrasi Kendaraan',
+            'Kendaraan Terdaftar',
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
@@ -56,164 +43,136 @@ class _RegistrasiKendaraanSectionState
             ),
           ),
           const SizedBox(height: 12),
-          Text(
-            _isRegistered
-                ? 'Kendaraan Anda sudah terdaftar. Jika sudah lengkap, Anda dapat melanjutkan penggunaan aplikasi.'
-                : 'Anda belum mendaftarkan kendaraan. Silakan registrasi kendaraan terlebih dahulu.',
-            style: const TextStyle(fontSize: 16, color: Colors.black54),
+          const Text(
+            'Kelola kendaraan Anda yang sudah terdaftar di sistem.',
+            style: TextStyle(fontSize: 14, color: Colors.black54),
           ),
           const SizedBox(height: 24),
-          if (!_isRegistered)
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Inline plate input for quick preview
-                LicensePlateInput(
-                  onChanged: (plate) {
-                    setState(() {
-                      _previewPlate = plate;
-                    });
-                  },
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  _previewPlate.isEmpty ? 'Preview: -' : _previewPlate,
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                ),
-                const SizedBox(height: 16),
-                _buildRegistrationButton(context),
-              ],
-            )
-          else
-            _buildRegisteredInfo(),
+          StreamBuilder<List<Vehicle>>(
+            stream: _vehicleService.streamUserVehicles(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
+
+              if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              }
+
+              final vehicles = snapshot.data ?? [];
+
+              if (vehicles.isEmpty) {
+                return Column(
+                  children: [
+                    Text(
+                      'Belum ada kendaraan terdaftar',
+                      style: TextStyle(color: Colors.grey[600], fontSize: 14),
+                    ),
+                    const SizedBox(height: 16),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF800000),
+                          foregroundColor: Colors.white,
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                        ),
+                        icon: const Icon(Icons.add),
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const RegistrasiKendaraanPage(),
+                            ),
+                          );
+                        },
+                        label: const Text('Tambah Kendaraan'),
+                      ),
+                    ),
+                  ],
+                );
+              }
+
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ...vehicles.map((vehicle) => _buildVehicleItem(vehicle)),
+                  const SizedBox(height: 16),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF800000),
+                        foregroundColor: Colors.white,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                      ),
+                      icon: const Icon(Icons.add),
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const RegistrasiKendaraanPage(),
+                          ),
+                        );
+                      },
+                      label: const Text('Tambah Kendaraan Baru'),
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildRegistrationButton(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF800000),
-          foregroundColor: Colors.white,
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          padding: const EdgeInsets.symmetric(vertical: 16),
-        ),
-        onPressed: () => _showRegistrationDialog(context),
-        child: const Text(
-          'Registrasi Kendaraan',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
-        ),
+  Widget _buildVehicleItem(Vehicle vehicle) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: const Color(0xFF800000).withOpacity(0.08),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: const Color(0xFF800000).withOpacity(0.2)),
       ),
-    );
-  }
-
-  void _showRegistrationDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Registrasi Kendaraan'),
-          content: const Text(
-            'Anda akan diarahkan ke halaman registrasi kendaraan. Pastikan data yang Anda masukkan benar.',
+      child: Row(
+        children: [
+          Icon(
+            vehicle.type == 'mobil' ? Icons.directions_car : Icons.two_wheeler,
+            color: const Color(0xFF800000),
+            size: 28,
           ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Batal'),
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF800000),
-                foregroundColor: Colors.white,
-              ),
-              onPressed: () async {
-                final result = await Navigator.of(context).push<VehicleData>(
-                  MaterialPageRoute(
-                    builder: (context) => const RegistrasiKendaraanPage(),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  vehicle.licensePlate,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
                   ),
-                );
-                if (result != null) {
-                  setState(() {
-                    _registeredVehicle = result;
-                    _isRegistered = true;
-                  });
-                }
-              },
-              child: const Text('Lanjutkan'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  InputDecoration _inputDecoration({
-    required String label,
-    required IconData icon,
-  }) {
-    return InputDecoration(
-      labelText: label,
-      prefixIcon: Icon(icon),
-      filled: true,
-      fillColor: const Color(0xFFF7F7F7),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(16),
-        borderSide: const BorderSide(color: Color(0xFFE0E0E0)),
-      ),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(16),
-        borderSide: const BorderSide(color: Color(0xFFE0E0E0)),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(16),
-        borderSide: const BorderSide(color: Color(0xFF800000), width: 1.5),
-      ),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
-    );
-  }
-
-  Widget _buildRegisteredInfo() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            color: const Color(0xFF800000).withOpacity(0.08),
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Jenis Kendaraan: $_jenisLabel',
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
                 ),
-              ),
-              const SizedBox(height: 8),
-              Text('Nomor Kendaraan: ${_registeredVehicle?.nomor ?? ''}'),
-              const SizedBox(height: 8),
-              Text('Merk Kendaraan: ${_registeredVehicle?.merk ?? ''}'),
-              const SizedBox(height: 8),
-              Text('Model Kendaraan: ${_registeredVehicle?.model ?? ''}'),
-            ],
+                Text(
+                  '${vehicle.brand} ${vehicle.model}',
+                  style: TextStyle(
+                    color: Colors.grey[600],
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-        const SizedBox(height: 24),
-        const Text(
-          'Jika sudah terdaftar, Anda dapat langsung melanjutkan ke bagian lainnya.',
-          style: TextStyle(fontSize: 16, color: Colors.black54),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

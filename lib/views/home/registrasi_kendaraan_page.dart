@@ -1,21 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../widgets/license_plate_input.dart';
-
-enum VehicleType { mobil, motor }
-
-class VehicleData {
-  final VehicleType type;
-  final String nomor;
-  final String merk;
-  final String model;
-
-  VehicleData({
-    required this.type,
-    required this.nomor,
-    required this.merk,
-    required this.model,
-  });
-}
+import '../../services/vehicle_service.dart';
+import '../../models/vehicle_model.dart';
 
 class RegistrasiKendaraanPage extends StatefulWidget {
   const RegistrasiKendaraanPage({super.key});
@@ -26,11 +12,14 @@ class RegistrasiKendaraanPage extends StatefulWidget {
 }
 
 class _RegistrasiKendaraanPageState extends State<RegistrasiKendaraanPage> {
+  final _vehicleService = VehicleService();
   final _formKey = GlobalKey<FormState>();
-  VehicleType _vehicleType = VehicleType.mobil;
+  String _vehicleType = 'mobil';
   final TextEditingController _nomorController = TextEditingController();
   final TextEditingController _merkController = TextEditingController();
   final TextEditingController _modelController = TextEditingController();
+  bool _isLoading = false;
+  Vehicle? _editingVehicle;
 
   @override
   void dispose() {
@@ -40,13 +29,22 @@ class _RegistrasiKendaraanPageState extends State<RegistrasiKendaraanPage> {
     super.dispose();
   }
 
-  void _registerVehicle() {
+  void _clearForm() {
+    _nomorController.clear();
+    _merkController.clear();
+    _modelController.clear();
+    _vehicleType = 'mobil';
+    _editingVehicle = null;
+    _formKey.currentState?.reset();
+  }
+
+  void _addOrUpdateVehicle() async {
     // Validate standard form fields
     if (!(_formKey.currentState?.validate() ?? false)) return;
 
     // Validate license plate (expected format: REGION NUMBER SERIES, e.g. B 1234 AMN)
     final plate = _nomorController.text.trim();
-      final plateRegex = RegExp(r'^[A-Z]{1,2}\s\d{1,4}\s[A-Z]{1,3}$');
+    final plateRegex = RegExp(r'^[A-Z]{1,2}\s\d{1,4}\s[A-Z]{1,3}$');
     if (plate.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Nomor kendaraan wajib diisi')),
@@ -60,19 +58,96 @@ class _RegistrasiKendaraanPageState extends State<RegistrasiKendaraanPage> {
       return;
     }
 
-    // Simulasi registrasi berhasil
+    setState(() => _isLoading = true);
+
+    String? error;
+    if (_editingVehicle == null) {
+      // Add new vehicle
+      error = await _vehicleService.addVehicle(
+        type: _vehicleType,
+        licensePlate: plate,
+        brand: _merkController.text.trim(),
+        model: _modelController.text.trim(),
+      );
+    } else {
+      // Update existing vehicle
+      error = await _vehicleService.updateVehicle(
+        vehicleId: _editingVehicle!.id!,
+        type: _vehicleType,
+        licensePlate: plate,
+        brand: _merkController.text.trim(),
+        model: _modelController.text.trim(),
+      );
+    }
+
+    setState(() => _isLoading = false);
+
+    if (error != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: $error'), backgroundColor: Colors.red),
+      );
+      return;
+    }
+
+    final action = _editingVehicle == null ? 'ditambahkan' : 'diubah';
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Kendaraan berhasil terdaftar')),
+      SnackBar(content: Text('Kendaraan berhasil $action')),
     );
-    // Kembali ke homepage dengan data kendaraan
-    final vehicleData = VehicleData(
-      type: _vehicleType,
-      nomor: _nomorController.text,
-      merk: _merkController.text,
-      model: _modelController.text,
-    );
-    Navigator.of(context).pop(vehicleData);
+    _clearForm();
   }
+
+  void _editVehicle(Vehicle vehicle) {
+    _nomorController.text = vehicle.licensePlate;
+    _merkController.text = vehicle.brand;
+    _modelController.text = vehicle.model;
+    _vehicleType = vehicle.type;
+    _editingVehicle = vehicle;
+    setState(() {});
+    _scrollToForm();
+  }
+
+  void _deleteVehicle(Vehicle vehicle) async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Hapus Kendaraan'),
+        content: Text('Yakin hapus ${vehicle.licensePlate}?'),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Batal')),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text('Hapus', style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
+    );
+
+    if (confirm != true) return;
+
+    final error = await _vehicleService.deleteVehicle(vehicle.id!);
+    if (error != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: $error'), backgroundColor: Colors.red),
+      );
+      return;
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Kendaraan berhasil dihapus')),
+    );
+  }
+
+  void _scrollToForm() {
+    Future.delayed(const Duration(milliseconds: 100), () {
+      _scrollController.animateTo(
+        0,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    });
+  }
+
+  late final ScrollController _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -85,67 +160,56 @@ class _RegistrasiKendaraanPageState extends State<RegistrasiKendaraanPage> {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
+          controller: _scrollController,
           padding: const EdgeInsets.all(20),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(24),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(24),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.06),
-                        blurRadius: 18,
-                        offset: const Offset(0, 10),
-                      ),
-                    ],
-                  ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // Form tambah/edit kendaraan
+              Container(
+                padding: const EdgeInsets.all(24),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(24),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.06),
+                      blurRadius: 18,
+                      offset: const Offset(0, 10),
+                    ),
+                  ],
+                ),
+                child: Form(
+                  key: _formKey,
                   child: Column(
                     children: [
-                      const Text(
-                        'Data Kendaraan',
-                        style: TextStyle(
+                      Text(
+                        _editingVehicle == null ? 'Tambah Kendaraan Baru' : 'Edit Kendaraan',
+                        style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                           color: Colors.black,
                         ),
                       ),
                       const SizedBox(height: 24),
-                      DropdownButtonFormField<VehicleType>(
+                      DropdownButtonFormField<String>(
                         value: _vehicleType,
                         decoration: _inputDecoration(
                           label: 'Jenis Kendaraan',
                           icon: Icons.directions_car_outlined,
                         ),
                         items: const [
-                          DropdownMenuItem(
-                            value: VehicleType.mobil,
-                            child: Text('Mobil'),
-                          ),
-                          DropdownMenuItem(
-                            value: VehicleType.motor,
-                            child: Text('Motor'),
-                          ),
+                          DropdownMenuItem(value: 'mobil', child: Text('Mobil')),
+                          DropdownMenuItem(value: 'motor', child: Text('Motor')),
                         ],
                         onChanged: (value) {
-                          if (value != null) {
-                            setState(() {
-                              _vehicleType = value;
-                            });
-                          }
+                          if (value != null) setState(() => _vehicleType = value);
                         },
                       ),
                       const SizedBox(height: 16),
-                      // License plate input (split fields: region - number - series)
                       LicensePlateInput(
                         initial: _nomorController.text,
-                        onChanged: (plate) {
-                          _nomorController.text = plate;
-                        },
+                        onChanged: (plate) => _nomorController.text = plate,
                       ),
                       const SizedBox(height: 16),
                       TextFormField(
@@ -176,35 +240,157 @@ class _RegistrasiKendaraanPageState extends State<RegistrasiKendaraanPage> {
                         },
                       ),
                       const SizedBox(height: 24),
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF800000),
-                            foregroundColor: Colors.white,
-                            elevation: 0,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16),
+                      Row(
+                        children: [
+                          if (_editingVehicle != null)
+                            Expanded(
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.grey,
+                                  foregroundColor: Colors.white,
+                                  elevation: 0,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(16),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(vertical: 16),
+                                ),
+                                onPressed: _isLoading ? null : _clearForm,
+                                child: const Text('Batal', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+                              ),
                             ),
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                          ),
-                          onPressed: _registerVehicle,
-                          child: const Text(
-                            'Daftar Kendaraan',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
+                          if (_editingVehicle != null) const SizedBox(width: 12),
+                          Expanded(
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFF800000),
+                                foregroundColor: Colors.white,
+                                elevation: 0,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                                padding: const EdgeInsets.symmetric(vertical: 16),
+                              ),
+                              onPressed: _isLoading ? null : _addOrUpdateVehicle,
+                              child: Text(
+                                _isLoading
+                                    ? 'Menyimpan...'
+                                    : (_editingVehicle == null ? 'Tambah Kendaraan' : 'Perbarui'),
+                                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+                              ),
                             ),
                           ),
-                        ),
+                        ],
                       ),
                     ],
                   ),
                 ),
-              ],
-            ),
+              ),
+              const SizedBox(height: 24),
+              // List kendaraan
+              const Text(
+                'Kendaraan Terdaftar',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 16),
+              StreamBuilder<List<Vehicle>>(
+                stream: _vehicleService.streamUserVehicles(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+
+                  if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  }
+
+                  final vehicles = snapshot.data ?? [];
+
+                  if (vehicles.isEmpty) {
+                    return Container(
+                      padding: const EdgeInsets.all(24),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Center(
+                        child: Text('Belum ada kendaraan terdaftar'),
+                      ),
+                    );
+                  }
+
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: vehicles.length,
+                    itemBuilder: (context, index) {
+                      final vehicle = vehicles[index];
+                      return _buildVehicleCard(vehicle);
+                    },
+                  );
+                },
+              ),
+            ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildVehicleCard(Vehicle vehicle) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey[300]!),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(
+                vehicle.type == 'mobil' ? Icons.directions_car : Icons.two_wheeler,
+                color: const Color(0xFF800000),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      vehicle.licensePlate,
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                    Text(
+                      '${vehicle.brand} ${vehicle.model}',
+                      style: TextStyle(color: Colors.grey[700], fontSize: 12),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              TextButton.icon(
+                onPressed: () => _editVehicle(vehicle),
+                icon: const Icon(Icons.edit),
+                label: const Text('Edit'),
+                style: TextButton.styleFrom(foregroundColor: Colors.blue),
+              ),
+              TextButton.icon(
+                onPressed: () => _deleteVehicle(vehicle),
+                icon: const Icon(Icons.delete),
+                label: const Text('Hapus'),
+                style: TextButton.styleFrom(foregroundColor: Colors.red),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
