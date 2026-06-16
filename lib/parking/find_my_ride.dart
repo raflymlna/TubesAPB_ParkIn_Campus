@@ -1,21 +1,42 @@
-import 'package:flutter/material.dart'; // ganti author
+import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
 
-class FindMyRidePage extends StatelessWidget {
+class FindMyRidePage extends StatefulWidget {
   const FindMyRidePage({super.key});
+
+  @override
+  State<FindMyRidePage> createState() => _FindMyRidePageState();
+}
+
+class _FindMyRidePageState extends State<FindMyRidePage> {
+  bool showNavigation = false;
+
+  // Simulasi posisi user
+  final LatLng userLocation =
+      const LatLng(-6.9735, 107.6298);
+
+  // Simulasi posisi motor
+  final LatLng vehicleLocation =
+      const LatLng(-6.9730, 107.6302);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+
       appBar: AppBar(
         title: const Text("Find My Ride"),
         backgroundColor: const Color(0xFF800000),
         foregroundColor: Colors.white,
       ),
+
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(30),
+
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+
           children: [
             const Text(
               "Vehicle Found",
@@ -30,10 +51,14 @@ class FindMyRidePage extends StatelessWidget {
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(24),
+
               decoration: BoxDecoration(
-                color: const Color(0xFF800000).withOpacity(0.05),
-                borderRadius: BorderRadius.circular(20),
+                color: const Color(0xFF800000)
+                    .withOpacity(0.05),
+                borderRadius:
+                    BorderRadius.circular(20),
               ),
+
               child: Column(
                 children: [
                   const Icon(
@@ -55,19 +80,25 @@ class FindMyRidePage extends StatelessWidget {
                   const SizedBox(height: 10),
 
                   Container(
-                    padding: const EdgeInsets.symmetric(
+                    padding:
+                        const EdgeInsets.symmetric(
                       horizontal: 15,
                       vertical: 8,
                     ),
+
                     decoration: BoxDecoration(
-                      color: Colors.blue.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(8),
+                      color: Colors.blue
+                          .withOpacity(0.1),
+                      borderRadius:
+                          BorderRadius.circular(8),
                     ),
+
                     child: const Text(
                       "Currently Parked",
                       style: TextStyle(
                         color: Colors.blue,
-                        fontWeight: FontWeight.bold,
+                        fontWeight:
+                            FontWeight.bold,
                       ),
                     ),
                   ),
@@ -110,10 +141,15 @@ class FindMyRidePage extends StatelessWidget {
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(25),
+
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: const Color(0xFF800000).withOpacity(0.05),
+                borderRadius:
+                    BorderRadius.circular(20),
+
+                color: const Color(0xFF800000)
+                    .withOpacity(0.05),
               ),
+
               child: Column(
                 children: [
                   _parkingRow([
@@ -151,27 +187,176 @@ class FindMyRidePage extends StatelessWidget {
 
             SizedBox(
               width: double.infinity,
+
               child: ElevatedButton.icon(
-                icon: const Icon(Icons.navigation),
-                label: const Text("Navigate To Slot"),
+                icon: const Icon(
+                  Icons.navigation,
+                ),
+
+                label: Text(
+                  showNavigation
+                      ? "Navigation Active"
+                      : "Navigate To Slot",
+                ),
+
                 onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text(
-                        "Navigating to Slot A-27",
-                      ),
-                    ),
-                  );
+                  setState(() {
+                    showNavigation = true;
+                  });
                 },
+
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF800000),
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(
+                  backgroundColor:
+                      const Color(0xFF800000),
+
+                  foregroundColor:
+                      Colors.white,
+
+                  padding:
+                      const EdgeInsets.symmetric(
                     vertical: 18,
                   ),
                 ),
               ),
             ),
+
+            const SizedBox(height: 30),
+
+            if (showNavigation)
+              Column(
+                crossAxisAlignment:
+                    CrossAxisAlignment.start,
+
+                children: [
+                  const Text(
+                    "Navigation Route",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight:
+                          FontWeight.bold,
+                    ),
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  SizedBox(
+                    height: 450,
+
+                    child: FlutterMap(
+                      options: MapOptions(
+                        initialCenter:
+                            vehicleLocation,
+                        initialZoom: 18,
+                      ),
+
+                      children: [
+                        TileLayer(
+                          urlTemplate:
+                              'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                        ),
+
+                        PolylineLayer(
+                          polylines: [
+                            Polyline(
+                              points: [
+                                userLocation,
+                                vehicleLocation,
+                              ],
+                              strokeWidth: 5,
+                              color: Colors.blue,
+                            ),
+                          ],
+                        ),
+
+                        MarkerLayer(
+                          markers: [
+                            Marker(
+                              point:
+                                  userLocation,
+
+                              width: 80,
+                              height: 80,
+
+                              child: const Icon(
+                                Icons
+                                    .person_pin_circle,
+                                color:
+                                    Colors.blue,
+                                size: 40,
+                              ),
+                            ),
+
+                            Marker(
+                              point:
+                                  vehicleLocation,
+
+                              width: 80,
+                              height: 80,
+
+                              child: const Icon(
+                                Icons
+                                    .motorcycle,
+                                color: Color(
+                                    0xFF800000),
+                                size: 40,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  Container(
+                    width: double.infinity,
+                    padding:
+                        const EdgeInsets.all(20),
+
+                    decoration: BoxDecoration(
+                      color: Colors.blue
+                          .withOpacity(0.08),
+
+                      borderRadius:
+                          BorderRadius.circular(
+                        20,
+                      ),
+                    ),
+
+                    child: const Column(
+                      children: [
+                        Text(
+                          "Directions",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight:
+                                FontWeight.bold,
+                          ),
+                        ),
+
+                        SizedBox(height: 15),
+
+                        Text(
+                          "1. Walk straight for 20 meters",
+                        ),
+
+                        SizedBox(height: 8),
+
+                        Text(
+                          "2. Turn right to Row A",
+                        ),
+
+                        SizedBox(height: 8),
+
+                        Text(
+                          "3. Your vehicle is located at Slot A-27",
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
           ],
         ),
       ),
@@ -184,20 +369,25 @@ class FindMyRidePage extends StatelessWidget {
     String value,
   ) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 15),
+      padding:
+          const EdgeInsets.only(bottom: 15),
+
       child: Row(
         children: [
           Icon(
             icon,
             color: const Color(0xFF800000),
           ),
+
           const SizedBox(width: 15),
+
           Text(
             "$title : ",
             style: const TextStyle(
               fontWeight: FontWeight.bold,
             ),
           ),
+
           Expanded(
             child: Text(value),
           ),
@@ -208,24 +398,32 @@ class FindMyRidePage extends StatelessWidget {
 
   Widget _parkingRow(List<String> slots) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      mainAxisAlignment:
+          MainAxisAlignment.spaceEvenly,
+
       children: slots.map((slot) {
-        final bool isMyVehicle = slot == "A27";
+        final bool isMyVehicle =
+            slot == "A27";
 
         return Container(
           width: 60,
           height: 60,
+
           decoration: BoxDecoration(
             color: isMyVehicle
                 ? const Color(0xFF800000)
                 : Colors.white,
-            borderRadius: BorderRadius.circular(12),
+
+            borderRadius:
+                BorderRadius.circular(12),
+
             border: Border.all(
               color: isMyVehicle
                   ? const Color(0xFF800000)
                   : Colors.grey.shade300,
             ),
           ),
+
           child: Center(
             child: isMyVehicle
                 ? const Icon(
@@ -235,7 +433,8 @@ class FindMyRidePage extends StatelessWidget {
                 : Text(
                     slot,
                     style: const TextStyle(
-                      fontWeight: FontWeight.bold,
+                      fontWeight:
+                          FontWeight.bold,
                     ),
                   ),
           ),
