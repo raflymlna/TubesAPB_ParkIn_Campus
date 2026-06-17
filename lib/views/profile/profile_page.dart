@@ -7,7 +7,6 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final user = FirebaseAuth.instance.currentUser;
 
     return Scaffold(
@@ -28,26 +27,19 @@ class ProfilePage extends StatelessWidget {
             .get(),
 
         builder: (context, snapshot) {
-
           // Loading
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return const Center(child: CircularProgressIndicator());
           }
 
           // Error
           if (snapshot.hasError) {
-            return const Center(
-              child: Text("Something went wrong"),
-            );
+            return const Center(child: Text("Something went wrong"));
           }
 
           // Data tidak ada
           if (!snapshot.hasData || !snapshot.data!.exists) {
-            return const Center(
-              child: Text("User data not found"),
-            );
+            return const Center(child: Text("User data not found"));
           }
 
           // Ambil data firestore
@@ -58,18 +50,13 @@ class ProfilePage extends StatelessWidget {
 
             child: Column(
               children: [
-
                 const SizedBox(height: 20),
 
                 // Profile Photo
                 CircleAvatar(
                   radius: 60,
                   backgroundColor: Color(0xFF800000),
-                  child: Icon(
-                    Icons.person,
-                    size: 60,
-                    color: Colors.white,
-                  ),
+                  child: Icon(Icons.person, size: 60, color: Colors.white),
                 ),
 
                 const SizedBox(height: 20),
@@ -111,30 +98,17 @@ class ProfilePage extends StatelessWidget {
 
                   child: ElevatedButton.icon(
                     onPressed: () async {
-
                       await FirebaseAuth.instance.signOut();
-
-                      if (context.mounted) {
-                        Navigator.pushNamedAndRemoveUntil(
-                          context, 
-                          '/login', 
-                          (route) => false,
-                        );
-                      }
                     },
 
                     icon: const Icon(Icons.logout),
 
-                    label: const Text(
-                      "Logout",
-                    ),
+                    label: const Text("Logout"),
 
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF800000),
                       foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 16,
-                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16),
                       ),
@@ -154,7 +128,6 @@ class ProfilePage extends StatelessWidget {
     required String title,
     required String subtitle,
   }) {
-
     return Container(
       width: double.infinity,
 
@@ -176,7 +149,6 @@ class ProfilePage extends StatelessWidget {
 
       child: Row(
         children: [
-
           Container(
             padding: const EdgeInsets.all(12),
 
@@ -185,10 +157,7 @@ class ProfilePage extends StatelessWidget {
               borderRadius: BorderRadius.circular(14),
             ),
 
-            child: Icon(
-              icon,
-              color: const Color(0xFF800000),
-            ),
+            child: Icon(icon, color: const Color(0xFF800000)),
           ),
 
           const SizedBox(width: 16),
@@ -198,7 +167,6 @@ class ProfilePage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
 
               children: [
-
                 Text(
                   title,
                   style: const TextStyle(
@@ -211,10 +179,7 @@ class ProfilePage extends StatelessWidget {
 
                 Text(
                   subtitle,
-                  style: const TextStyle(
-                    color: Colors.grey,
-                    fontSize: 14,
-                  ),
+                  style: const TextStyle(color: Colors.grey, fontSize: 14),
                 ),
               ],
             ),

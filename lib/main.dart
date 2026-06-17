@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'views/auth/login_page.dart';
+import 'views/auth/auth_wrapper.dart';
 import '/core/theme/app_theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'ParkIn Campus',
       theme: AppTheme.lightTheme,
-      home: LoginPage(),
+      home: AuthWrapper(),
       routes: {
         '/login': (context) => const LoginPage(),
         '/main': (context) => const MainPage(),

@@ -52,6 +52,66 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  void _showResetPasswordDialog() {
+    final resetEmailController = TextEditingController(
+      text: emailController.text,
+    );
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Reset Password'),
+
+          content: TextField(
+            controller: resetEmailController,
+            keyboardType: TextInputType.emailAddress,
+            decoration: const InputDecoration(hintText: 'Masukkan email'),
+          ),
+
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Batal'),
+            ),
+
+            ElevatedButton(
+              onPressed: () async {
+                final email = resetEmailController.text.trim();
+
+                if (email.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Email tidak boleh kosong')),
+                  );
+                  return;
+                }
+
+                String? result = await AuthService().resetPassword(email);
+
+                if (!mounted) return;
+
+                Navigator.pop(context);
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      result == null
+                          ? 'Link reset password telah dikirim ke email'
+                          : result,
+                    ),
+                  ),
+                );
+              },
+              child: const Text('Kirim'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -206,7 +266,9 @@ class _LoginPageState extends State<LoginPage> {
                             Align(
                               alignment: Alignment.centerRight,
                               child: TextButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  _showResetPasswordDialog();
+                                },
                                 child: const Text('Lupa password?'),
                               ),
                             ),
