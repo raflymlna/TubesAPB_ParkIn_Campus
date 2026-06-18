@@ -222,20 +222,20 @@ class AppLocalizationsId extends AppLocalizations {
   String get registrationSuccess => 'Registrasi Berhasil';
 
   @override
-  String get invalidCredentials => 'Invalid email or password';
+  String get invalidCredentials => 'Email atau password salah';
 
   @override
-  String get userNotFound => 'Account not found';
+  String get userNotFound => 'Akun tidak ditemukan';
 
   @override
-  String get wrongPassword => 'Incorrect password';
+  String get wrongPassword => 'Password salah';
 
   @override
-  String get emailAlreadyUsed => 'Email is already registered';
+  String get emailAlreadyUsed => 'Email sudah terdaftar';
 
   @override
-  String get weakPassword => 'Password is too weak';
+  String get weakPassword => 'Password terlalu lemah';
 
   @override
-  String get unknownError => 'An unexpected error occurred';
+  String get unknownError => 'Terjadi kesalahan';
 }
