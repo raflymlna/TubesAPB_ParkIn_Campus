@@ -46,10 +46,10 @@ class VehicleService {
         .orderBy('createdAt', descending: true)
         .snapshots()
         .map((snapshot) {
-      return snapshot.docs.map((doc) {
-        return Vehicle.fromMap(doc.data(), doc.id);
-      }).toList();
-    });
+          return snapshot.docs.map((doc) {
+            return Vehicle.fromMap(doc.data(), doc.id);
+          }).toList();
+        });
   }
 
   /// Update vehicle by id
@@ -65,8 +65,10 @@ class VehicleService {
       if (userId.isEmpty) return 'User tidak login';
 
       // Verify ownership sebelum update
-      final docSnapshot =
-          await _firestore.collection('vehicles').doc(vehicleId).get();
+      final docSnapshot = await _firestore
+          .collection('vehicles')
+          .doc(vehicleId)
+          .get();
       if (!docSnapshot.exists || docSnapshot['userId'] != userId) {
         return 'Vehicle tidak ditemukan atau bukan milik Anda';
       }
@@ -91,8 +93,10 @@ class VehicleService {
       if (userId.isEmpty) return 'User tidak login';
 
       // Verify ownership sebelum delete
-      final docSnapshot =
-          await _firestore.collection('vehicles').doc(vehicleId).get();
+      final docSnapshot = await _firestore
+          .collection('vehicles')
+          .doc(vehicleId)
+          .get();
       if (!docSnapshot.exists || docSnapshot['userId'] != userId) {
         return 'Vehicle tidak ditemukan atau bukan milik Anda';
       }
@@ -107,13 +111,31 @@ class VehicleService {
   /// Get single vehicle by id
   Future<Vehicle?> getVehicle(String vehicleId) async {
     try {
-      final docSnapshot =
-          await _firestore.collection('vehicles').doc(vehicleId).get();
+      final docSnapshot = await _firestore
+          .collection('vehicles')
+          .doc(vehicleId)
+          .get();
       if (!docSnapshot.exists) return null;
 
       return Vehicle.fromMap(docSnapshot.data()!, docSnapshot.id);
     } catch (e) {
       return null;
     }
+  }
+
+  Future<List<String>> getUserVehicleTypes() async {
+    final userId = _currentUserId;
+
+    if (userId.isEmpty) return [];
+
+    final snapshot = await _firestore
+        .collection('vehicles')
+        .where('userId', isEqualTo: userId)
+        .get();
+
+    return snapshot.docs
+        .map((doc) => doc['type'].toString().toLowerCase())
+        .toSet()
+        .toList();
   }
 }
