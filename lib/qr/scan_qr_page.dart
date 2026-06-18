@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import '../services/parking_history_service.dart';
 
 class QRPage extends StatefulWidget {
   const QRPage({super.key});
@@ -11,84 +11,46 @@ class QRPage extends StatefulWidget {
 
 class _QRPageState extends State<QRPage> {
   bool isScanned = false;
-  bool isParked = false;
 
-  String? currentBuilding; //  SIMPAN GEDUNG
+  final ParkingHistoryService historyService = ParkingHistoryService();
 
   Future<void> handleScan(String? code) async {
     if (code == null || isScanned) return;
 
     setState(() => isScanned = true);
 
-    final cleaned = code.trim();
+    try {
+      final cleaned = code.trim();
 
-    if (!cleaned.contains("|")) {
-      showResult("QR tidak valid!");
-      return;
-    }
+      if (!cleaned.contains("|")) {
+        showResult("QR tidak valid!");
+        return;
+      }
 
-    final parts = cleaned.split("|");
+      final parts = cleaned.split("|");
 
-    if (parts.length != 2) {
-      showResult("Format QR salah!");
-      return;
-    }
+      if (parts.length != 2) {
+        showResult("Format QR salah!");
+        return;
+      }
 
-    final action = parts[0].trim().toLowerCase();
-    final building = parts[1].trim();
+      final action = parts[0].trim().toLowerCase();
+      final building = parts[1].trim();
 
-    //  PARK IN
-    if (action == "park in") {
-      if (isParked) {
-        showResult("Kamu sudah parkir di $currentBuilding!");
-      } else {
-        isParked = true;
-        currentBuilding = building;
+      //  PARK IN
+      if (action == "park in") {
+        await historyService.parkIn(building);
 
-        await FirebaseFirestore.instance
-            .collection('parking_history')
-            .add({
-          'location': building,
-          'checkInTime': Timestamp.now(),
-          'checkOutTime': null,
-          'status': 'Parking',
-        });
         showResult("Berhasil masuk parkir di $building");
-      }
-    }
+      } else if (action == "park out") {
+        await historyService.parkOut(building);
 
-    //  PARK OUT
-    else if (action == "park out") {
-      if (!isParked) {
-        showResult("Kamu belum parkir!");
+        showResult("Berhasil keluar parkir di $building");
+      } else {
+        showResult("QR tidak dikenali");
       }
-      else if (building != currentBuilding) {
-        showResult("Kamu parkir di $currentBuilding!");
-      }
-      else {
-        final query = await FirebaseFirestore.instance
-        .collection('parking_history')
-        .where('location', isEqualTo: building)
-        .where('status', isEqualTo: 'Parking')
-        .limit(1)
-        .get();
-            
-      if (query.docs.isNotEmpty) {
-        await query.docs.first.reference.update({
-          'status': 'Out',
-          'checkOutTime': Timestamp.now(),
-        });
-      }
-      isParked = false;
-      currentBuilding = null;
-                
-      showResult("Berhasil keluar parkir dari $building");
-    }
-  }
-
-    //  TIDAK DIKENALI
-    else {
-      showResult("QR tidak dikenali!");
+    } catch (e) {
+      showResult(e.toString());
     }
   }
 
@@ -105,7 +67,7 @@ class _QRPageState extends State<QRPage> {
               setState(() => isScanned = false);
             },
             child: const Text("OK"),
-          )
+          ),
         ],
       ),
     );
@@ -128,10 +90,7 @@ class _QRPageState extends State<QRPage> {
             },
           ),
 
-          CustomPaint(
-            size: Size.infinite,
-            painter: ScannerOverlay(),
-          ),
+          CustomPaint(size: Size.infinite, painter: ScannerOverlay()),
 
           Center(
             child: Container(
@@ -152,8 +111,11 @@ class _QRPageState extends State<QRPage> {
                   buildCorner(Alignment.topLeft),
                   buildCorner(Alignment.topRight, isRight: true),
                   buildCorner(Alignment.bottomLeft, isBottom: true),
-                  buildCorner(Alignment.bottomRight,
-                      isRight: true, isBottom: true),
+                  buildCorner(
+                    Alignment.bottomRight,
+                    isRight: true,
+                    isBottom: true,
+                  ),
                 ],
               ),
             ),
@@ -175,8 +137,11 @@ class _QRPageState extends State<QRPage> {
     );
   }
 
-  Widget buildCorner(Alignment alignment,
-      {bool isRight = false, bool isBottom = false}) {
+  Widget buildCorner(
+    Alignment alignment, {
+    bool isRight = false,
+    bool isBottom = false,
+  }) {
     return Align(
       alignment: alignment,
       child: Container(
