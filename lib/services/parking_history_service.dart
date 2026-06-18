@@ -30,20 +30,29 @@ class ParkingHistoryService {
   }
 
   Future<void> parkOut(String location) async {
-    final query = await _firestore
+    final activeParking = await _firestore
         .collection('parking_history')
         .where('userId', isEqualTo: uid)
-        .where('location', isEqualTo: location)
         .where('status', isEqualTo: 'Park')
         .limit(1)
         .get();
 
-    if (query.docs.isNotEmpty) {
-      await query.docs.first.reference.update({
-        'status': 'Done',
-        'checkOutTime': Timestamp.now(),
-      });
+    if (activeParking.docs.isEmpty) {
+      throw Exception("Anda belum parkir!");
     }
+
+    final data = activeParking.docs.first.data();
+
+    final currentLocation = data['location'];
+
+    if (currentLocation != location) {
+      throw Exception("Anda sedang parkir di $currentLocation");
+    }
+
+    await activeParking.docs.first.reference.update({
+      'status': 'Done',
+      'checkOutTime': Timestamp.now(),
+    });
   }
 
   Stream<QuerySnapshot> getHistory() {

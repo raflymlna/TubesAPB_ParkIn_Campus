@@ -50,7 +50,13 @@ class _QRPageState extends State<QRPage> {
         showResult("QR tidak dikenali");
       }
     } catch (e) {
-      showResult(e.toString());
+      String message = e.toString();
+
+      if (message.startsWith("Exception: ")) {
+        message = message.replaceFirst("Exception: ", "");
+      }
+
+      showResult(message);
     }
   }
 
