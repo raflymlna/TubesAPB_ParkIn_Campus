@@ -97,5 +97,11 @@
   "createNewAccount": "Buat Akun Baru",
   "registration": "Registrasi",
   "registrationSubtitle": "Pastikan data yang dimasukkan benar.",
-  "registrationSuccess": "Registrasi Berhasil"
+  "registrationSuccess": "Registrasi Berhasil",
+  "invalidCredentials": "Email atau password salah",
+  "userNotFound": "Akun tidak ditemukan",
+  "wrongPassword": "Password salah",
+  "emailAlreadyUsed": "Email sudah terdaftar",
+  "weakPassword": "Password terlalu lemah",
+  "unknownError": "Terjadi kesalahan"
 }

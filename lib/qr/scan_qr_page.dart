@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import '../services/parking_history_service.dart';
 import '../../l10n/app_localizations.dart';
+import '../services/vehicle_service.dart';
 
 class QRPage extends StatefulWidget {
   const QRPage({super.key});
@@ -14,6 +15,7 @@ class _QRPageState extends State<QRPage> {
   bool isScanned = false;
 
   final ParkingHistoryService historyService = ParkingHistoryService();
+  final VehicleService vehicleService = VehicleService();
 
   Future<void> handleScan(String? code) async {
     if (code == null || isScanned) return;
@@ -40,10 +42,12 @@ class _QRPageState extends State<QRPage> {
 
       //  PARK IN
       if (action == "park in") {
+        await validateParkingAccess(building);
         await historyService.parkIn(building);
 
         showResult(AppLocalizations.of(context)!.parkInSuccess(building),);
       } else if (action == "park out") {
+        await validateParkingAccess(building);
         await historyService.parkOut(building);
 
         showResult(AppLocalizations.of(context)!.parkOutSuccess(building),);
@@ -85,6 +89,34 @@ class _QRPageState extends State<QRPage> {
 
   }
 }
+  }
+
+  Future<void> validateParkingAccess(String location) async {
+    final vehicleTypes = await vehicleService.getUserVehicleTypes();
+
+    if (vehicleTypes.isEmpty) {
+      throw Exception("Silakan registrasikan kendaraan terlebih dahulu");
+    }
+
+    const motorAreas = ['Gate 4', 'GKU', 'TULT', 'FIT-FIK', 'FKS-FEB'];
+
+    const carAreas = ['Gate 2', 'Gate 3'];
+
+    final hasMotor = vehicleTypes.contains('motor');
+
+    final hasCar = vehicleTypes.contains('mobil');
+
+    if (hasMotor && hasCar) {
+      return;
+    }
+
+    if (hasMotor && carAreas.contains(location)) {
+      throw Exception("Area parkir ini hanya untuk mobil");
+    }
+
+    if (hasCar && motorAreas.contains(location)) {
+      throw Exception("Area parkir ini hanya untuk motor");
+    }
   }
 
   void showResult(String message) {
