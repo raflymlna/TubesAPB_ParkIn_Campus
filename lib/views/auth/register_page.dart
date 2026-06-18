@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../services/auth_service.dart';
+import '../../l10n/app_localizations.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -97,8 +98,8 @@ class _RegisterPageState extends State<RegisterPage> {
                       color: Colors.white,
                     ),
                     const SizedBox(height: 10),
-                    const Text(
-                      'Buat Akun Baru',
+                    Text(
+                       AppLocalizations.of(context)!.createNewAccount,
                       style: TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.w800,
@@ -106,10 +107,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                     ),
                     const SizedBox(height: 6),
-                    const Text(
-                      'Isi data dengan lengkap untuk registrasi.',
-                      style: TextStyle(color: Colors.white70),
-                    ),
+                    
                     const SizedBox(height: 24),
                     Container(
                       padding: const EdgeInsets.all(22),
@@ -129,8 +127,8 @@ class _RegisterPageState extends State<RegisterPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            const Text(
-                              'Registrasi',
+                            Text(
+                              AppLocalizations.of(context)!.registration,
                               style: TextStyle(
                                 fontSize: 22,
                                 fontWeight: FontWeight.bold,
@@ -138,8 +136,8 @@ class _RegisterPageState extends State<RegisterPage> {
                               ),
                             ),
                             const SizedBox(height: 6),
-                            const Text(
-                              'Pastikan data yang dimasukkan benar.',
+                            Text(
+                              AppLocalizations.of(context)!.registrationSubtitle,
                               style: TextStyle(
                                 fontSize: 14,
                                 color: Colors.grey,
@@ -150,12 +148,13 @@ class _RegisterPageState extends State<RegisterPage> {
                             TextFormField(
                               controller: fullNameController,
                               decoration: _inputDecoration(
-                                label: 'Nama Lengkap',
+                                label: AppLocalizations.of(context)!.fullName,
                                 icon: Icons.badge_outlined,
                               ),
                               validator: (value) {
                                 if (value == null || value.trim().isEmpty) {
-                                  return 'Nama lengkap wajib diisi';
+                                  return AppLocalizations.of(context)!
+                                  .fullNameRequired;
                                 }
                                 return null;
                               },
@@ -166,15 +165,17 @@ class _RegisterPageState extends State<RegisterPage> {
                               controller: emailController,
                               keyboardType: TextInputType.emailAddress,
                               decoration: _inputDecoration(
-                                label: 'Email',
+                                label: AppLocalizations.of(context)!.email,
                                 icon: Icons.email_outlined,
                               ),
                               validator: (value) {
                                 if (value == null || value.trim().isEmpty) {
-                                  return 'Email wajib diisi';
+                                  return AppLocalizations.of(context)!
+                                  .emailRequired;
                                 }
                                 if (!value.contains('@')) {
-                                  return 'Format email tidak valid';
+                                  return AppLocalizations.of(context)!
+                                  .emailInvalid;
                                 }
                                 return null;
                               },
@@ -185,15 +186,17 @@ class _RegisterPageState extends State<RegisterPage> {
                               controller: phoneController,
                               keyboardType: TextInputType.phone,
                               decoration: _inputDecoration(
-                                label: 'No. Telepon',
+                                label: AppLocalizations.of(context)!.phoneNumber,
                                 icon: Icons.phone_outlined,
                               ),
                               validator: (value) {
                                 if (value == null || value.trim().isEmpty) {
-                                  return 'No. telepon wajib diisi';
+                                  return AppLocalizations.of(context)!
+                                  .phoneRequired;
                                 }
                                 if (value.trim().length < 10) {
-                                  return 'No. telepon minimal 10 karakter';
+                                  return AppLocalizations.of(context)!
+                                  .phoneMinLength;
                                 }
                                 return null;
                               },
@@ -204,7 +207,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               controller: passwordController,
                               obscureText: obscurePassword,
                               decoration: _inputDecoration(
-                                label: 'Password',
+                                label: AppLocalizations.of(context)!.password,
                                 icon: Icons.lock_outline,
                                 suffixIcon: IconButton(
                                   onPressed: () {
@@ -221,10 +224,12 @@ class _RegisterPageState extends State<RegisterPage> {
                               ),
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return 'Password wajib diisi';
+                                  return AppLocalizations.of(context)!
+                                  .passwordRequired;
                                 }
                                 if (value.length < 6) {
-                                  return 'Password minimal 6 karakter';
+                                  return AppLocalizations.of(context)!
+                                  .passwordMinLength;
                                 }
                                 return null;
                               },
@@ -235,7 +240,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               controller: confirmPasswordController,
                               obscureText: obscureConfirmPassword,
                               decoration: _inputDecoration(
-                                label: 'Konfirmasi Password',
+                                label: AppLocalizations.of(context)!.confirmPassword,
                                 icon: Icons.lock_reset_outlined,
                                 suffixIcon: IconButton(
                                   onPressed: () {
@@ -253,10 +258,12 @@ class _RegisterPageState extends State<RegisterPage> {
                               ),
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return 'Konfirmasi password wajib diisi';
+                                  return AppLocalizations.of(context)!
+                                  .confirmPasswordRequired;
                                 }
                                 if (value != passwordController.text) {
-                                  return 'Password tidak sama';
+                                  return AppLocalizations.of(context)!
+                                  .passwordNotMatch;
                                 }
                                 return null;
                               },
@@ -296,8 +303,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                       ScaffoldMessenger.of(
                                         context,
                                       ).showSnackBar(
-                                        const SnackBar(
-                                          content: Text('Registrasi Berhasil'),
+                                        SnackBar(
+                                          content: Text(AppLocalizations.of(context)!.registrationSuccess),
                                         ),
                                       );
 
@@ -315,8 +322,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                     ? const CircularProgressIndicator(
                                         color: Colors.white,
                                       )
-                                    : const Text(
-                                        'Daftar',
+                                    : Text(
+                                        AppLocalizations.of(context)!.register,
                                         style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w700,
@@ -330,8 +337,8 @@ class _RegisterPageState extends State<RegisterPage> {
                               onPressed: () {
                                 Navigator.pop(context);
                               },
-                              child: const Text(
-                                'Sudah punya akun? Login',
+                              child: Text(
+                                 AppLocalizations.of(context)!.alreadyHaveAccount,
                                 style: TextStyle(
                                   fontWeight: FontWeight.w600,
                                   color: Color(0xFF800000),

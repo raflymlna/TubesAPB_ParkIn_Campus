@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import '../services/parking_history_service.dart';
+import '../../l10n/app_localizations.dart';
 
 class QRPage extends StatefulWidget {
   const QRPage({super.key});
@@ -23,14 +24,14 @@ class _QRPageState extends State<QRPage> {
       final cleaned = code.trim();
 
       if (!cleaned.contains("|")) {
-        showResult("QR tidak valid!");
+        showResult(AppLocalizations.of(context)!.invalidQr,);
         return;
       }
 
       final parts = cleaned.split("|");
 
       if (parts.length != 2) {
-        showResult("Format QR salah!");
+        showResult(AppLocalizations.of(context)!.invalidQrFormat,);
         return;
       }
 
@@ -41,30 +42,56 @@ class _QRPageState extends State<QRPage> {
       if (action == "park in") {
         await historyService.parkIn(building);
 
-        showResult("Berhasil masuk parkir di $building");
+        showResult(AppLocalizations.of(context)!.parkInSuccess(building),);
       } else if (action == "park out") {
         await historyService.parkOut(building);
 
-        showResult("Berhasil keluar parkir di $building");
+        showResult(AppLocalizations.of(context)!.parkOutSuccess(building),);
       } else {
-        showResult("QR tidak dikenali");
+        showResult(
+  AppLocalizations.of(context)!.unknownQr,);
       }
     } catch (e) {
-      String message = e.toString();
 
-      if (message.startsWith("Exception: ")) {
-        message = message.replaceFirst("Exception: ", "");
-      }
+  String error = e.toString();
 
-      showResult(message);
-    }
+  if (error.contains("active_parking")) {
+
+    showResult(
+      AppLocalizations.of(context)!
+          .activeParking,
+    );
+
+  } else if (error.contains("not_parked")) {
+
+    showResult(
+      AppLocalizations.of(context)!
+          .notParked,
+    );
+
+  } else if (error.contains("wrong_location:")) {
+
+    final location =
+        error.split(":").last;
+
+    showResult(
+      AppLocalizations.of(context)!
+          .wrongLocation(location),
+    );
+
+  } else {
+
+    showResult(error);
+
+  }
+}
   }
 
   void showResult(String message) {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text("Info"),
+        title: Text(AppLocalizations.of(context)!.info,),
         content: Text(message),
         actions: [
           TextButton(
@@ -72,7 +99,7 @@ class _QRPageState extends State<QRPage> {
               Navigator.pop(context);
               setState(() => isScanned = false);
             },
-            child: const Text("OK"),
+            child: Text(AppLocalizations.of(context)!.ok,),
           ),
         ],
       ),
@@ -82,7 +109,7 @@ class _QRPageState extends State<QRPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Scan QR Parkir')),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.scanQrParking,)),
       body: Stack(
         children: [
           MobileScanner(
@@ -127,17 +154,19 @@ class _QRPageState extends State<QRPage> {
             ),
           ),
 
-          const Positioned(
-            bottom: 80,
-            left: 0,
-            right: 0,
-            child: Center(
-              child: Text(
-                "Scan QR Park In / Park Out",
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-          ),
+          Positioned(
+  bottom: 80,
+  left: 0,
+  right: 0,
+  child: Center(
+    child: Text(
+      AppLocalizations.of(context)!.scanInstruction,
+      style: const TextStyle(
+        color: Colors.white,
+      ),
+    ),
+  ),
+),
         ],
       ),
     );

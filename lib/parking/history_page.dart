@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import '../services/parking_history_service.dart';
 import '../parking/find_my_ride.dart';
+import '../../l10n/app_localizations.dart';
 
 String formatTimestamp(Timestamp? timestamp) {
   if (timestamp == null) return "-";
@@ -21,7 +22,7 @@ class HistoryPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text("Parking History"),
+        title: Text(AppLocalizations.of(context)!.parkingHistory,),
         backgroundColor: const Color(0xFF800000),
         foregroundColor: Colors.white,
         elevation: 0,
@@ -34,8 +35,8 @@ class HistoryPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              "Your Parking Activity",
+            Text(
+              AppLocalizations.of(context)!.yourParkingActivity,
               style: TextStyle(
                 fontSize: 32,
                 fontWeight: FontWeight.w900,
@@ -49,7 +50,7 @@ class HistoryPage extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton.icon(
                 icon: const Icon(Icons.directions_car),
-                label: const Text("Find My Ride"),
+                label: Text(AppLocalizations.of(context)!.findMyRide,),
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -80,8 +81,9 @@ class HistoryPage extends StatelessWidget {
                   }
 
                   if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                    return const Center(
-                      child: Text("Belum ada riwayat parkir"),
+                    return Center(
+                      child: Text(AppLocalizations.of(context)!.noParkingHistory,
+                      ),
                     );
                   }
 
@@ -131,6 +133,18 @@ class HistoryPage extends StatelessWidget {
       textColor = Colors.grey;
     }
 
+    String displayStatus;
+
+    if (status == "Park") {
+      displayStatus =
+        AppLocalizations.of(context)!.parking;
+      } else if (status == "Done") {
+      displayStatus =
+        AppLocalizations.of(context)!.out;
+      } else {
+      displayStatus = status;
+    } 
+
     return InkWell(
       onTap: () {
         showDialog(
@@ -163,9 +177,9 @@ class HistoryPage extends StatelessWidget {
 
                     const SizedBox(height: 16),
 
-                    const Text(
-                      "Detail Parkir",
-                      style: TextStyle(
+                    Text(
+                      AppLocalizations.of(context)!.parkingDetail,
+                      style: const TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                       ),
@@ -173,13 +187,13 @@ class HistoryPage extends StatelessWidget {
 
                     const SizedBox(height: 24),
 
-                    _buildDetailRow(Icons.location_on, "Lokasi", location),
+                    _buildDetailRow(Icons.location_on, AppLocalizations.of(context)!.location, location),
 
                     const SizedBox(height: 12),
 
                     _buildDetailRow(
                       Icons.login,
-                      "Park In",
+                      AppLocalizations.of(context)!.parkIn,
                       formatTimestamp(checkIn),
                     ),
 
@@ -187,7 +201,7 @@ class HistoryPage extends StatelessWidget {
 
                     _buildDetailRow(
                       Icons.logout,
-                      "Park Out",
+                      AppLocalizations.of(context)!.parkOut,
                       formatTimestamp(checkOut),
                     ),
 
@@ -205,7 +219,7 @@ class HistoryPage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
-                        status,
+                        displayStatus,
                         style: TextStyle(
                           color: isDone ? Colors.green : Colors.blue,
                           fontWeight: FontWeight.bold,
@@ -229,7 +243,7 @@ class HistoryPage extends StatelessWidget {
                         onPressed: () {
                           Navigator.pop(context);
                         },
-                        child: const Text("Tutup"),
+                        child: Text(AppLocalizations.of(context)!.close,),
                       ),
                     ),
                   ],
@@ -286,7 +300,7 @@ class HistoryPage extends StatelessWidget {
                   const SizedBox(height: 8),
 
                   Text(
-                    "${formatTimestamp(checkIn)} - ${checkOut == null ? 'Now' : formatTimestamp(checkOut)}",
+                    "${formatTimestamp(checkIn)} - ${checkOut == null ? AppLocalizations.of(context)!.now : formatTimestamp(checkOut)}",
                     style: const TextStyle(color: Colors.black54),
                   ),
                 ],
@@ -302,7 +316,7 @@ class HistoryPage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
-                status,
+                displayStatus,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: status == "Done" ? Colors.green : Colors.blue,

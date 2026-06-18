@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:park_in_campus/services/auth_service.dart';
 import '../main_nav/main_page.dart';
 import 'register_page.dart';
+import '../../l10n/app_localizations.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -66,7 +67,8 @@ class _LoginPageState extends State<LoginPage> {
           content: TextField(
             controller: resetEmailController,
             keyboardType: TextInputType.emailAddress,
-            decoration: const InputDecoration(hintText: 'Masukkan email'),
+                              
+            decoration: InputDecoration(hintText: AppLocalizations.of(context)!.enterEmail ),
           ),
 
           actions: [
@@ -74,7 +76,7 @@ class _LoginPageState extends State<LoginPage> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: const Text('Batal'),
+              child: Text(AppLocalizations.of(context)!.cancel),
             ),
 
             ElevatedButton(
@@ -83,7 +85,7 @@ class _LoginPageState extends State<LoginPage> {
 
                 if (email.isEmpty) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Email tidak boleh kosong')),
+                    SnackBar(content: Text(AppLocalizations.of(context)!.emailRequired)),
                   );
                   return;
                 }
@@ -104,7 +106,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 );
               },
-              child: const Text('Kirim'),
+              child: Text(AppLocalizations.of(context)!.send),
             ),
           ],
         );
@@ -170,8 +172,8 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         const SizedBox(height: 6),
-                        const Text(
-                          'Login untuk masuk ke sistem parkir',
+                        Text(
+                          AppLocalizations.of(context)!.loginSubtitle,
                           style: TextStyle(fontSize: 14, color: Colors.white70),
                         ),
                       ],
@@ -195,8 +197,8 @@ class _LoginPageState extends State<LoginPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            const Text(
-                              'Selamat datang',
+                            Text(
+                              AppLocalizations.of(context)!.welcome,
                               style: TextStyle(
                                 fontSize: 22,
                                 fontWeight: FontWeight.bold,
@@ -204,8 +206,8 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                             ),
                             const SizedBox(height: 6),
-                            const Text(
-                              'Silakan login untuk melanjutkan.',
+                            Text(
+                              AppLocalizations.of(context)!.pleaseLogin,
                               style: TextStyle(
                                 fontSize: 14,
                                 color: Colors.grey,
@@ -216,17 +218,17 @@ class _LoginPageState extends State<LoginPage> {
                               controller: emailController,
                               keyboardType: TextInputType.emailAddress,
                               decoration: _inputDecoration(
-                                label: 'Email',
+                                label: AppLocalizations.of(context)!.email,
                                 icon: Icons.person_outline,
                               ),
                               validator: (value) {
                                 if (value == null || value.trim().isEmpty) {
-                                  return 'Email tidak boleh kosong';
+                                  return  AppLocalizations.of(context)!.emailRequired;
                                 }
 
                                 if (value.contains('@') &&
                                     !value.contains('.')) {
-                                  return 'Format email tidak valid';
+                                  return AppLocalizations.of(context)!.emailInvalid;
                                 }
 
                                 return null;
@@ -237,7 +239,7 @@ class _LoginPageState extends State<LoginPage> {
                               controller: passwordController,
                               obscureText: obscurePassword,
                               decoration: _inputDecoration(
-                                label: 'Password',
+                               label: AppLocalizations.of(context)!.password,
                                 icon: Icons.lock_outline,
                                 suffixIcon: IconButton(
                                   onPressed: () {
@@ -254,10 +256,10 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return 'Password tidak boleh kosong';
+                                  return AppLocalizations.of(context)!.passwordRequired;
                                 }
                                 if (value.length < 6) {
-                                  return 'Password minimal 6 karakter';
+                                  return AppLocalizations.of(context)!.passwordMinLength;
                                 }
                                 return null;
                               },
@@ -269,7 +271,7 @@ class _LoginPageState extends State<LoginPage> {
                                 onPressed: () {
                                   _showResetPasswordDialog();
                                 },
-                                child: const Text('Lupa password?'),
+                                child: Text(AppLocalizations.of(context)!.forgotPassword),
                               ),
                             ),
                             const SizedBox(height: 4),
@@ -322,8 +324,8 @@ class _LoginPageState extends State<LoginPage> {
                                     ? const CircularProgressIndicator(
                                         color: Colors.white,
                                       )
-                                    : const Text(
-                                        'Login',
+                                    : Text(
+                                        AppLocalizations.of(context)!.login,
                                         style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w700,
@@ -335,8 +337,8 @@ class _LoginPageState extends State<LoginPage> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                const Text(
-                                  'Belum punya akun?',
+                                Text(
+                                  AppLocalizations.of(context)!.dontHaveAccount,
                                   style: TextStyle(color: Colors.grey),
                                 ),
                                 TextButton(
@@ -348,8 +350,8 @@ class _LoginPageState extends State<LoginPage> {
                                       ),
                                     );
                                   },
-                                  child: const Text(
-                                    'Daftar',
+                                  child: Text(
+                                    AppLocalizations.of(context)!.register,
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color: Color(0xFF800000),

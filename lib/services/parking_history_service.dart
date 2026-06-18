@@ -16,7 +16,7 @@ class ParkingHistoryService {
         .get();
 
     if (activeParking.docs.isNotEmpty) {
-      throw Exception('Masih ada parkir aktif');
+      throw Exception('active_parking');
     }
 
     await _firestore.collection('parking_history').add({
@@ -38,7 +38,7 @@ class ParkingHistoryService {
         .get();
 
     if (activeParking.docs.isEmpty) {
-      throw Exception("Anda belum parkir!");
+      throw Exception("not_parked");
     }
 
     final data = activeParking.docs.first.data();
@@ -46,7 +46,7 @@ class ParkingHistoryService {
     final currentLocation = data['location'];
 
     if (currentLocation != location) {
-      throw Exception("Anda sedang parkir di $currentLocation");
+      throw Exception("wrong_location:$currentLocation");
     }
 
     await activeParking.docs.first.reference.update({
