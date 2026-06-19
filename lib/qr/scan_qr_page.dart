@@ -47,10 +47,21 @@ class _QRPageState extends State<QRPage> {
 
       //  PARK IN
       if (action == "park in") {
-        // 1. Validasi dari temen lu
+        final activeParking = await firestore
+            .collection('parking_history')
+            .where('userId', isEqualTo: auth.currentUser?.uid)
+            .where('status', isEqualTo: 'Park')
+            .limit(1)
+            .get();
+
+        if (activeParking.docs.isNotEmpty) {
+          final currentParkLocation = activeParking.docs.first
+              .data()['location'];
+
+          throw Exception("Anda sedang parkir di $currentParkLocation");
+        }
         await validateParkingAccess(building);
 
-        // 2. Logika dari lu: Cek tipe kendaraan user dan bersihin formatnya
         String userVehicleType = 'Motor';
         final vehicleQuery = await firestore
             .collection('vehicles')
@@ -67,7 +78,6 @@ class _QRPageState extends State<QRPage> {
           }
         }
 
-        // 3. Logika dari lu: Cari slot parkir kosong terurut
         final slotKosong = await firestore
             .collection('parking_slots')
             .where('locationName', isEqualTo: building)
@@ -84,21 +94,16 @@ class _QRPageState extends State<QRPage> {
         final slotDoc = slotKosong.docs.first;
         final slotName = slotDoc.data()['slotName'];
 
-        // 4. Logika dari lu: Merahkan slot parkir
         await slotDoc.reference.update({'isAvailable': false});
 
-        // 5. FIX ERROR NYA DI SINI: Panggil historyService pakai 2 argumen!
         await historyService.parkIn(building, slotName);
 
-        // 6. UI/UX dari temen lu
         showResult(AppLocalizations.of(context)!.parkInSuccess(building));
       }
       // PARK OUT
       else if (action == "park out") {
-        // 1. Validasi dari temen lu
         await validateParkingAccess(building);
 
-        // 2. Logika dari lu: Cari data parkir aktif
         final activeParking = await firestore
             .collection('parking_history')
             .where('userId', isEqualTo: historyService.uid)
@@ -118,7 +123,6 @@ class _QRPageState extends State<QRPage> {
           throw Exception("Anda parkir di $parkedLocation, bukan di sini!");
         }
 
-        // 3. Logika dari lu: Hijaukan kotak parkir yang ditinggalkan
         if (parkedSlotName != null) {
           await firestore
               .collection('parking_slots')
@@ -126,10 +130,8 @@ class _QRPageState extends State<QRPage> {
               .update({'isAvailable': true});
         }
 
-        // 4. Update history jadi 'Done'
         await historyService.parkOut(building);
 
-        // 5. UI/UX dari temen lu
         showResult(AppLocalizations.of(context)!.parkOutSuccess(building));
       } else {
         showResult("QR tidak dikenali");
