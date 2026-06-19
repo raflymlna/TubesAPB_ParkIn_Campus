@@ -103,5 +103,42 @@
   "wrongPassword": "Password salah",
   "emailAlreadyUsed": "Email sudah terdaftar",
   "weakPassword": "Password terlalu lemah",
-  "unknownError": "Terjadi kesalahan"
+  "unknownError": "Terjadi kesalahan",
+  "registerVehicleFirst": "Silakan registrasikan kendaraan terlebih dahulu",
+  "carOnlyArea": "Area parkir ini hanya untuk mobil",
+  "motorcycleOnlyArea": "Area parkir ini hanya untuk motor",
+  "vehicleRegistration": "Registrasi Kendaraan",
+"addNewVehicle": "Tambah Kendaraan Baru",
+"editVehicle": "Edit Kendaraan",
+
+"vehicleType": "Jenis Kendaraan",
+"car": "Mobil",
+"motorcycle": "Motor",
+
+"vehicleBrand": "Merk Kendaraan",
+"vehicleModel": "Model Kendaraan",
+
+"vehicleBrandRequired": "Merk kendaraan wajib diisi",
+"vehicleModelRequired": "Model kendaraan wajib diisi",
+
+"vehicleRequired": "Nomor kendaraan wajib diisi",
+"invalidPlateFormat": "Format plat tidak valid. Contoh: B 1234 AMN",
+
+"cancel": "Batal",
+"saving": "Menyimpan...",
+"addVehicle": "Tambah Kendaraan",
+"update": "Perbarui",
+
+"registeredVehicles": "Kendaraan Terdaftar",
+"noRegisteredVehicle": "Belum ada kendaraan terdaftar",
+
+"vehicleAdded": "Kendaraan berhasil ditambahkan",
+"vehicleUpdated": "Kendaraan berhasil diubah",
+"vehicleDeleted": "Kendaraan berhasil dihapus",
+
+"deleteVehicle": "Hapus Kendaraan",
+"deleteVehicleConfirm": "Yakin hapus {plate}?",
+
+"delete": "Hapus",
+"edit": "Edit"
 }

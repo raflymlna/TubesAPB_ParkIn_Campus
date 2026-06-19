@@ -75,19 +75,40 @@ class _QRPageState extends State<QRPage> {
 
   } else if (error.contains("wrong_location:")) {
 
-    final location =
-        error.split(":").last;
+  final location =
+      error.split(":").last;
 
-    showResult(
-      AppLocalizations.of(context)!
-          .wrongLocation(location),
-    );
+  showResult(
+    AppLocalizations.of(context)!
+        .wrongLocation(location),
+  );
 
-  } else {
+} else if (error.contains("registerVehicleFirst")) {
 
-    showResult(error);
+  showResult(
+    AppLocalizations.of(context)!
+        .registerVehicleFirst,
+  );
 
-  }
+} else if (error.contains("carOnlyArea")) {
+
+  showResult(
+    AppLocalizations.of(context)!
+        .carOnlyArea,
+  );
+
+} else if (error.contains("motorcycleOnlyArea")) {
+
+  showResult(
+    AppLocalizations.of(context)!
+        .motorcycleOnlyArea,
+  );
+
+} else {
+
+  showResult(error);
+
+}
 }
   }
 
@@ -95,7 +116,7 @@ class _QRPageState extends State<QRPage> {
     final vehicleTypes = await vehicleService.getUserVehicleTypes();
 
     if (vehicleTypes.isEmpty) {
-      throw Exception("Silakan registrasikan kendaraan terlebih dahulu");
+      throw Exception("registerVehicleFirst");
     }
 
     const motorAreas = ['Gate 4', 'GKU', 'TULT', 'FIT-FIK', 'FKS-FEB'];
@@ -111,11 +132,11 @@ class _QRPageState extends State<QRPage> {
     }
 
     if (hasMotor && carAreas.contains(location)) {
-      throw Exception("Area parkir ini hanya untuk mobil");
+      throw Exception("carOnlyArea");
     }
 
     if (hasCar && motorAreas.contains(location)) {
-      throw Exception("Area parkir ini hanya untuk motor");
+      throw Exception("motorcycleOnlyArea");
     }
   }
 
