@@ -251,10 +251,10 @@ class _FindMyRidePageState extends State<FindMyRidePage> {
 
                       children: [
                         TileLayer(
-                          urlTemplate:
-                              'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                        ),
-
+                        urlTemplate:
+                            'https://basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
+                        userAgentPackageName: 'com.parkincampus.app',
+        ),
                         PolylineLayer(
                           polylines: [
                             Polyline(
