@@ -22,18 +22,18 @@ class ParkingService {
 
     // Setup lokasi, kode slot, kapasitas, dan tipe kendaraan
     final List<Map<String, dynamic>> locations = [
-      {'name': 'TULT', 'prefix': 'TULT', 'count': 20, 'type': 'Motor'},
-      {'name': 'FIT-FIK', 'prefix': 'FIT-FIK', 'count': 20, 'type': 'Motor'},
-      {'name': 'GKU', 'prefix': 'GKU', 'count': 50, 'type': 'Motor'},
-      {'name': 'Gate4', 'prefix': 'GATE-4', 'count': 20, 'type': 'Motor'},
-      {'name': 'Gate 2', 'prefix': 'GATE-2', 'count': 100, 'type': 'Mobil'},
+      {'name': 'TULT', 'prefix': 'TULT', 'count': 75, 'type': 'Motor'},
+      {'name': 'FIT-FIK', 'prefix': 'FIT-FIK', 'count': 150, 'type': 'Motor'},
+      {'name': 'GKU', 'prefix': 'GKU', 'count': 300, 'type': 'Motor'},
+      {'name': 'Gate4', 'prefix': 'GATE-4', 'count': 100, 'type': 'Motor'},
+      {'name': 'Gate 2', 'prefix': 'GATE-2', 'count': 50, 'type': 'Mobil'},
       {'name': 'Gate 3', 'prefix': 'GATE-3', 'count': 100, 'type': 'Mobil'},
     ];
 
     for (var loc in locations) {
       for (int i = 1; i <= loc['count']; i++) {
         // Format nomor jadi 2 digit (contoh: 01, 02)
-        String slotNumber = i.toString().padLeft(2, '0');
+        String slotNumber = i.toString().padLeft(3, '0');
         String slotName = '${loc['prefix']}-$slotNumber';
 
         // Buat referensi dokumen baru
