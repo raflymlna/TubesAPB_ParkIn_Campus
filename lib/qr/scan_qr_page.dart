@@ -53,7 +53,15 @@ class _QRPageState extends State<QRPage> {
             .get();
 
         if (vehicleQuery.docs.isNotEmpty) {
-          userVehicleType = vehicleQuery.docs.first.data()['type'] ?? 'Motor';
+          // Ambil data asli dari profil user
+          String rawType = vehicleQuery.docs.first.data()['type'] ?? 'Motor';
+
+          // Sanitasi: Paksa jadi huruf kapital di awal (Motor / Mobil) biar sinkron sama database
+          if (rawType.toLowerCase().contains('motor')) {
+            userVehicleType = 'Motor';
+          } else if (rawType.toLowerCase().contains('mobil')) {
+            userVehicleType = 'Mobil';
+          }
         }
 
         // 2. Cari slot parkir berurutan (dari 01, 02, dst)
