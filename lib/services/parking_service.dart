@@ -22,27 +22,12 @@ class ParkingService {
 
     // Setup lokasi, kode slot, kapasitas, dan tipe kendaraan
     final List<Map<String, dynamic>> locations = [
-      {'name': 'TULT', 'prefix': 'TULT-A', 'count': 20, 'type': 'Mobil'},
-      {'name': 'TULT', 'prefix': 'TULT-B', 'count': 20, 'type': 'Mobil'},
-      {'name': 'TULT', 'prefix': 'TULT-C', 'count': 20, 'type': 'Mobil'},
-      {'name': 'FKS', 'prefix': 'FKS', 'count': 20, 'type': 'Mobil'},
-      {'name': 'FEB', 'prefix': 'FEB', 'count': 20, 'type': 'Mobil'},
-      {'name': 'FIT', 'prefix': 'FIT', 'count': 20, 'type': 'Mobil'},
-      {'name': 'FIK', 'prefix': 'FIK', 'count': 20, 'type': 'Mobil'},
-      {'name': 'GKU', 'prefix': 'GKU-A', 'count': 50, 'type': 'Mobil'},
-      {'name': 'GKU', 'prefix': 'GKU-B', 'count': 50, 'type': 'Mobil'},
-      {'name': 'GKU', 'prefix': 'GKU-C', 'count': 50, 'type': 'Mobil'},
-      {'name': 'CACUK', 'prefix': 'CACUK-A', 'count': 20, 'type': 'Mobil'},
-      {'name': 'CACUK', 'prefix': 'CACUK-B', 'count': 20, 'type': 'Mobil'},
-      {'name': 'CACUK', 'prefix': 'CACUK-C', 'count': 20, 'type': 'Mobil'},
-      {'name': 'CACUK', 'prefix': 'CACUK-D', 'count': 20, 'type': 'Mobil'},
-      {'name': 'CACUK', 'prefix': 'CACUK-E', 'count': 20, 'type': 'Mobil'},
-      {'name': 'CACUK', 'prefix': 'CACUK-F', 'count': 20, 'type': 'Mobil'},
-      {'name': 'GATE-4', 'prefix': 'GATE-4', 'count': 100, 'type': 'Motor'},
-      {'name': 'GKU', 'prefix': 'GKU', 'count': 300, 'type': 'Motor'},
-      {'name': 'TULT', 'prefix': 'TULT', 'count': 100, 'type': 'Motor'},
-      {'name': 'FIT/FIK', 'prefix': 'FIT/FIK', 'count': 150, 'type': 'Motor'},
-      {'name': 'FKS/FEB', 'prefix': 'FKS/FEB', 'count': 50, 'type': 'Motor'},
+      {'name': 'TULT', 'prefix': 'TULT', 'count': 20, 'type': 'Motor'},
+      {'name': 'FIT-FIK', 'prefix': 'FIT-FIK', 'count': 20, 'type': 'Motor'},
+      {'name': 'GKU', 'prefix': 'GKU', 'count': 50, 'type': 'Motor'},
+      {'name': 'Gate4', 'prefix': 'GATE-4', 'count': 20, 'type': 'Motor'},
+      {'name': 'Gate 2', 'prefix': 'GATE-2', 'count': 100, 'type': 'Mobil'},
+      {'name': 'Gate 3', 'prefix': 'GATE-3', 'count': 100, 'type': 'Mobil'},
     ];
 
     for (var loc in locations) {
@@ -52,7 +37,10 @@ class ParkingService {
         String slotName = '${loc['prefix']}-$slotNumber';
 
         // Buat referensi dokumen baru
-        DocumentReference docRef = _firestore.collection('parking_slots').doc();
+        // Ubah baris referensinya jadi begini:
+        DocumentReference docRef = _firestore
+            .collection('parking_slots')
+            .doc(slotName);
 
         // Masukkan data sesuai model
         batch.set(docRef, {
