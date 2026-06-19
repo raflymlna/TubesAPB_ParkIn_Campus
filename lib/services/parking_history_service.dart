@@ -7,7 +7,8 @@ class ParkingHistoryService {
 
   String get uid => _auth.currentUser!.uid;
 
-  Future<void> parkIn(String location) async {
+  // Tambahin parameter slotName di sini
+  Future<void> parkIn(String location, String slotName) async {
     final activeParking = await _firestore
         .collection('parking_history')
         .where('userId', isEqualTo: uid)
@@ -22,6 +23,7 @@ class ParkingHistoryService {
     await _firestore.collection('parking_history').add({
       'userId': uid,
       'location': location,
+      'slotName': slotName, // <--- Catat nama slot (misal: TULT-MT-01)
       'checkInTime': Timestamp.now(),
       'checkOutTime': null,
       'status': 'Park',
