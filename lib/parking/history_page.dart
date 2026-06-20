@@ -94,12 +94,21 @@ class HistoryPage extends StatelessWidget {
                     itemBuilder: (context, index) {
                       final data = docs[index].data() as Map<String, dynamic>;
 
+                      final licensePlate = data['licensePlate']?.toString();
+                      final vehicleBrand = data['vehicleBrand']?.toString();
+                      final vehicleModel = data['vehicleModel']?.toString();
+                      final vehicleType = data['vehicleType']?.toString();
+
                       return _buildHistoryCard(
                         context: context,
                         location: data['location'],
                         checkIn: data['checkInTime'],
                         checkOut: data['checkOutTime'],
                         status: data['status'],
+                        licensePlate: licensePlate,
+                        vehicleBrand: vehicleBrand,
+                        vehicleModel: vehicleModel,
+                        vehicleType: vehicleType,
                       );
                     },
                   );
@@ -118,6 +127,10 @@ class HistoryPage extends StatelessWidget {
     required Timestamp? checkIn,
     required Timestamp? checkOut,
     required String status,
+    String? licensePlate,
+    String? vehicleBrand,
+    String? vehicleModel,
+    String? vehicleType,
   }) {
     Color bgColor;
     Color textColor;
@@ -136,14 +149,12 @@ class HistoryPage extends StatelessWidget {
     String displayStatus;
 
     if (status == "Park") {
-      displayStatus =
-        AppLocalizations.of(context)!.parking;
-      } else if (status == "Done") {
-      displayStatus =
-        AppLocalizations.of(context)!.out;
-      } else {
+      displayStatus = AppLocalizations.of(context)!.parking;
+    } else if (status == "Done") {
+      displayStatus = AppLocalizations.of(context)!.out;
+    } else {
       displayStatus = status;
-    } 
+    }
 
     return InkWell(
       onTap: () {
@@ -160,8 +171,8 @@ class HistoryPage extends StatelessWidget {
                 padding: const EdgeInsets.all(24),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    // Icon
                     Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
@@ -187,7 +198,39 @@ class HistoryPage extends StatelessWidget {
 
                     const SizedBox(height: 24),
 
-                    _buildDetailRow(Icons.location_on, AppLocalizations.of(context)!.location, location),
+                    _buildDetailRow(
+                      Icons.location_on,
+                      AppLocalizations.of(context)!.location,
+                      location,
+                    ),
+
+                    if (licensePlate != null) ...[
+                      const SizedBox(height: 12),
+                      _buildDetailRow(
+                        Icons.confirmation_number,
+                        'Plat',
+                        licensePlate,
+                      ),
+                    ],
+
+                    if ((vehicleBrand != null && vehicleBrand.isNotEmpty) ||
+                        (vehicleModel != null && vehicleModel.isNotEmpty)) ...[
+                      const SizedBox(height: 12),
+                      _buildDetailRow(
+                        Icons.directions_car,
+                        'Kendaraan',
+                        '${vehicleBrand ?? '-'} ${vehicleModel ?? ''}',
+                      ),
+                    ],
+
+                    if (vehicleType != null) ...[
+                      const SizedBox(height: 12),
+                      _buildDetailRow(
+                        Icons.category,
+                        AppLocalizations.of(context)!.vehicleType,
+                        vehicleType,
+                      ),
+                    ],
 
                     const SizedBox(height: 12),
 
@@ -243,7 +286,9 @@ class HistoryPage extends StatelessWidget {
                         onPressed: () {
                           Navigator.pop(context);
                         },
-                        child: Text(AppLocalizations.of(context)!.close,),
+                        child: Text(
+                          AppLocalizations.of(context)!.close,
+                        ),
                       ),
                     ),
                   ],

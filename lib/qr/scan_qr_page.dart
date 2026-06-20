@@ -63,6 +63,12 @@ class _QRPageState extends State<QRPage> {
         await validateParkingAccess(building);
 
         String userVehicleType = 'Motor';
+        String? vehicleId;
+        String? vehicleLicensePlate;
+        String? vehicleBrand;
+        String? vehicleModel;
+        String? vehicleRawType;
+
         final vehicleQuery = await firestore
             .collection('vehicles')
             .where('userId', isEqualTo: auth.currentUser?.uid)
@@ -70,10 +76,17 @@ class _QRPageState extends State<QRPage> {
             .get();
 
         if (vehicleQuery.docs.isNotEmpty) {
-          String rawType = vehicleQuery.docs.first.data()['type'] ?? 'Motor';
-          if (rawType.toLowerCase().contains('motor')) {
+          final vDoc = vehicleQuery.docs.first;
+          final vData = vDoc.data();
+          vehicleId = vDoc.id;
+          vehicleRawType = (vData['type'] ?? 'Motor').toString();
+          vehicleLicensePlate = vData['licensePlate']?.toString();
+          vehicleBrand = vData['brand']?.toString();
+          vehicleModel = vData['model']?.toString();
+
+          if (vehicleRawType.toLowerCase().contains('motor')) {
             userVehicleType = 'Motor';
-          } else if (rawType.toLowerCase().contains('mobil')) {
+          } else if (vehicleRawType.toLowerCase().contains('mobil')) {
             userVehicleType = 'Mobil';
           }
         }
@@ -96,7 +109,15 @@ class _QRPageState extends State<QRPage> {
 
         await slotDoc.reference.update({'isAvailable': false});
 
-        await historyService.parkIn(building, slotName);
+        await historyService.parkIn(
+          building,
+          slotName,
+          vehicleId: vehicleId,
+          licensePlate: vehicleLicensePlate,
+          brand: vehicleBrand,
+          model: vehicleModel,
+          type: vehicleRawType,
+        );
 
         showResult(AppLocalizations.of(context)!.parkInSuccess(building));
       }

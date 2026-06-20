@@ -193,7 +193,7 @@ class _RegistrasiKendaraanPageState extends State<RegistrasiKendaraanPage> {
                       ),
                       const SizedBox(height: 24),
                       DropdownButtonFormField<String>(
-                        value: _vehicleType,
+                        initialValue: _vehicleType,
                         decoration: _inputDecoration(
                           label: 'Jenis Kendaraan',
                           icon: Icons.directions_car_outlined,
