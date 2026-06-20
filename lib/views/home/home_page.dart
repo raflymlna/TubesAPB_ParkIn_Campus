@@ -83,60 +83,73 @@ class HomePage extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: isMobile ? 20 : 100),
                 child: SizedBox(
-                  height: 350, // PENTING: Kasih tinggi fixed buat ListView
+                  height: 350,
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     children: [
-                      _buildMenuCard(
-                        icon: Icons.local_parking_rounded,
-                        title: "Parking Slot",
-                        description: "Check available parking slots.",
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ParkingStatusPage(),
+                      // Bungkus setiap _buildMenuCard dengan SizedBox yang punya lebar
+                      SizedBox(
+                        width: 300,
+                        child: _buildMenuCard(
+                          icon: Icons.local_parking_rounded,
+                          title: "Parking Slot",
+                          description: "Check available parking slots.",
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ParkingStatusPage(),
+                            ),
                           ),
+                          isMobile: isMobile,
                         ),
-                        isMobile: isMobile,
                       ),
                       const SizedBox(width: 20),
-                      _buildMenuCard(
-                        icon: Icons.history_rounded,
-                        title: "Parking History",
-                        description: "View your past activities.",
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => HistoryPage(),
+                      SizedBox(
+                        width: 300,
+                        child: _buildMenuCard(
+                          icon: Icons.history_rounded,
+                          title: "Parking History",
+                          description: "View your past activities.",
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => HistoryPage(),
+                            ),
                           ),
+                          isMobile: isMobile,
                         ),
-                        isMobile: isMobile,
                       ),
                       const SizedBox(width: 20),
-                      _buildMenuCard(
-                        icon: Icons.directions_car_filled_rounded,
-                        title: "Vehicle Data",
-                        description: "Manage your vehicle info.",
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => RegistrasiKendaraanPage(),
+                      SizedBox(
+                        width: 300,
+                        child: _buildMenuCard(
+                          icon: Icons.directions_car_filled_rounded,
+                          title: "Vehicle Data",
+                          description: "Manage your vehicle info.",
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => RegistrasiKendaraanPage(),
+                            ),
                           ),
+                          isMobile: isMobile,
                         ),
-                        isMobile: isMobile,
                       ),
                       const SizedBox(width: 20),
-                      _buildMenuCard(
-                        icon: Icons.location_on_rounded,
-                        title: "Find My Ride",
-                        description: "Easily locate your vehicle.",
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const FindMyRidePage(),
+                      SizedBox(
+                        width: 300,
+                        child: _buildMenuCard(
+                          icon: Icons.location_on_rounded,
+                          title: "Find My Ride",
+                          description: "Easily locate your vehicle.",
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const FindMyRidePage(),
+                            ),
                           ),
+                          isMobile: isMobile,
                         ),
-                        isMobile: isMobile,
                       ),
                     ],
                   ),
