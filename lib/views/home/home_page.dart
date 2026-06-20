@@ -82,146 +82,67 @@ class HomePage extends StatelessWidget {
               // Section 2: Barisan Card (Horizontal Scroll)
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: isMobile ? 20 : 100),
-                child: isMobile
-                    ? Column(
-                        children: [
-                          _buildMenuCard(
-                            icon: Icons.local_parking_rounded,
-                            title: "Parking Slot",
-                            description:
-                                "Check available parking slots in real-time and secure your spot.",
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ParkingStatusPage(),
-                                ),
-                              );
-                            },
-                            isMobile: isMobile,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis
+                      .horizontal, // <-- Kuncinya di sini, bikin scroll kesamping
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _buildMenuCard(
+                        icon: Icons.local_parking_rounded,
+                        title: "Parking Slot",
+                        description:
+                            "Check available parking slots in real-time.",
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ParkingStatusPage(),
                           ),
-                          const SizedBox(height: 20),
-                          _buildMenuCard(
-                            icon: Icons.history_rounded,
-                            title: "Parking History",
-                            description:
-                                "View your past parking activities and transaction details.",
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => HistoryPage(),
-                                ),
-                              );
-                            },
-                            isMobile: isMobile,
-                          ),
-                          const SizedBox(height: 20),
-                          _buildMenuCard(
-                            icon: Icons.directions_car_filled_rounded,
-                            title: "Vehicle Data",
-                            description:
-                                "Manage your vehicle information for seamless parking access.",
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      RegistrasiKendaraanPage(),
-                                ),
-                              );
-                            },
-                            isMobile: isMobile,
-                          ),
-                          const SizedBox(height: 20),
-                          _buildMenuCard(
-                            icon: Icons
-                                .location_on_rounded, // Ikon buat nyari posisi
-                            title: "Find My Ride",
-                            description:
-                                "Easily locate your parked vehicle on campus map.",
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const FindMyRidePage(),
-                                ),
-                              );
-                            },
-                            isMobile: isMobile,
-                          ),
-                        ],
-                      )
-                    : Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          _buildMenuCard(
-                            icon: Icons.local_parking_rounded,
-                            title: "Parking Slot",
-                            description:
-                                "Check available parking slots in real-time and secure your spot.",
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ParkingStatusPage(),
-                                ),
-                              );
-                            },
-                            isMobile: isMobile,
-                          ),
-                          const SizedBox(width: 40),
-                          _buildMenuCard(
-                            icon: Icons.history_rounded,
-                            title: "Parking History",
-                            description:
-                                "View your past parking activities and transaction details.",
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => HistoryPage(),
-                                ),
-                              );
-                            },
-                            isMobile: isMobile,
-                          ),
-                          const SizedBox(width: 40),
-                          _buildMenuCard(
-                            icon: Icons.directions_car_filled_rounded,
-                            title: "Vehicle Data",
-                            description:
-                                "Manage your vehicle information for seamless parking access.",
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      RegistrasiKendaraanPage(),
-                                ),
-                              );
-                            },
-                            isMobile: isMobile,
-                          ),
-                          const SizedBox(width: 40),
-                          _buildMenuCard(
-                            icon: Icons
-                                .location_on_rounded, // Ikon buat nyari posisi
-                            title: "Find My Ride",
-                            description:
-                                "Easily locate your parked vehicle on campus map.",
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const FindMyRidePage(),
-                                ),
-                              );
-                            },
-                            isMobile: isMobile,
-                          ),
-                        ],
+                        ),
+                        isMobile: isMobile,
                       ),
+                      const SizedBox(width: 20), // Jarak antar card
+                      _buildMenuCard(
+                        icon: Icons.history_rounded,
+                        title: "Parking History",
+                        description: "View your past activities.",
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => HistoryPage(),
+                          ),
+                        ),
+                        isMobile: isMobile,
+                      ),
+                      const SizedBox(width: 20),
+                      _buildMenuCard(
+                        icon: Icons.directions_car_filled_rounded,
+                        title: "Vehicle Data",
+                        description: "Manage your vehicle info.",
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => RegistrasiKendaraanPage(),
+                          ),
+                        ),
+                        isMobile: isMobile,
+                      ),
+                      const SizedBox(width: 20),
+                      _buildMenuCard(
+                        icon: Icons.location_on_rounded,
+                        title: "Find My Ride",
+                        description: "Easily locate your vehicle.",
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const FindMyRidePage(),
+                          ),
+                        ),
+                        isMobile: isMobile,
+                      ),
+                    ],
+                  ),
+                ),
               ),
 
               const SizedBox(height: 100),
