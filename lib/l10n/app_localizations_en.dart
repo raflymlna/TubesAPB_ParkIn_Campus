@@ -350,4 +350,113 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get language => 'Language';
+
+  @override
+  String get easyToRegister => 'Easy to register';
+
+  @override
+  String get easyToUse => 'Easy to use';
+
+  @override
+  String get smartSlotFinder => 'Smart Slot Finder';
+
+  @override
+  String errorMessage(Object error) {
+    return 'Error: $error';
+  }
+
+  @override
+  String get parkingDatabaseGenerated =>
+      'Parking database regenerated successfully.';
+
+  @override
+  String get vehicleFound => 'Vehicle Found';
+
+  @override
+  String get currentlyParked => 'Currently Parked';
+
+  @override
+  String get slot => 'Slot';
+
+  @override
+  String get parkedSince => 'Parked Since';
+
+  @override
+  String get parkingMap => 'Parking Map';
+
+  @override
+  String get navigationActive => 'Navigation Active';
+
+  @override
+  String get navigateToSlot => 'Navigate To Slot';
+
+  @override
+  String get navigationRoute => 'Navigation Route';
+
+  @override
+  String get directions => 'Directions';
+
+  @override
+  String get direction1 => '1. Walk straight for 20 meters';
+
+  @override
+  String get direction2 => '2. Turn right to Row A';
+
+  @override
+  String get direction3 => '3. Your vehicle is located at Slot A-27';
+
+  @override
+  String get parkingAvailability => 'Parking Availability';
+
+  @override
+  String get noParkingData => 'No parking slot data available.';
+
+  @override
+  String get vehicle => 'Vehicle';
+
+  @override
+  String get parkInCampusSimple => 'ParkInCampus is simple to use';
+
+  @override
+  String get easyToRegisterDesc =>
+      'Unlock added benefits when you register on our app. Registering is simple and straightforward. It takes less than 30 seconds.';
+
+  @override
+  String get easyToUseDesc =>
+      'Get access to parking spots instantly with our seamless interface. No complicated forms or long queues—just open the app, find your spot, and start your journey within seconds.';
+
+  @override
+  String get smartSlotFinderDesc =>
+      'No more circling around the block. View live parking occupancy through our app and navigate directly to an empty slot, ensuring a stress-free parking experience.';
+
+  @override
+  String get weAre => 'We\'re ';
+
+  @override
+  String get everywhere => 'everywhere';
+
+  @override
+  String get youNeedUs => ' you need us to be';
+
+  @override
+  String get journeyDescription =>
+      'Work. Gym. Class. Hang Out. ParkInCampus is with you on your journey each day. We are available in over 1,000 parking slots at Telkom University. You can choose us to simplify your journey.';
+
+  @override
+  String alreadyParkedAt(Object location) {
+    return 'You are currently parked at $location';
+  }
+
+  @override
+  String parkingFull(Object building, Object vehicleType) {
+    return '$vehicleType parking at $building is full!';
+  }
+
+  @override
+  String get ourLocations => 'Our Locations';
+
+  @override
+  String helloUser(Object name) {
+    return 'Hello, $name';
+  }
 }

@@ -1,3 +1,4 @@
+import '../../l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'registrasi_kendaraan_section.dart';
 import '../../parking/parking_status_page.dart'; // <-- Tambahan Import Halaman Status Parkir
@@ -38,7 +39,7 @@ class HomePage extends StatelessWidget {
                   }
 
                   return Text(
-                    "Halo, $displayName",
+                    AppLocalizations.of(context)!.helloUser(displayName),
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                       fontSize: 32,
@@ -93,7 +94,7 @@ class HomePage extends StatelessWidget {
                   children: [
                     _buildMenuCard(
                       icon: Icons.local_parking_rounded,
-                      title: "Parking",
+                     title: AppLocalizations.of(context)!.parking,
                       onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -104,7 +105,7 @@ class HomePage extends StatelessWidget {
                     ),
                     _buildMenuCard(
                       icon: Icons.history_rounded,
-                      title: "History",
+                      title: AppLocalizations.of(context)!.history,
                       onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => HistoryPage()),
@@ -113,7 +114,7 @@ class HomePage extends StatelessWidget {
                     ),
                     _buildMenuCard(
                       icon: Icons.directions_car_filled_rounded,
-                      title: "Vehicle",
+                      title: AppLocalizations.of(context)!.vehicle,
                       onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -125,7 +126,7 @@ class HomePage extends StatelessWidget {
                     _buildMenuCard(
                       icon: Icons.location_on_rounded,
                       title:
-                          "Find Ride", // Judul disingkat biar gak kepanjangan
+                          AppLocalizations.of(context)!.findMyRide,
                       onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -144,10 +145,10 @@ class HomePage extends StatelessWidget {
                   vertical: 60,
                 ),
                 child: isMobile
-                    ? Column(children: _buildMapContent(isMobile))
+                    ? Column(children: _buildMapContent(context, isMobile))
                     : Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: _buildMapContent(isMobile),
+                        children: _buildMapContent(context, isMobile),
                       ),
               ),
 
@@ -163,7 +164,7 @@ class HomePage extends StatelessWidget {
                 child: Column(
                   children: [
                     Text(
-                      "ParkInCampus is simple to use",
+                      AppLocalizations.of(context)!.parkInCampusSimple,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: isMobile ? 32 : 40,
@@ -173,11 +174,11 @@ class HomePage extends StatelessWidget {
                     ),
                     const SizedBox(height: 60),
                     isMobile
-                        ? Column(children: _buildFeatureItems(isMobile))
+                        ? Column(children: _buildFeatureItems(context, isMobile))
                         : Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: _buildFeatureItems(isMobile),
+                            children: _buildFeatureItems(context, isMobile),
                           ),
                   ],
                 ),
@@ -191,13 +192,13 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  List<Widget> _buildFeatureItems(bool isMobile) {
+  List<Widget> _buildFeatureItems(BuildContext context, bool isMobile) {
     return [
       _buildFeatureCard(
         icon: Icons.check_circle_rounded,
-        title: "Easy to register",
+        title: AppLocalizations.of(context)!.easyToRegister,
         description:
-            "Unlock added benefits when you register on our app. Registering is simple and straightforward. It takes less than 30 seconds.",
+            AppLocalizations.of(context)!.easyToRegisterDesc,
         isMobile: isMobile,
       ),
       if (!isMobile) const SizedBox(width: 40),
@@ -205,9 +206,9 @@ class HomePage extends StatelessWidget {
 
       _buildFeatureCard(
         icon: Icons.ads_click_rounded,
-        title: "Easy to use",
+        title: AppLocalizations.of(context)!.easyToUse,
         description:
-            "Get access to parking spots instantly with our seamless interface. No complicated forms or long queues—just open the app, find your spot, and start your journey within seconds.",
+            AppLocalizations.of(context)!.easyToUseDesc,
         isMobile: isMobile,
       ),
       if (!isMobile) const SizedBox(width: 40),
@@ -215,9 +216,9 @@ class HomePage extends StatelessWidget {
 
       _buildFeatureCard(
         icon: Icons.local_parking_rounded,
-        title: "Smart Slot Finder",
+        title: AppLocalizations.of(context)!.smartSlotFinder,
         description:
-            "No more circling around the block. View live parking occupancy through our app and navigate directly to an empty slot, ensuring a stress-free parking experience.",
+            AppLocalizations.of(context)!.smartSlotFinderDesc,
         isMobile: isMobile,
       ),
     ];
@@ -270,7 +271,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  List<Widget> _buildMapContent(bool isMobile) {
+  List<Widget> _buildMapContent(BuildContext context, bool isMobile) {
     return [
       Container(
         width: 450,
@@ -304,26 +305,26 @@ class HomePage extends StatelessWidget {
           children: [
             RichText(
               textAlign: isMobile ? TextAlign.center : TextAlign.start,
-              text: const TextSpan(
-                style: TextStyle(
+              text: TextSpan(
+                style: const TextStyle(
                   fontSize: 42,
                   fontWeight: FontWeight.w900,
                   color: Colors.black,
                   height: 1.1,
                 ),
                 children: [
-                  TextSpan(text: "We're "),
+                  TextSpan(text:  AppLocalizations.of(context)!.weAre,),
                   TextSpan(
-                    text: "everywhere",
-                    style: TextStyle(color: Color(0xFF800000)),
+                    text: AppLocalizations.of(context)!.everywhere,
+                    style: const TextStyle(color: Color(0xFF800000)),
                   ),
-                  TextSpan(text: " you need us to be"),
+                  TextSpan(text:  AppLocalizations.of(context)!.youNeedUs),
                 ],
               ),
             ),
             const SizedBox(height: 24),
             Text(
-              "Work. Gym. Class. Hang Out. ParkInCampus is with you on your journey each day. We are available in over 1,000 Parking Slot on Telkom University. You can choose us to simplify their journey.",
+              AppLocalizations.of(context)!.journeyDescription,
               textAlign: isMobile ? TextAlign.center : TextAlign.start,
               style: const TextStyle(
                 fontSize: 16,
@@ -331,7 +332,7 @@ class HomePage extends StatelessWidget {
                 height: 1.6,
               ),
             ),
-            const SizedBox(height: 32),
+            /*const SizedBox(height: 32),
             ElevatedButton(
               onPressed: () {},
               style: ElevatedButton.styleFrom(
@@ -345,11 +346,11 @@ class HomePage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
-              child: const Text(
-                "Our locations",
+              child: Text(
+                AppLocalizations.of(context)!.ourLocations,
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
-            ),
+            ),*/
           ],
         ),
       ),
@@ -406,7 +407,7 @@ class HomePage extends StatelessWidget {
                   title,
                   textAlign: isMobile ? TextAlign.center : TextAlign.start,
                   style: const TextStyle(
-                    fontSize: 24,
+                    fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
                   ),
