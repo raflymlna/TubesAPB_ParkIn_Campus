@@ -139,5 +139,21 @@
 "deleteVehicleConfirm": "Are you sure you want to delete {plate}?",
 
 "delete": "Delete",
-"edit": "Edit"
+"edit": "Edit",
+ "viewProfile": "View Profile",
+  "manageVehicle": "Manage Vehicle",
+  "edit": "Edit",
+  "save": "Save",
+  "profileDetail": "Profile Detail",
+  "profileDetail": "Profile Detail",
+"viewProfile": "View Profile",
+"editProfile": "Edit Profile",
+"save": "Save",
+"nameRequired": "Name is required",
+"profileUpdated": "Profile updated successfully",
+"save": "Save",
+"vehicles": "Vehicles",
+"vehicles": "Vehicles",
+"noVehicle": "No vehicle registered",
+"language": "Language"
 }

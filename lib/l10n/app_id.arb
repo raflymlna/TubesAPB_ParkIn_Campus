@@ -140,5 +140,21 @@
 "deleteVehicleConfirm": "Yakin hapus {plate}?",
 
 "delete": "Hapus",
-"edit": "Edit"
+"edit": "Edit",
+"viewProfile": "Lihat Profil",
+  "manageVehicle": "Kelola Kendaraan",
+  "edit": "Ubah",
+  "save": "Simpan",
+  "profileDetail": "Detail Profil",
+  "profileDetail": "Detail Profil",
+"viewProfile": "Lihat Profil",
+"editProfile": "Ubah Profil",
+"save": "Simpan",
+"nameRequired": "Nama wajib diisi",
+"profileUpdated": "Profil berhasil diperbarui",
+"save": "Simpan",
+"vehicles": "Kendaraan",
+"vehicles": "Kendaraan",
+"noVehicle": "Belum ada kendaraan terdaftar",
+"language": "Bahasa"
 }

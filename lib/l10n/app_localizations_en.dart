@@ -320,4 +320,34 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get edit => 'Edit';
+
+  @override
+  String get viewProfile => 'View Profile';
+
+  @override
+  String get manageVehicle => 'Manage Vehicle';
+
+  @override
+  String get save => 'Save';
+
+  @override
+  String get profileDetail => 'Profile Detail';
+
+  @override
+  String get editProfile => 'Edit Profile';
+
+  @override
+  String get nameRequired => 'Name is required';
+
+  @override
+  String get profileUpdated => 'Profile updated successfully';
+
+  @override
+  String get vehicles => 'Vehicles';
+
+  @override
+  String get noVehicle => 'No vehicle registered';
+
+  @override
+  String get language => 'Language';
 }

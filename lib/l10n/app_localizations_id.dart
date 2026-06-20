@@ -319,5 +319,35 @@ class AppLocalizationsId extends AppLocalizations {
   String get delete => 'Hapus';
 
   @override
-  String get edit => 'Edit';
+  String get edit => 'Ubah';
+
+  @override
+  String get viewProfile => 'Lihat Profil';
+
+  @override
+  String get manageVehicle => 'Kelola Kendaraan';
+
+  @override
+  String get save => 'Simpan';
+
+  @override
+  String get profileDetail => 'Detail Profil';
+
+  @override
+  String get editProfile => 'Ubah Profil';
+
+  @override
+  String get nameRequired => 'Nama wajib diisi';
+
+  @override
+  String get profileUpdated => 'Profil berhasil diperbarui';
+
+  @override
+  String get vehicles => 'Kendaraan';
+
+  @override
+  String get noVehicle => 'Belum ada kendaraan terdaftar';
+
+  @override
+  String get language => 'Bahasa';
 }
