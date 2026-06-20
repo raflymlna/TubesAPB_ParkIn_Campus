@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../../l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
+
+import '../../l10n/app_localizations.dart';
 import '../../providers/language_provider.dart';
+
+import 'profile_detail_page.dart';
+import '../home/registrasi_kendaraan_page.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -15,19 +19,19 @@ class ProfilePage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-       title: Text(
-        AppLocalizations.of(context)!.profile,
-      ),
+        title: Text(
+          AppLocalizations.of(context)!.profile,
+        ),
         centerTitle: true,
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
         elevation: 0,
       ),
-      body: FutureBuilder<DocumentSnapshot>(
-        future: FirebaseFirestore.instance
+      body: StreamBuilder<DocumentSnapshot>(
+        stream: FirebaseFirestore.instance
             .collection('users')
             .doc(user!.uid)
-            .get(),
+            .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState ==
               ConnectionState.waiting) {
@@ -57,171 +61,288 @@ class ProfilePage extends StatelessWidget {
             child: Column(
               children: [
 
-                const SizedBox(height: 20),
-
-                CircleAvatar(
-                  radius: 60,
-                  backgroundColor: const Color(0xFF800000),
-                  child: const Icon(
-                    Icons.person,
-                    size: 60,
+                // PROFILE CARD
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
                     color: Colors.white,
+                    borderRadius:
+                        BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.05),
+                        blurRadius: 10,
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    children: [
+
+                      const CircleAvatar(
+                        radius: 30,
+                        backgroundColor:
+                            Color(0xFF800000),
+                        child: Icon(
+                          Icons.person,
+                          color: Colors.white,
+                        ),
+                      ),
+
+                      const SizedBox(width: 16),
+
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment:
+                              CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              data['full_name'] ?? '',
+                              style: const TextStyle(
+                                fontWeight:
+                                    FontWeight.bold,
+                                fontSize: 18,
+                              ),
+                            ),
+                            Text(
+                              data['phone'] ?? '',
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) =>
+                                  const ProfileDetailPage(),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          AppLocalizations.of(context)!
+                              .viewProfile,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
 
                 const SizedBox(height: 20),
 
-                Text(
-                  data['full_name'] ?? 'No Name',
+                const SizedBox(height: 24),
+                
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(AppLocalizations.of(context)!.vehicles,
                   style: const TextStyle(
-                    fontSize: 26,
+                    fontSize: 22,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
+              ),
+              
+              const SizedBox(height: 12),
 
-                const SizedBox(height: 40),
+              StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance
+                  .collection('vehicles')
+                  .where('userId', isEqualTo: user.uid)
+                  .snapshots(),
+                builder: (context, snapshot) {
+                  
+                  if (!snapshot.hasData) {
+                    return const SizedBox();
+                  }
+                  
+                  final vehicles = snapshot.data!.docs;
+                  
+                  if (vehicles.isEmpty) {
+                    return Container(
+                      margin: const EdgeInsets.only(bottom: 20),
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text(
+                        AppLocalizations.of(context)!.noVehicle,
+                      ),
+                    );
+                  }
+                  
+                  return Column(
+                    children: vehicles.map((doc) {
+                      
+                      final vehicle =
+                        doc.data() as Map<String, dynamic>;
 
-                _buildProfileCard(
-                  icon: Icons.email,
-                  title: AppLocalizations.of(context)!.email,
-                  subtitle: data['email'] ?? '-',
-                ),
+                      final type = vehicle['type']
+                        .toString()
+                        .toLowerCase();
 
-                const SizedBox(height: 16),
+                      String displayType;
+                      
+                    if (type.contains('motor')) {
+                      displayType =
+                        AppLocalizations.of(context)!.motorcycle;
+                      } else if (type.contains('mobil')) {
+                        displayType =
+                        AppLocalizations.of(context)!.car;
+                      } else {
+                        displayType = vehicle['type'] ?? '';
+                      }
+                        
+                      return Container(
+                        margin: const EdgeInsets.only(bottom: 12),
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius:
+                            BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color:
+                                Colors.black.withOpacity(0.05),
+                              blurRadius: 10,
+                            ),
+                          ],
+                        ),
+                        
+                        child: Row(
+                          children: [
+                            
+                            Icon(
+                              type.contains('motor')
+                                ? Icons.two_wheeler
+                                : Icons.directions_car,
+                              color: const Color(0xFF800000),
+                              size: 34,
+                            ),
+                            
+                            const SizedBox(width: 16),
+                            
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment:
+                                  CrossAxisAlignment.start,
+                                children: [
+                                  
+                                Text(
+                                  vehicle['licensePlate'] ?? '-',
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                
+                                const SizedBox(height: 4),
+                                
+                                Text(
+                                  '${vehicle['brand'] ?? ''} ${vehicle['model'] ?? ''}',
+                                ),
+                                
+                                Text(
+                                  displayType,
+                                  style: const TextStyle(
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  
+                   }).toList(),
+                  );
+                },
+              ),
+              const SizedBox(height: 8),
 
-                _buildProfileCard(
-                  icon: Icons.phone,
-                  title: AppLocalizations.of(context)!.phoneNumber,
-                  subtitle: data['phone'] ?? '-',
+                // MANAGE VEHICLE CARD
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius:
+                        BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.05),
+                        blurRadius: 10,
+                      ),
+                    ],
+                  ),
+                  child: ListTile(
+                    leading: const Icon(
+                      Icons.directions_car,
+                      color: Color(0xFF800000),
+                    ),
+                    title: Text(
+                      AppLocalizations.of(context)!
+                          .manageVehicle,
+                    ),
+                    trailing: const Icon(
+                      Icons.arrow_forward_ios,
+                      size: 18,
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) =>
+                              const RegistrasiKendaraanPage(),
+                        ),
+                      );
+                    },
+                  ),
                 ),
 
                 const SizedBox(height: 30),
 
+                // LANGUAGE
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    AppLocalizations.of(context)!.vehicleInformation,
-                    style: TextStyle(
-                      fontSize: 20,
+                    AppLocalizations.of(context)!.language,
+                    style: const TextStyle(
+                      fontSize: 22,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
 
-                const SizedBox(height: 16),
-
-                StreamBuilder<QuerySnapshot>(
-                  stream: FirebaseFirestore.instance
-                      .collection('vehicles')
-                      .where('userId',
-                          isEqualTo: user.uid)
-                      .snapshots(),
-                  builder:
-                      (context, vehicleSnapshot) {
-
-                    if (vehicleSnapshot
-                            .connectionState ==
-                        ConnectionState.waiting) {
-                      return const Center(
-                        child:
-                            CircularProgressIndicator(),
-                      );
-                    }
-
-                    if (!vehicleSnapshot.hasData ||
-                        vehicleSnapshot
-                            .data!.docs.isEmpty) {
-                      return const Text(
-                        "No vehicle registered",
-                      );
-                    }
-
-                    final vehicles =
-                        vehicleSnapshot.data!.docs;
-
-                    return Column(
-                      children:
-                          vehicles.map((vehicle) {
-
-                        final vehicleData =
-                            vehicle.data()
-                                as Map<String, dynamic>;
-
-                        return Column(
-                          children: [
-
-                            _buildProfileCard(
-                              icon: Icons.pin,
-                              title: AppLocalizations.of(context)!.licensePlate,
-                              subtitle:
-                                  vehicleData[
-                                          'licensePlate'] ??
-                                      '-',
-                            ),
-
-                            const SizedBox(
-                                height: 16),
-
-                            _buildProfileCard(
-                              icon: Icons
-                                  .directions_car,
-                              title: AppLocalizations.of(context)!.vehicleType,
-                              subtitle:
-                                  vehicleData[
-                                          'type'] ??
-                                      '-',
-                            ),
-
-                            const SizedBox(
-                                height: 16),
-
-                            _buildProfileCard(
-                              icon:
-                                  Icons.car_repair,
-                              title: AppLocalizations.of(context)!.brandModel,
-                              subtitle:
-                                  "${vehicleData['brand'] ?? ''} ${vehicleData['model'] ?? ''}",
-                            ),
-
-                            const SizedBox(
-                                height: 20),
-                          ],
+                Consumer<LanguageProvider>(
+                  builder: (context, provider, child) {
+                    return DropdownButton<String>(
+                      value:
+                          provider.locale.languageCode,
+                      isExpanded: true,
+                      items: const [
+                        DropdownMenuItem(
+                          value: 'en',
+                          child: Text('English'),
+                        ),
+                        DropdownMenuItem(
+                          value: 'id',
+                          child:
+                              Text('Bahasa Indonesia'),
+                        ),
+                      ],
+                      onChanged: (value) {
+                        provider.changeLanguage(
+                          value!,
                         );
-                      }).toList(),
+                      },
                     );
                   },
                 ),
 
-                const SizedBox(height: 20),
+                const SizedBox(height: 40),
 
-Consumer<LanguageProvider>(
-  builder: (context, provider, child) {
-    return DropdownButton<String>(
-      value: provider.locale.languageCode,
-
-      isExpanded: true,
-
-      items: const [
-        DropdownMenuItem(
-          value: 'en',
-          child: Text('English'),
-        ),
-        DropdownMenuItem(
-          value: 'id',
-          child: Text('Bahasa Indonesia'),
-        ),
-      ],
-
-      onChanged: (value) {
-        provider.changeLanguage(value!);
-      },
-    );
-  },
-),
-
-const SizedBox(height: 20),
-                const SizedBox(height: 20),
-
+                // LOGOUT BUTTON
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton.icon(
@@ -231,7 +352,8 @@ const SizedBox(height: 20),
                     },
                     icon: const Icon(Icons.logout),
                     label: Text(
-                      AppLocalizations.of(context)!.logout,
+                      AppLocalizations.of(context)!
+                          .logout,
                     ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor:
@@ -255,76 +377,6 @@ const SizedBox(height: 20),
             ),
           );
         },
-      ),
-    );
-  }
-
-  static Widget _buildProfileCard({
-    required IconData icon,
-    required String title,
-    required String subtitle,
-  }) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius:
-            BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color:
-                Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding:
-                const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: const Color(0xFF800000)
-                  .withOpacity(0.1),
-              borderRadius:
-                  BorderRadius.circular(14),
-            ),
-            child: Icon(
-              icon,
-              color:
-                  const Color(0xFF800000),
-            ),
-          ),
-
-          const SizedBox(width: 16),
-
-          Expanded(
-            child: Column(
-              crossAxisAlignment:
-                  CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontWeight:
-                        FontWeight.bold,
-                    fontSize: 16,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  subtitle,
-                  style: const TextStyle(
-                    color: Colors.grey,
-                    fontSize: 14,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
       ),
     );
   }

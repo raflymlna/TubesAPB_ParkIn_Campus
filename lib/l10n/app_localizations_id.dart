@@ -238,4 +238,116 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get unknownError => 'Terjadi kesalahan';
+
+  @override
+  String get registerVehicleFirst =>
+      'Silakan registrasikan kendaraan terlebih dahulu';
+
+  @override
+  String get carOnlyArea => 'Area parkir ini hanya untuk mobil';
+
+  @override
+  String get motorcycleOnlyArea => 'Area parkir ini hanya untuk motor';
+
+  @override
+  String get vehicleRegistration => 'Registrasi Kendaraan';
+
+  @override
+  String get addNewVehicle => 'Tambah Kendaraan Baru';
+
+  @override
+  String get editVehicle => 'Edit Kendaraan';
+
+  @override
+  String get car => 'Mobil';
+
+  @override
+  String get motorcycle => 'Motor';
+
+  @override
+  String get vehicleBrand => 'Merk Kendaraan';
+
+  @override
+  String get vehicleModel => 'Model Kendaraan';
+
+  @override
+  String get vehicleBrandRequired => 'Merk kendaraan wajib diisi';
+
+  @override
+  String get vehicleModelRequired => 'Model kendaraan wajib diisi';
+
+  @override
+  String get vehicleRequired => 'Nomor kendaraan wajib diisi';
+
+  @override
+  String get invalidPlateFormat =>
+      'Format plat tidak valid. Contoh: B 1234 AMN';
+
+  @override
+  String get saving => 'Menyimpan...';
+
+  @override
+  String get addVehicle => 'Tambah Kendaraan';
+
+  @override
+  String get update => 'Perbarui';
+
+  @override
+  String get registeredVehicles => 'Kendaraan Terdaftar';
+
+  @override
+  String get noRegisteredVehicle => 'Belum ada kendaraan terdaftar';
+
+  @override
+  String get vehicleAdded => 'Kendaraan berhasil ditambahkan';
+
+  @override
+  String get vehicleUpdated => 'Kendaraan berhasil diubah';
+
+  @override
+  String get vehicleDeleted => 'Kendaraan berhasil dihapus';
+
+  @override
+  String get deleteVehicle => 'Hapus Kendaraan';
+
+  @override
+  String deleteVehicleConfirm(Object plate) {
+    return 'Yakin hapus $plate?';
+  }
+
+  @override
+  String get delete => 'Hapus';
+
+  @override
+  String get edit => 'Ubah';
+
+  @override
+  String get viewProfile => 'Lihat Profil';
+
+  @override
+  String get manageVehicle => 'Kelola Kendaraan';
+
+  @override
+  String get save => 'Simpan';
+
+  @override
+  String get profileDetail => 'Detail Profil';
+
+  @override
+  String get editProfile => 'Ubah Profil';
+
+  @override
+  String get nameRequired => 'Nama wajib diisi';
+
+  @override
+  String get profileUpdated => 'Profil berhasil diperbarui';
+
+  @override
+  String get vehicles => 'Kendaraan';
+
+  @override
+  String get noVehicle => 'Belum ada kendaraan terdaftar';
+
+  @override
+  String get language => 'Bahasa';
 }

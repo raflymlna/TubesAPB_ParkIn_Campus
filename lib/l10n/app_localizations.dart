@@ -547,6 +547,222 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'An unexpected error occurred'**
   String get unknownError;
+
+  /// No description provided for @registerVehicleFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Please register a vehicle first'**
+  String get registerVehicleFirst;
+
+  /// No description provided for @carOnlyArea.
+  ///
+  /// In en, this message translates to:
+  /// **'This parking area is for cars only'**
+  String get carOnlyArea;
+
+  /// No description provided for @motorcycleOnlyArea.
+  ///
+  /// In en, this message translates to:
+  /// **'This parking area is for motorcycles only'**
+  String get motorcycleOnlyArea;
+
+  /// No description provided for @vehicleRegistration.
+  ///
+  /// In en, this message translates to:
+  /// **'Vehicle Registration'**
+  String get vehicleRegistration;
+
+  /// No description provided for @addNewVehicle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add New Vehicle'**
+  String get addNewVehicle;
+
+  /// No description provided for @editVehicle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Vehicle'**
+  String get editVehicle;
+
+  /// No description provided for @car.
+  ///
+  /// In en, this message translates to:
+  /// **'Car'**
+  String get car;
+
+  /// No description provided for @motorcycle.
+  ///
+  /// In en, this message translates to:
+  /// **'Motorcycle'**
+  String get motorcycle;
+
+  /// No description provided for @vehicleBrand.
+  ///
+  /// In en, this message translates to:
+  /// **'Vehicle Brand'**
+  String get vehicleBrand;
+
+  /// No description provided for @vehicleModel.
+  ///
+  /// In en, this message translates to:
+  /// **'Vehicle Model'**
+  String get vehicleModel;
+
+  /// No description provided for @vehicleBrandRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Vehicle brand is required'**
+  String get vehicleBrandRequired;
+
+  /// No description provided for @vehicleModelRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Vehicle model is required'**
+  String get vehicleModelRequired;
+
+  /// No description provided for @vehicleRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Vehicle plate number is required'**
+  String get vehicleRequired;
+
+  /// No description provided for @invalidPlateFormat.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid plate format. Example: B 1234 AMN'**
+  String get invalidPlateFormat;
+
+  /// No description provided for @saving.
+  ///
+  /// In en, this message translates to:
+  /// **'Saving...'**
+  String get saving;
+
+  /// No description provided for @addVehicle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Vehicle'**
+  String get addVehicle;
+
+  /// No description provided for @update.
+  ///
+  /// In en, this message translates to:
+  /// **'Update'**
+  String get update;
+
+  /// No description provided for @registeredVehicles.
+  ///
+  /// In en, this message translates to:
+  /// **'Registered Vehicles'**
+  String get registeredVehicles;
+
+  /// No description provided for @noRegisteredVehicle.
+  ///
+  /// In en, this message translates to:
+  /// **'No registered vehicles'**
+  String get noRegisteredVehicle;
+
+  /// No description provided for @vehicleAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'Vehicle added successfully'**
+  String get vehicleAdded;
+
+  /// No description provided for @vehicleUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Vehicle updated successfully'**
+  String get vehicleUpdated;
+
+  /// No description provided for @vehicleDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Vehicle deleted successfully'**
+  String get vehicleDeleted;
+
+  /// No description provided for @deleteVehicle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Vehicle'**
+  String get deleteVehicle;
+
+  /// No description provided for @deleteVehicleConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete {plate}?'**
+  String deleteVehicleConfirm(Object plate);
+
+  /// No description provided for @delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get delete;
+
+  /// No description provided for @edit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get edit;
+
+  /// No description provided for @viewProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'View Profile'**
+  String get viewProfile;
+
+  /// No description provided for @manageVehicle.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage Vehicle'**
+  String get manageVehicle;
+
+  /// No description provided for @save.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get save;
+
+  /// No description provided for @profileDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile Detail'**
+  String get profileDetail;
+
+  /// No description provided for @editProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Profile'**
+  String get editProfile;
+
+  /// No description provided for @nameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Name is required'**
+  String get nameRequired;
+
+  /// No description provided for @profileUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile updated successfully'**
+  String get profileUpdated;
+
+  /// No description provided for @vehicles.
+  ///
+  /// In en, this message translates to:
+  /// **'Vehicles'**
+  String get vehicles;
+
+  /// No description provided for @noVehicle.
+  ///
+  /// In en, this message translates to:
+  /// **'No vehicle registered'**
+  String get noVehicle;
+
+  /// No description provided for @language.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get language;
 }
 
 class _AppLocalizationsDelegate
