@@ -158,7 +158,7 @@ class ParkingStatusPage extends StatelessWidget {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
+      /* floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.primary,
         onPressed: () async {
           await _parkingService.seedParkingDatabase();
@@ -172,7 +172,7 @@ class ParkingStatusPage extends StatelessWidget {
           }
         },
         child: const Icon(Icons.dataset, color: AppColors.textWhite),
-      ),
+      ), */
     );
   }
 }
