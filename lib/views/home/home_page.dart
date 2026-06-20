@@ -86,7 +86,7 @@ class HomePage extends StatelessWidget {
                   scrollDirection: Axis
                       .horizontal, // <-- Kuncinya di sini, bikin scroll kesamping
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       _buildMenuCard(
                         icon: Icons.local_parking_rounded,
