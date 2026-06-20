@@ -89,7 +89,7 @@ class HomePage extends StatelessWidget {
                   crossAxisSpacing: 16,
                   mainAxisSpacing: 16,
                   mainAxisExtent:
-                      180, // <-- KUNCI: Kasih tinggi tetap yang cukup buat teks biar gak overflow
+                      260, // <-- KUNCI: Kasih tinggi tetap yang cukup buat teks biar gak overflow
                   children: [
                     _buildMenuCard(
                       icon: Icons.local_parking_rounded,
