@@ -94,7 +94,6 @@ class HomePage extends StatelessWidget {
                     _buildMenuCard(
                       icon: Icons.local_parking_rounded,
                       title: "Parking",
-                      description: "Slot info.",
                       onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -106,7 +105,6 @@ class HomePage extends StatelessWidget {
                     _buildMenuCard(
                       icon: Icons.history_rounded,
                       title: "History",
-                      description: "Past data.",
                       onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => HistoryPage()),
@@ -116,7 +114,6 @@ class HomePage extends StatelessWidget {
                     _buildMenuCard(
                       icon: Icons.directions_car_filled_rounded,
                       title: "Vehicle",
-                      description: "Car info.",
                       onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -129,7 +126,6 @@ class HomePage extends StatelessWidget {
                       icon: Icons.location_on_rounded,
                       title:
                           "Find Ride", // Judul disingkat biar gak kepanjangan
-                      description: "Locate.",
                       onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -368,7 +364,6 @@ class HomePage extends StatelessWidget {
   Widget _buildMenuCard({
     required IconData icon,
     required String title,
-    required String description,
     required VoidCallback onTap,
     required bool isMobile,
   }) {
@@ -397,6 +392,7 @@ class HomePage extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(30),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: isMobile
                   ? CrossAxisAlignment.center
                   : CrossAxisAlignment.start,
@@ -420,15 +416,6 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 16),
-                Text(
-                  description,
-                  textAlign: isMobile ? TextAlign.center : TextAlign.start,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Colors.black54,
-                    height: 1.5,
-                  ),
-                ),
               ],
             ),
           ),
