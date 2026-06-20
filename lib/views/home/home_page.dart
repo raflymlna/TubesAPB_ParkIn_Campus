@@ -82,77 +82,47 @@ class HomePage extends StatelessWidget {
               // Section 2: Barisan Card (Horizontal Scroll)
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: isMobile ? 20 : 100),
-                child: SizedBox(
-                  height: 350,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: [
-                      // Bungkus setiap _buildMenuCard dengan SizedBox yang punya lebar
-                      SizedBox(
-                        width: 300,
-                        child: _buildMenuCard(
-                          icon: Icons.local_parking_rounded,
-                          title: "Parking Slot",
-                          description: "Check available parking slots.",
-                          onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ParkingStatusPage(),
-                            ),
-                          ),
-                          isMobile: isMobile,
-                        ),
-                      ),
-                      const SizedBox(width: 20),
-                      SizedBox(
-                        width: 300,
-                        child: _buildMenuCard(
-                          icon: Icons.history_rounded,
-                          title: "Parking History",
-                          description: "View your past activities.",
-                          onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => HistoryPage(),
-                            ),
-                          ),
-                          isMobile: isMobile,
-                        ),
-                      ),
-                      const SizedBox(width: 20),
-                      SizedBox(
-                        width: 300,
-                        child: _buildMenuCard(
-                          icon: Icons.directions_car_filled_rounded,
-                          title: "Vehicle Data",
-                          description: "Manage your vehicle info.",
-                          onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => RegistrasiKendaraanPage(),
-                            ),
-                          ),
-                          isMobile: isMobile,
-                        ),
-                      ),
-                      const SizedBox(width: 20),
-                      SizedBox(
-                        width: 300,
-                        child: _buildMenuCard(
-                          icon: Icons.location_on_rounded,
-                          title: "Find My Ride",
-                          description: "Easily locate your vehicle.",
-                          onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const FindMyRidePage(),
-                            ),
-                          ),
-                          isMobile: isMobile,
-                        ),
-                      ),
-                    ],
-                  ),
+                child: GridView.count(
+                  shrinkWrap:
+                      true, // Penting: biar GridView nggak minta space tak terbatas
+                  physics:
+                      NeverScrollableScrollPhysics(), // Penting: biar nggak bisa di-scroll
+                  crossAxisCount: isMobile
+                      ? 2
+                      : 4, // Kalau HP 2 kolom, kalau desktop 4 kolom
+                  crossAxisSpacing: 15,
+                  mainAxisSpacing: 15,
+                  childAspectRatio: 1.0, // Biar bentuknya kotak presisi
+                  children: [
+                    _buildMenuCard(
+                      icon: Icons.local_parking_rounded,
+                      title: "Parking",
+                      description: "Slot info.",
+                      onTap: () {},
+                      isMobile: isMobile,
+                    ),
+                    _buildMenuCard(
+                      icon: Icons.history_rounded,
+                      title: "History",
+                      description: "Past data.",
+                      onTap: () {},
+                      isMobile: isMobile,
+                    ),
+                    _buildMenuCard(
+                      icon: Icons.directions_car_filled_rounded,
+                      title: "Vehicle",
+                      description: "Car info.",
+                      onTap: () {},
+                      isMobile: isMobile,
+                    ),
+                    _buildMenuCard(
+                      icon: Icons.location_on_rounded,
+                      title: "Find",
+                      description: "Locate.",
+                      onTap: () {},
+                      isMobile: isMobile,
+                    ),
+                  ],
                 ),
               ),
 
