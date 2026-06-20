@@ -82,17 +82,15 @@ class HomePage extends StatelessWidget {
               // Section 2: Barisan Card (Horizontal Scroll)
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: isMobile ? 20 : 100),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis
-                      .horizontal, // <-- Kuncinya di sini, bikin scroll kesamping
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
+                child: SizedBox(
+                  height: 350, // PENTING: Kasih tinggi fixed buat ListView
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
                     children: [
                       _buildMenuCard(
                         icon: Icons.local_parking_rounded,
                         title: "Parking Slot",
-                        description:
-                            "Check available parking slots in real-time.",
+                        description: "Check available parking slots.",
                         onTap: () => Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -101,7 +99,7 @@ class HomePage extends StatelessWidget {
                         ),
                         isMobile: isMobile,
                       ),
-                      const SizedBox(width: 20), // Jarak antar card
+                      const SizedBox(width: 20),
                       _buildMenuCard(
                         icon: Icons.history_rounded,
                         title: "Parking History",
