@@ -81,45 +81,61 @@ class HomePage extends StatelessWidget {
               ),
               // Section 2: Barisan Card (Horizontal Scroll)
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: isMobile ? 20 : 100),
+                padding: EdgeInsets.symmetric(horizontal: 20),
                 child: GridView.count(
-                  shrinkWrap:
-                      true, // Penting: biar GridView nggak minta space tak terbatas
-                  physics:
-                      NeverScrollableScrollPhysics(), // Penting: biar nggak bisa di-scroll
-                  crossAxisCount: isMobile
-                      ? 2
-                      : 4, // Kalau HP 2 kolom, kalau desktop 4 kolom
-                  crossAxisSpacing: 15,
-                  mainAxisSpacing: 15,
-                  childAspectRatio: 0.85, // Biar bentuknya kotak presisi
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  crossAxisCount: 2, // Tetap 2 kolom buat HP
+                  crossAxisSpacing: 16,
+                  mainAxisSpacing: 16,
+                  mainAxisExtent:
+                      180, // <-- KUNCI: Kasih tinggi tetap yang cukup buat teks biar gak overflow
                   children: [
                     _buildMenuCard(
                       icon: Icons.local_parking_rounded,
                       title: "Parking",
                       description: "Slot info.",
-                      onTap: () {},
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ParkingStatusPage(),
+                        ),
+                      ),
                       isMobile: isMobile,
                     ),
                     _buildMenuCard(
                       icon: Icons.history_rounded,
                       title: "History",
                       description: "Past data.",
-                      onTap: () {},
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => HistoryPage()),
+                      ),
                       isMobile: isMobile,
                     ),
                     _buildMenuCard(
                       icon: Icons.directions_car_filled_rounded,
                       title: "Vehicle",
                       description: "Car info.",
-                      onTap: () {},
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => RegistrasiKendaraanPage(),
+                        ),
+                      ),
                       isMobile: isMobile,
                     ),
                     _buildMenuCard(
                       icon: Icons.location_on_rounded,
-                      title: "Find My Ride",
+                      title:
+                          "Find Ride", // Judul disingkat biar gak kepanjangan
                       description: "Locate.",
-                      onTap: () {},
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => FindMyRidePage(),
+                        ),
+                      ),
                       isMobile: isMobile,
                     ),
                   ],
