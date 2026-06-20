@@ -92,7 +92,7 @@ class HomePage extends StatelessWidget {
                       : 4, // Kalau HP 2 kolom, kalau desktop 4 kolom
                   crossAxisSpacing: 15,
                   mainAxisSpacing: 15,
-                  childAspectRatio: 1.0, // Biar bentuknya kotak presisi
+                  childAspectRatio: 0.85, // Biar bentuknya kotak presisi
                   children: [
                     _buildMenuCard(
                       icon: Icons.local_parking_rounded,
@@ -117,7 +117,7 @@ class HomePage extends StatelessWidget {
                     ),
                     _buildMenuCard(
                       icon: Icons.location_on_rounded,
-                      title: "Find",
+                      title: "Find My Ride",
                       description: "Locate.",
                       onTap: () {},
                       isMobile: isMobile,
