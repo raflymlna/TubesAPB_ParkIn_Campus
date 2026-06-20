@@ -102,5 +102,58 @@
   "wrongPassword": "Incorrect password",
   "emailAlreadyUsed": "Email is already registered",
   "weakPassword": "Password is too weak",
-  "unknownError": "An unexpected error occurred"
+  "unknownError": "An unexpected error occurred",
+  "registerVehicleFirst": "Please register a vehicle first",
+  "carOnlyArea": "This parking area is for cars only",
+  "motorcycleOnlyArea": "This parking area is for motorcycles only",
+  "vehicleRegistration": "Vehicle Registration",
+"addNewVehicle": "Add New Vehicle",
+"editVehicle": "Edit Vehicle",
+
+"vehicleType": "Vehicle Type",
+"car": "Car",
+"motorcycle": "Motorcycle",
+
+"vehicleBrand": "Vehicle Brand",
+"vehicleModel": "Vehicle Model",
+
+"vehicleBrandRequired": "Vehicle brand is required",
+"vehicleModelRequired": "Vehicle model is required",
+
+"vehicleRequired": "Vehicle plate number is required",
+"invalidPlateFormat": "Invalid plate format. Example: B 1234 AMN",
+
+"cancel": "Cancel",
+"saving": "Saving...",
+"addVehicle": "Add Vehicle",
+"update": "Update",
+
+"registeredVehicles": "Registered Vehicles",
+"noRegisteredVehicle": "No registered vehicles",
+
+"vehicleAdded": "Vehicle added successfully",
+"vehicleUpdated": "Vehicle updated successfully",
+"vehicleDeleted": "Vehicle deleted successfully",
+
+"deleteVehicle": "Delete Vehicle",
+"deleteVehicleConfirm": "Are you sure you want to delete {plate}?",
+
+"delete": "Delete",
+"edit": "Edit",
+ "viewProfile": "View Profile",
+  "manageVehicle": "Manage Vehicle",
+  "edit": "Edit",
+  "save": "Save",
+  "profileDetail": "Profile Detail",
+  "profileDetail": "Profile Detail",
+"viewProfile": "View Profile",
+"editProfile": "Edit Profile",
+"save": "Save",
+"nameRequired": "Name is required",
+"profileUpdated": "Profile updated successfully",
+"save": "Save",
+"vehicles": "Vehicles",
+"vehicles": "Vehicles",
+"noVehicle": "No vehicle registered",
+"language": "Language"
 }

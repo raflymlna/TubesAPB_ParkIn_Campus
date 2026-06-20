@@ -240,4 +240,114 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get unknownError => 'An unexpected error occurred';
+
+  @override
+  String get registerVehicleFirst => 'Please register a vehicle first';
+
+  @override
+  String get carOnlyArea => 'This parking area is for cars only';
+
+  @override
+  String get motorcycleOnlyArea => 'This parking area is for motorcycles only';
+
+  @override
+  String get vehicleRegistration => 'Vehicle Registration';
+
+  @override
+  String get addNewVehicle => 'Add New Vehicle';
+
+  @override
+  String get editVehicle => 'Edit Vehicle';
+
+  @override
+  String get car => 'Car';
+
+  @override
+  String get motorcycle => 'Motorcycle';
+
+  @override
+  String get vehicleBrand => 'Vehicle Brand';
+
+  @override
+  String get vehicleModel => 'Vehicle Model';
+
+  @override
+  String get vehicleBrandRequired => 'Vehicle brand is required';
+
+  @override
+  String get vehicleModelRequired => 'Vehicle model is required';
+
+  @override
+  String get vehicleRequired => 'Vehicle plate number is required';
+
+  @override
+  String get invalidPlateFormat => 'Invalid plate format. Example: B 1234 AMN';
+
+  @override
+  String get saving => 'Saving...';
+
+  @override
+  String get addVehicle => 'Add Vehicle';
+
+  @override
+  String get update => 'Update';
+
+  @override
+  String get registeredVehicles => 'Registered Vehicles';
+
+  @override
+  String get noRegisteredVehicle => 'No registered vehicles';
+
+  @override
+  String get vehicleAdded => 'Vehicle added successfully';
+
+  @override
+  String get vehicleUpdated => 'Vehicle updated successfully';
+
+  @override
+  String get vehicleDeleted => 'Vehicle deleted successfully';
+
+  @override
+  String get deleteVehicle => 'Delete Vehicle';
+
+  @override
+  String deleteVehicleConfirm(Object plate) {
+    return 'Are you sure you want to delete $plate?';
+  }
+
+  @override
+  String get delete => 'Delete';
+
+  @override
+  String get edit => 'Edit';
+
+  @override
+  String get viewProfile => 'View Profile';
+
+  @override
+  String get manageVehicle => 'Manage Vehicle';
+
+  @override
+  String get save => 'Save';
+
+  @override
+  String get profileDetail => 'Profile Detail';
+
+  @override
+  String get editProfile => 'Edit Profile';
+
+  @override
+  String get nameRequired => 'Name is required';
+
+  @override
+  String get profileUpdated => 'Profile updated successfully';
+
+  @override
+  String get vehicles => 'Vehicles';
+
+  @override
+  String get noVehicle => 'No vehicle registered';
+
+  @override
+  String get language => 'Language';
 }
