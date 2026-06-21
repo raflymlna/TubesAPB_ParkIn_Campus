@@ -303,9 +303,9 @@ class _FindMyRidePageState extends State<FindMyRidePage> {
                     ),
                     children: [
                       TileLayer(
-                        urlTemplate:
-                            'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                      ),
+  urlTemplate:
+      'https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
+),
                       PolylineLayer(
                         polylines: [
                           Polyline(
@@ -572,38 +572,49 @@ class _FindMyRidePageState extends State<FindMyRidePage> {
   /// MOTOR: FIT-FIK, TULT, GKU, GATE 4
   /// MOBIL: GATE 2, GATE 3
   LatLng _getLocationCoordinates(String location) {
-    final normalizedLocation = location.toLowerCase().trim();
+  final normalizedLocation =
+      location.toLowerCase().trim();
 
-    // Gate 2 Parking Area (MOBIL)
-    if (normalizedLocation.contains('gate 2') || normalizedLocation.contains('gate2')) {
-      return const LatLng(-6.9742, 107.6310);
-    }
-
-    // Gate 3 Parking Area (MOBIL)
-    if (normalizedLocation.contains('gate 3') || normalizedLocation.contains('gate3')) {
-      return const LatLng(-6.9750, 107.6320);
-    }
-
-    // Gate 4 Parking Area (MOTOR)
-    if (normalizedLocation.contains('gate 4') || normalizedLocation.contains('gate4')) {
-      return const LatLng(-6.9755, 107.6330);
-    }
-
-    // FIT-FIK Parking Area (MOTOR)
-    if (normalizedLocation.contains('fit-fik') ||
-        normalizedLocation.contains('fit fik') ||
-        normalizedLocation.contains('fitfik')) {
-      return const LatLng(-6.9728, 107.6290);
-    }
-
-    // GKU Parking Area (MOTOR)
-    if (normalizedLocation.contains('gku')) {
-      return const LatLng(-6.9720, 107.6280);
-    }
-
-    // TULT Parking Area (MOTOR) - default
-    return const LatLng(-6.9735, 107.6298);
+  if (normalizedLocation.contains('gate 2')) {
+    return const LatLng(
+      -6.9742,
+      107.6310,
+    );
   }
+
+  if (normalizedLocation.contains('gate 3')) {
+    return const LatLng(
+      -6.9750,
+      107.6320,
+    );
+  }
+
+  if (normalizedLocation.contains('gate 4')) {
+    return const LatLng(
+      -6.9755,
+      107.6330,
+    );
+  }
+
+  if (normalizedLocation.contains('fit')) {
+    return const LatLng(
+      -6.9728,
+      107.6290,
+    );
+  }
+
+  if (normalizedLocation.contains('gku')) {
+    return const LatLng(
+      -6.9720,
+      107.6280,
+    );
+  }
+
+  return const LatLng(
+    -6.9735,
+    107.6298,
+  );
+}
 
   /// Format location name for display
   /// Converts lowercase/mixed case to proper capitalization
