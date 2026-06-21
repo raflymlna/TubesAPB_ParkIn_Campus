@@ -547,6 +547,414 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'An unexpected error occurred'**
   String get unknownError;
+
+  /// No description provided for @registerVehicleFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Please register a vehicle first'**
+  String get registerVehicleFirst;
+
+  /// No description provided for @carOnlyArea.
+  ///
+  /// In en, this message translates to:
+  /// **'This parking area is for cars only'**
+  String get carOnlyArea;
+
+  /// No description provided for @motorcycleOnlyArea.
+  ///
+  /// In en, this message translates to:
+  /// **'This parking area is for motorcycles only'**
+  String get motorcycleOnlyArea;
+
+  /// No description provided for @vehicleRegistration.
+  ///
+  /// In en, this message translates to:
+  /// **'Vehicle Registration'**
+  String get vehicleRegistration;
+
+  /// No description provided for @addNewVehicle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add New Vehicle'**
+  String get addNewVehicle;
+
+  /// No description provided for @editVehicle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Vehicle'**
+  String get editVehicle;
+
+  /// No description provided for @car.
+  ///
+  /// In en, this message translates to:
+  /// **'Car'**
+  String get car;
+
+  /// No description provided for @motorcycle.
+  ///
+  /// In en, this message translates to:
+  /// **'Motorcycle'**
+  String get motorcycle;
+
+  /// No description provided for @vehicleBrand.
+  ///
+  /// In en, this message translates to:
+  /// **'Vehicle Brand'**
+  String get vehicleBrand;
+
+  /// No description provided for @vehicleModel.
+  ///
+  /// In en, this message translates to:
+  /// **'Vehicle Model'**
+  String get vehicleModel;
+
+  /// No description provided for @vehicleBrandRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Vehicle brand is required'**
+  String get vehicleBrandRequired;
+
+  /// No description provided for @vehicleModelRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Vehicle model is required'**
+  String get vehicleModelRequired;
+
+  /// No description provided for @vehicleRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Vehicle plate number is required'**
+  String get vehicleRequired;
+
+  /// No description provided for @invalidPlateFormat.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid plate format. Example: B 1234 AMN'**
+  String get invalidPlateFormat;
+
+  /// No description provided for @saving.
+  ///
+  /// In en, this message translates to:
+  /// **'Saving...'**
+  String get saving;
+
+  /// No description provided for @addVehicle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Vehicle'**
+  String get addVehicle;
+
+  /// No description provided for @update.
+  ///
+  /// In en, this message translates to:
+  /// **'Update'**
+  String get update;
+
+  /// No description provided for @registeredVehicles.
+  ///
+  /// In en, this message translates to:
+  /// **'Registered Vehicles'**
+  String get registeredVehicles;
+
+  /// No description provided for @noRegisteredVehicle.
+  ///
+  /// In en, this message translates to:
+  /// **'No registered vehicles'**
+  String get noRegisteredVehicle;
+
+  /// No description provided for @vehicleAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'Vehicle added successfully'**
+  String get vehicleAdded;
+
+  /// No description provided for @vehicleUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Vehicle updated successfully'**
+  String get vehicleUpdated;
+
+  /// No description provided for @vehicleDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Vehicle deleted successfully'**
+  String get vehicleDeleted;
+
+  /// No description provided for @deleteVehicle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Vehicle'**
+  String get deleteVehicle;
+
+  /// No description provided for @deleteVehicleConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete {plate}?'**
+  String deleteVehicleConfirm(Object plate);
+
+  /// No description provided for @delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get delete;
+
+  /// No description provided for @edit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get edit;
+
+  /// No description provided for @viewProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'View Profile'**
+  String get viewProfile;
+
+  /// No description provided for @manageVehicle.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage Vehicle'**
+  String get manageVehicle;
+
+  /// No description provided for @save.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get save;
+
+  /// No description provided for @profileDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile Detail'**
+  String get profileDetail;
+
+  /// No description provided for @editProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Profile'**
+  String get editProfile;
+
+  /// No description provided for @nameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Name is required'**
+  String get nameRequired;
+
+  /// No description provided for @profileUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile updated successfully'**
+  String get profileUpdated;
+
+  /// No description provided for @vehicles.
+  ///
+  /// In en, this message translates to:
+  /// **'Vehicles'**
+  String get vehicles;
+
+  /// No description provided for @noVehicle.
+  ///
+  /// In en, this message translates to:
+  /// **'No vehicle registered'**
+  String get noVehicle;
+
+  /// No description provided for @language.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get language;
+
+  /// No description provided for @easyToRegister.
+  ///
+  /// In en, this message translates to:
+  /// **'Easy to register'**
+  String get easyToRegister;
+
+  /// No description provided for @easyToUse.
+  ///
+  /// In en, this message translates to:
+  /// **'Easy to use'**
+  String get easyToUse;
+
+  /// No description provided for @smartSlotFinder.
+  ///
+  /// In en, this message translates to:
+  /// **'Smart Slot Finder'**
+  String get smartSlotFinder;
+
+  /// No description provided for @errorMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Error: {error}'**
+  String errorMessage(Object error);
+
+  /// No description provided for @parkingDatabaseGenerated.
+  ///
+  /// In en, this message translates to:
+  /// **'Parking database regenerated successfully.'**
+  String get parkingDatabaseGenerated;
+
+  /// No description provided for @vehicleFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Vehicle Found'**
+  String get vehicleFound;
+
+  /// No description provided for @currentlyParked.
+  ///
+  /// In en, this message translates to:
+  /// **'Currently Parked'**
+  String get currentlyParked;
+
+  /// No description provided for @slot.
+  ///
+  /// In en, this message translates to:
+  /// **'Slot'**
+  String get slot;
+
+  /// No description provided for @parkedSince.
+  ///
+  /// In en, this message translates to:
+  /// **'Parked Since'**
+  String get parkedSince;
+
+  /// No description provided for @parkingMap.
+  ///
+  /// In en, this message translates to:
+  /// **'Parking Map'**
+  String get parkingMap;
+
+  /// No description provided for @navigationActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Navigation Active'**
+  String get navigationActive;
+
+  /// No description provided for @navigateToSlot.
+  ///
+  /// In en, this message translates to:
+  /// **'Navigate To Slot'**
+  String get navigateToSlot;
+
+  /// No description provided for @navigationRoute.
+  ///
+  /// In en, this message translates to:
+  /// **'Navigation Route'**
+  String get navigationRoute;
+
+  /// No description provided for @directions.
+  ///
+  /// In en, this message translates to:
+  /// **'Directions'**
+  String get directions;
+
+  /// No description provided for @direction1.
+  ///
+  /// In en, this message translates to:
+  /// **'1. Walk straight for 20 meters'**
+  String get direction1;
+
+  /// No description provided for @direction2.
+  ///
+  /// In en, this message translates to:
+  /// **'2. Turn right to Row A'**
+  String get direction2;
+
+  /// No description provided for @direction3.
+  ///
+  /// In en, this message translates to:
+  /// **'3. Your vehicle is located at Slot A-27'**
+  String get direction3;
+
+  /// No description provided for @parkingAvailability.
+  ///
+  /// In en, this message translates to:
+  /// **'Parking Availability'**
+  String get parkingAvailability;
+
+  /// No description provided for @noParkingData.
+  ///
+  /// In en, this message translates to:
+  /// **'No parking slot data available.'**
+  String get noParkingData;
+
+  /// No description provided for @vehicle.
+  ///
+  /// In en, this message translates to:
+  /// **'Vehicle'**
+  String get vehicle;
+
+  /// No description provided for @parkInCampusSimple.
+  ///
+  /// In en, this message translates to:
+  /// **'ParkInCampus is simple to use'**
+  String get parkInCampusSimple;
+
+  /// No description provided for @easyToRegisterDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock added benefits when you register on our app. Registering is simple and straightforward. It takes less than 30 seconds.'**
+  String get easyToRegisterDesc;
+
+  /// No description provided for @easyToUseDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Get access to parking spots instantly with our seamless interface. No complicated forms or long queues—just open the app, find your spot, and start your journey within seconds.'**
+  String get easyToUseDesc;
+
+  /// No description provided for @smartSlotFinderDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'No more circling around the block. View live parking occupancy through our app and navigate directly to an empty slot, ensuring a stress-free parking experience.'**
+  String get smartSlotFinderDesc;
+
+  /// No description provided for @weAre.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'re '**
+  String get weAre;
+
+  /// No description provided for @everywhere.
+  ///
+  /// In en, this message translates to:
+  /// **'everywhere'**
+  String get everywhere;
+
+  /// No description provided for @youNeedUs.
+  ///
+  /// In en, this message translates to:
+  /// **' you need us to be'**
+  String get youNeedUs;
+
+  /// No description provided for @journeyDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Work. Gym. Class. Hang Out. ParkInCampus is with you on your journey each day. We are available in over 1,000 parking slots at Telkom University. You can choose us to simplify your journey.'**
+  String get journeyDescription;
+
+  /// No description provided for @alreadyParkedAt.
+  ///
+  /// In en, this message translates to:
+  /// **'You are currently parked at {location}'**
+  String alreadyParkedAt(Object location);
+
+  /// No description provided for @parkingFull.
+  ///
+  /// In en, this message translates to:
+  /// **'{vehicleType} parking at {building} is full!'**
+  String parkingFull(Object building, Object vehicleType);
+
+  /// No description provided for @ourLocations.
+  ///
+  /// In en, this message translates to:
+  /// **'Our Locations'**
+  String get ourLocations;
+
+  /// No description provided for @helloUser.
+  ///
+  /// In en, this message translates to:
+  /// **'Hello, {name}'**
+  String helloUser(Object name);
 }
 
 class _AppLocalizationsDelegate

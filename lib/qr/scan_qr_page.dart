@@ -3,6 +3,8 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 import '../services/parking_history_service.dart';
 import '../../l10n/app_localizations.dart';
 import '../services/vehicle_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class QRPage extends StatefulWidget {
   const QRPage({super.key});
@@ -26,76 +28,162 @@ class _QRPageState extends State<QRPage> {
       final cleaned = code.trim();
 
       if (!cleaned.contains("|")) {
-        showResult(AppLocalizations.of(context)!.invalidQr,);
+        showResult(AppLocalizations.of(context)!.invalidQr);
         return;
       }
 
       final parts = cleaned.split("|");
 
       if (parts.length != 2) {
-        showResult(AppLocalizations.of(context)!.invalidQrFormat,);
+        showResult(AppLocalizations.of(context)!.invalidQrFormat);
         return;
       }
 
       final action = parts[0].trim().toLowerCase();
       final building = parts[1].trim();
 
+      final firestore = FirebaseFirestore.instance;
+      final auth = FirebaseAuth.instance;
+
       //  PARK IN
       if (action == "park in") {
-        await validateParkingAccess(building);
-        await historyService.parkIn(building);
+        final activeParking = await firestore
+            .collection('parking_history')
+            .where('userId', isEqualTo: auth.currentUser?.uid)
+            .where('status', isEqualTo: 'Park')
+            .limit(1)
+            .get();
 
-        showResult(AppLocalizations.of(context)!.parkInSuccess(building),);
-      } else if (action == "park out") {
+        if (activeParking.docs.isNotEmpty) {
+          final currentParkLocation = activeParking.docs.first
+              .data()['location'];
+
+          throw Exception(AppLocalizations.of(context)!.alreadyParkedAt(currentParkLocation),);
+        }
         await validateParkingAccess(building);
+
+        String userVehicleType = 'Motor';
+        String? vehicleId;
+        String? vehicleLicensePlate;
+        String? vehicleBrand;
+        String? vehicleModel;
+        String? vehicleRawType;
+
+        final vehicleQuery = await firestore
+            .collection('vehicles')
+            .where('userId', isEqualTo: auth.currentUser?.uid)
+            .limit(1)
+            .get();
+
+        if (vehicleQuery.docs.isNotEmpty) {
+          final vDoc = vehicleQuery.docs.first;
+          final vData = vDoc.data();
+          vehicleId = vDoc.id;
+          vehicleRawType = (vData['type'] ?? 'Motor').toString();
+          vehicleLicensePlate = vData['licensePlate']?.toString();
+          vehicleBrand = vData['brand']?.toString();
+          vehicleModel = vData['model']?.toString();
+
+          if (vehicleRawType.toLowerCase().contains('motor')) {
+            userVehicleType = 'Motor';
+          } else if (vehicleRawType.toLowerCase().contains('mobil')) {
+            userVehicleType = 'Mobil';
+          }
+        }
+
+        final slotKosong = await firestore
+            .collection('parking_slots')
+            .where('locationName', isEqualTo: building)
+            .where('vehicleType', isEqualTo: userVehicleType)
+            .where('isAvailable', isEqualTo: true)
+            .orderBy('slotName')
+            .limit(1)
+            .get();
+
+        if (slotKosong.docs.isEmpty) {
+          throw Exception(AppLocalizations.of(context)!.parkingFull(userVehicleType,building,),);
+        }
+
+        final slotDoc = slotKosong.docs.first;
+        final slotName = slotDoc.data()['slotName'];
+
+        await slotDoc.reference.update({'isAvailable': false});
+
+        await historyService.parkIn(
+          building,
+          slotName,
+          vehicleId: vehicleId,
+          licensePlate: vehicleLicensePlate,
+          brand: vehicleBrand,
+          model: vehicleModel,
+          type: vehicleRawType,
+        );
+
+        showResult(AppLocalizations.of(context)!.parkInSuccess(building));
+      }
+      // PARK OUT
+      else if (action == "park out") {
+        await validateParkingAccess(building);
+
+        final activeParking = await firestore
+            .collection('parking_history')
+            .where('userId', isEqualTo: historyService.uid)
+            .where('status', isEqualTo: 'Park')
+            .limit(1)
+            .get();
+
+        if (activeParking.docs.isEmpty) {
+          throw Exception("not_parked");
+        }
+
+        final historyData = activeParking.docs.first.data();
+        final parkedSlotName = historyData['slotName'];
+        final parkedLocation = historyData['location'];
+
+        if (parkedLocation != building) {
+          throw Exception("wrong_location:$parkedLocation");
+        }
+
+        if (parkedSlotName != null) {
+          await firestore
+              .collection('parking_slots')
+              .doc(parkedSlotName)
+              .update({'isAvailable': true});
+        }
+
         await historyService.parkOut(building);
 
-        showResult(AppLocalizations.of(context)!.parkOutSuccess(building),);
+        showResult(AppLocalizations.of(context)!.parkOutSuccess(building));
       } else {
-        showResult(
-  AppLocalizations.of(context)!.unknownQr,);
+        showResult(AppLocalizations.of(context)!.unknownQr,);
       }
     } catch (e) {
+      String error = e.toString();
 
-  String error = e.toString();
-
-  if (error.contains("active_parking")) {
-
-    showResult(
-      AppLocalizations.of(context)!
-          .activeParking,
-    );
-
-  } else if (error.contains("not_parked")) {
-
-    showResult(
-      AppLocalizations.of(context)!
-          .notParked,
-    );
-
-  } else if (error.contains("wrong_location:")) {
-
-    final location =
-        error.split(":").last;
-
-    showResult(
-      AppLocalizations.of(context)!
-          .wrongLocation(location),
-    );
-
-  } else {
-
-    showResult(error);
-
-  }
-}
+      if (error.contains("active_parking")) {
+        showResult(AppLocalizations.of(context)!.activeParking,);
+      } else if (error.contains("not_parked")) {
+        showResult(AppLocalizations.of(context)!.notParked,);
+      } else if (error.contains("wrong_location:")) {
+        final location = error.split(":").last;
+        showResult(AppLocalizations.of(context)!.wrongLocation(location),);
+      } else if (error.contains("registerVehicleFirst")) {
+        showResult(AppLocalizations.of(context)!.registerVehicleFirst,);
+      } else if (error.contains("carOnlyArea")) {
+        showResult(AppLocalizations.of(context)!.carOnlyArea,);
+      } else if (error.contains("motorcycleOnlyArea")) {
+        showResult(AppLocalizations.of(context)!.motorcycleOnlyArea,);
+      } else {
+         showResult(error.replaceFirst("Exception: ", ""),);
+      }
+    }
   }
 
   Future<void> validateParkingAccess(String location) async {
     final vehicleTypes = await vehicleService.getUserVehicleTypes();
 
     if (vehicleTypes.isEmpty) {
-      throw Exception("Silakan registrasikan kendaraan terlebih dahulu");
+      throw Exception("registerVehicleFirst");
     }
 
     const motorAreas = ['Gate 4', 'GKU', 'TULT', 'FIT-FIK', 'FKS-FEB'];
@@ -111,11 +199,11 @@ class _QRPageState extends State<QRPage> {
     }
 
     if (hasMotor && carAreas.contains(location)) {
-      throw Exception("Area parkir ini hanya untuk mobil");
+      throw Exception("carOnlyArea");
     }
 
     if (hasCar && motorAreas.contains(location)) {
-      throw Exception("Area parkir ini hanya untuk motor");
+      throw Exception("motorcycleOnlyArea");
     }
   }
 
@@ -123,7 +211,7 @@ class _QRPageState extends State<QRPage> {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: Text(AppLocalizations.of(context)!.info,),
+        title: Text(AppLocalizations.of(context)!.info),
         content: Text(message),
         actions: [
           TextButton(
@@ -131,7 +219,7 @@ class _QRPageState extends State<QRPage> {
               Navigator.pop(context);
               setState(() => isScanned = false);
             },
-            child: Text(AppLocalizations.of(context)!.ok,),
+            child: Text(AppLocalizations.of(context)!.ok),
           ),
         ],
       ),
@@ -141,7 +229,7 @@ class _QRPageState extends State<QRPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(AppLocalizations.of(context)!.scanQrParking,)),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.scanQrParking)),
       body: Stack(
         children: [
           MobileScanner(
@@ -187,18 +275,16 @@ class _QRPageState extends State<QRPage> {
           ),
 
           Positioned(
-  bottom: 80,
-  left: 0,
-  right: 0,
-  child: Center(
-    child: Text(
-      AppLocalizations.of(context)!.scanInstruction,
-      style: const TextStyle(
-        color: Colors.white,
-      ),
-    ),
-  ),
-),
+            bottom: 80,
+            left: 0,
+            right: 0,
+            child: Center(
+              child: Text(
+                AppLocalizations.of(context)!.scanInstruction,
+                style: const TextStyle(color: Colors.white),
+              ),
+            ),
+          ),
         ],
       ),
     );

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../widgets/license_plate_input.dart';
 import '../../services/vehicle_service.dart';
 import '../../models/vehicle_model.dart';
+import '../../l10n/app_localizations.dart'; 
 
 class RegistrasiKendaraanPage extends StatefulWidget {
   const RegistrasiKendaraanPage({super.key});
@@ -47,13 +48,13 @@ class _RegistrasiKendaraanPageState extends State<RegistrasiKendaraanPage> {
     final plateRegex = RegExp(r'^[A-Z]{1,2}\s\d{1,4}\s[A-Z]{1,3}$');
     if (plate.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Nomor kendaraan wajib diisi')),
+        SnackBar(content: Text(AppLocalizations.of(context)!.vehicleRequired)),
       );
       return;
     }
     if (!plateRegex.hasMatch(plate)) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Format plat tidak valid. Contoh: B 1234 AMN')),
+        SnackBar(content: Text(AppLocalizations.of(context)!.invalidPlateFormat)),
       );
       return;
     }
@@ -89,11 +90,17 @@ class _RegistrasiKendaraanPageState extends State<RegistrasiKendaraanPage> {
       return;
     }
 
-    final action = _editingVehicle == null ? 'ditambahkan' : 'diubah';
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Kendaraan berhasil $action')),
-    );
-    _clearForm();
+    final message = _editingVehicle == null
+    ? AppLocalizations.of(context)!.vehicleAdded
+    : AppLocalizations.of(context)!.vehicleUpdated;
+
+ScaffoldMessenger.of(context).showSnackBar(
+  SnackBar(
+    content: Text(message),
+  ),
+);
+
+_clearForm();
   }
 
   void _editVehicle(Vehicle vehicle) {
@@ -110,13 +117,13 @@ class _RegistrasiKendaraanPageState extends State<RegistrasiKendaraanPage> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Hapus Kendaraan'),
-        content: Text('Yakin hapus ${vehicle.licensePlate}?'),
+        title: Text(AppLocalizations.of(context)!.deleteVehicle),
+       content: Text(AppLocalizations.of(context)!.deleteVehicleConfirm(vehicle.licensePlate),),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Batal')),
+          TextButton(onPressed: () => Navigator.pop(ctx), child: Text(AppLocalizations.of(context)!.cancel,)),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('Hapus', style: TextStyle(color: Colors.red)),
+            child: Text(AppLocalizations.of(context)!.delete, style: TextStyle(color: Colors.red)),
           ),
         ],
       ),
@@ -133,7 +140,7 @@ class _RegistrasiKendaraanPageState extends State<RegistrasiKendaraanPage> {
     }
 
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Kendaraan berhasil dihapus')),
+      SnackBar(content: Text(AppLocalizations.of(context)!.vehicleDeleted)),
     );
   }
 
@@ -154,7 +161,7 @@ class _RegistrasiKendaraanPageState extends State<RegistrasiKendaraanPage> {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
       appBar: AppBar(
-        title: const Text('Registrasi Kendaraan'),
+        title: Text(AppLocalizations.of(context)!.vehicleRegistration),
         backgroundColor: const Color(0xFF800000),
         foregroundColor: Colors.white,
       ),
@@ -184,7 +191,7 @@ class _RegistrasiKendaraanPageState extends State<RegistrasiKendaraanPage> {
                   child: Column(
                     children: [
                       Text(
-                        _editingVehicle == null ? 'Tambah Kendaraan Baru' : 'Edit Kendaraan',
+                        _editingVehicle == null? AppLocalizations.of(context)!.addNewVehicle: AppLocalizations.of(context)!.editVehicle,
                         style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -193,14 +200,14 @@ class _RegistrasiKendaraanPageState extends State<RegistrasiKendaraanPage> {
                       ),
                       const SizedBox(height: 24),
                       DropdownButtonFormField<String>(
-                        value: _vehicleType,
+                        initialValue: _vehicleType,
                         decoration: _inputDecoration(
-                          label: 'Jenis Kendaraan',
+                          label: AppLocalizations.of(context)!.vehicleType,
                           icon: Icons.directions_car_outlined,
                         ),
-                        items: const [
-                          DropdownMenuItem(value: 'mobil', child: Text('Mobil')),
-                          DropdownMenuItem(value: 'motor', child: Text('Motor')),
+                        items: [
+                          DropdownMenuItem(value: 'mobil', child: Text(AppLocalizations.of(context)!.car)),
+                          DropdownMenuItem(value: 'motor', child: Text(AppLocalizations.of(context)!.motorcycle)),
                         ],
                         onChanged: (value) {
                           if (value != null) setState(() => _vehicleType = value);
@@ -215,12 +222,12 @@ class _RegistrasiKendaraanPageState extends State<RegistrasiKendaraanPage> {
                       TextFormField(
                         controller: _merkController,
                         decoration: _inputDecoration(
-                          label: 'Merk Kendaraan',
+                          label: AppLocalizations.of(context)!.vehicleBrand,
                           icon: Icons.branding_watermark_outlined,
                         ),
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {
-                            return 'Merk kendaraan wajib diisi';
+                            return AppLocalizations.of(context)!.vehicleBrandRequired;
                           }
                           return null;
                         },
@@ -229,12 +236,12 @@ class _RegistrasiKendaraanPageState extends State<RegistrasiKendaraanPage> {
                       TextFormField(
                         controller: _modelController,
                         decoration: _inputDecoration(
-                          label: 'Model Kendaraan',
+                          label: AppLocalizations.of(context)!.vehicleModel,
                           icon: Icons.car_rental_outlined,
                         ),
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {
-                            return 'Model kendaraan wajib diisi';
+                            return AppLocalizations.of(context)!.vehicleModelRequired;
                           }
                           return null;
                         },
@@ -255,7 +262,7 @@ class _RegistrasiKendaraanPageState extends State<RegistrasiKendaraanPage> {
                                   padding: const EdgeInsets.symmetric(vertical: 16),
                                 ),
                                 onPressed: _isLoading ? null : _clearForm,
-                                child: const Text('Batal', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+                                child: Text(AppLocalizations.of(context)!.cancel, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
                               ),
                             ),
                           if (_editingVehicle != null) const SizedBox(width: 12),
@@ -273,8 +280,8 @@ class _RegistrasiKendaraanPageState extends State<RegistrasiKendaraanPage> {
                               onPressed: _isLoading ? null : _addOrUpdateVehicle,
                               child: Text(
                                 _isLoading
-                                    ? 'Menyimpan...'
-                                    : (_editingVehicle == null ? 'Tambah Kendaraan' : 'Perbarui'),
+                                    ? AppLocalizations.of(context)!.saving
+                                    : (_editingVehicle == null ? AppLocalizations.of(context)!.addVehicle : AppLocalizations.of(context)!.update),
                                 style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
                               ),
                             ),
@@ -287,8 +294,8 @@ class _RegistrasiKendaraanPageState extends State<RegistrasiKendaraanPage> {
               ),
               const SizedBox(height: 24),
               // List kendaraan
-              const Text(
-                'Kendaraan Terdaftar',
+              Text(
+                AppLocalizations.of(context)!.registeredVehicles,
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 16),
@@ -312,8 +319,8 @@ class _RegistrasiKendaraanPageState extends State<RegistrasiKendaraanPage> {
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: const Center(
-                        child: Text('Belum ada kendaraan terdaftar'),
+                      child: Center(
+                        child: Text(AppLocalizations.of(context)!.noRegisteredVehicle),
                       ),
                     );
                   }
@@ -379,13 +386,13 @@ class _RegistrasiKendaraanPageState extends State<RegistrasiKendaraanPage> {
               TextButton.icon(
                 onPressed: () => _editVehicle(vehicle),
                 icon: const Icon(Icons.edit),
-                label: const Text('Edit'),
+                label: Text(AppLocalizations.of(context)!.edit),
                 style: TextButton.styleFrom(foregroundColor: Colors.blue),
               ),
               TextButton.icon(
                 onPressed: () => _deleteVehicle(vehicle),
                 icon: const Icon(Icons.delete),
-                label: const Text('Hapus'),
+                label: Text(AppLocalizations.of(context)!.delete),
                 style: TextButton.styleFrom(foregroundColor: Colors.red),
               ),
             ],

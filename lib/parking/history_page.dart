@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import '../services/parking_history_service.dart';
-import '../parking/find_my_ride.dart';
 import '../../l10n/app_localizations.dart';
 
 String formatTimestamp(Timestamp? timestamp) {
@@ -22,7 +21,7 @@ class HistoryPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.parkingHistory,),
+        title: Text(AppLocalizations.of(context)!.parkingHistory),
         backgroundColor: const Color(0xFF800000),
         foregroundColor: Colors.white,
         elevation: 0,
@@ -35,43 +34,6 @@ class HistoryPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              AppLocalizations.of(context)!.yourParkingActivity,
-              style: TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.w900,
-                color: Colors.black,
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton.icon(
-                icon: const Icon(Icons.directions_car),
-                label: Text(AppLocalizations.of(context)!.findMyRide,),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const FindMyRidePage(),
-                    ),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF800000),
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 18),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 30),
-
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
                 stream: ParkingHistoryService().getHistory(),
@@ -82,7 +44,8 @@ class HistoryPage extends StatelessWidget {
 
                   if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
                     return Center(
-                      child: Text(AppLocalizations.of(context)!.noParkingHistory,
+                      child: Text(
+                        AppLocalizations.of(context)!.noParkingHistory,
                       ),
                     );
                   }
@@ -90,9 +53,30 @@ class HistoryPage extends StatelessWidget {
                   final docs = snapshot.data!.docs;
 
                   return ListView.builder(
-                    itemCount: docs.length,
+                    itemCount: docs.length + 1,
                     itemBuilder: (context, index) {
-                      final data = docs[index].data() as Map<String, dynamic>;
+                      // Judul
+                      if (index == 0) {
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 30),
+                          child: Text(
+                            AppLocalizations.of(context)!.yourParkingActivity,
+                            style: const TextStyle(
+                              fontSize: 32,
+                              fontWeight: FontWeight.w900,
+                              color: Colors.black,
+                            ),
+                          ),
+                        );
+                      }
+
+                      final data =
+                          docs[index - 1].data() as Map<String, dynamic>;
+
+                      final licensePlate = data['licensePlate']?.toString();
+                      final vehicleBrand = data['vehicleBrand']?.toString();
+                      final vehicleModel = data['vehicleModel']?.toString();
+                      final vehicleType = data['vehicleType']?.toString();
 
                       return _buildHistoryCard(
                         context: context,
@@ -100,6 +84,10 @@ class HistoryPage extends StatelessWidget {
                         checkIn: data['checkInTime'],
                         checkOut: data['checkOutTime'],
                         status: data['status'],
+                        licensePlate: licensePlate,
+                        vehicleBrand: vehicleBrand,
+                        vehicleModel: vehicleModel,
+                        vehicleType: vehicleType,
                       );
                     },
                   );
@@ -118,6 +106,10 @@ class HistoryPage extends StatelessWidget {
     required Timestamp? checkIn,
     required Timestamp? checkOut,
     required String status,
+    String? licensePlate,
+    String? vehicleBrand,
+    String? vehicleModel,
+    String? vehicleType,
   }) {
     Color bgColor;
     Color textColor;
@@ -136,14 +128,12 @@ class HistoryPage extends StatelessWidget {
     String displayStatus;
 
     if (status == "Park") {
-      displayStatus =
-        AppLocalizations.of(context)!.parking;
-      } else if (status == "Done") {
-      displayStatus =
-        AppLocalizations.of(context)!.out;
-      } else {
+      displayStatus = AppLocalizations.of(context)!.parking;
+    } else if (status == "Done") {
+      displayStatus = AppLocalizations.of(context)!.out;
+    } else {
       displayStatus = status;
-    } 
+    }
 
     return InkWell(
       onTap: () {
@@ -160,8 +150,8 @@ class HistoryPage extends StatelessWidget {
                 padding: const EdgeInsets.all(24),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    // Icon
                     Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
@@ -187,7 +177,39 @@ class HistoryPage extends StatelessWidget {
 
                     const SizedBox(height: 24),
 
-                    _buildDetailRow(Icons.location_on, AppLocalizations.of(context)!.location, location),
+                    _buildDetailRow(
+                      Icons.location_on,
+                      AppLocalizations.of(context)!.location,
+                      location,
+                    ),
+
+                    if (licensePlate != null) ...[
+                      const SizedBox(height: 12),
+                      _buildDetailRow(
+                        Icons.confirmation_number,
+                        'Plat',
+                        licensePlate,
+                      ),
+                    ],
+
+                    if ((vehicleBrand != null && vehicleBrand.isNotEmpty) ||
+                        (vehicleModel != null && vehicleModel.isNotEmpty)) ...[
+                      const SizedBox(height: 12),
+                      _buildDetailRow(
+                        Icons.directions_car,
+                        'Kendaraan',
+                        '${vehicleBrand ?? '-'} ${vehicleModel ?? ''}',
+                      ),
+                    ],
+
+                    if (vehicleType != null) ...[
+                      const SizedBox(height: 12),
+                      _buildDetailRow(
+                        Icons.category,
+                        AppLocalizations.of(context)!.vehicleType,
+                        vehicleType,
+                      ),
+                    ],
 
                     const SizedBox(height: 12),
 
@@ -243,7 +265,7 @@ class HistoryPage extends StatelessWidget {
                         onPressed: () {
                           Navigator.pop(context);
                         },
-                        child: Text(AppLocalizations.of(context)!.close,),
+                        child: Text(AppLocalizations.of(context)!.close),
                       ),
                     ),
                   ],

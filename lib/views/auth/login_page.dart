@@ -3,6 +3,8 @@ import 'package:park_in_campus/services/auth_service.dart';
 import '../main_nav/main_page.dart';
 import 'register_page.dart';
 import '../../l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
+import '../../providers/language_provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -62,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Reset Password'),
+          title: Text(AppLocalizations.of(context)!.resetPassword,),
 
           content: TextField(
             controller: resetEmailController,
@@ -359,6 +361,45 @@ class _LoginPageState extends State<LoginPage> {
                                   ),
                                 ),
                               ],
+                            ),
+                            const SizedBox(height: 10),
+
+                            Center(
+                              child: Consumer<LanguageProvider>(
+                                builder: (context, provider, child) {
+                                  return Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const Icon(
+                                        Icons.language,
+                                        color: Color(0xFF800000),
+                                        size: 20,
+                                      ),
+                                      const SizedBox(width: 8),
+
+                                      DropdownButton<String>(
+                                        value: provider.locale.languageCode,
+                                        underline: const SizedBox(),
+                                        items: const [
+                                          DropdownMenuItem(
+                                            value: 'id',
+                                            child: Text('Bahasa Indonesia'),
+                                          ),
+                                          DropdownMenuItem(
+                                            value: 'en',
+                                            child: Text('English'),
+                                          ),
+                                        ],
+                                        onChanged: (value) {
+                                          if (value != null) {
+                                            provider.changeLanguage(value);
+                                          }
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                },
+                              ),
                             ),
                           ],
                         ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import '../../l10n/app_localizations.dart';
 
 class FindMyRidePage extends StatefulWidget {
   const FindMyRidePage({super.key});
@@ -26,7 +27,7 @@ class _FindMyRidePageState extends State<FindMyRidePage> {
       backgroundColor: Colors.white,
 
       appBar: AppBar(
-        title: const Text("Find My Ride"),
+        title: Text(AppLocalizations.of(context)!.findMyRide,),
         backgroundColor: const Color(0xFF800000),
         foregroundColor: Colors.white,
       ),
@@ -38,8 +39,8 @@ class _FindMyRidePageState extends State<FindMyRidePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
 
           children: [
-            const Text(
-              "Vehicle Found",
+            Text(
+              AppLocalizations.of(context)!.vehicleFound,
               style: TextStyle(
                 fontSize: 32,
                 fontWeight: FontWeight.w900,
@@ -93,8 +94,8 @@ class _FindMyRidePageState extends State<FindMyRidePage> {
                           BorderRadius.circular(8),
                     ),
 
-                    child: const Text(
-                      "Currently Parked",
+                    child: Text(
+                      AppLocalizations.of(context)!.currentlyParked,
                       style: TextStyle(
                         color: Colors.blue,
                         fontWeight:
@@ -107,19 +108,19 @@ class _FindMyRidePageState extends State<FindMyRidePage> {
 
                   _infoTile(
                     Icons.location_on,
-                    "Location",
+                    AppLocalizations.of(context)!.location,
                     "TULT Parking Area",
                   ),
 
                   _infoTile(
                     Icons.local_parking,
-                    "Slot",
+                    AppLocalizations.of(context)!.slot,
                     "A-27",
                   ),
 
                   _infoTile(
                     Icons.access_time,
-                    "Parked Since",
+                    AppLocalizations.of(context)!.parkedSince,
                     "14:00 WIB",
                   ),
                 ],
@@ -128,8 +129,8 @@ class _FindMyRidePageState extends State<FindMyRidePage> {
 
             const SizedBox(height: 40),
 
-            const Text(
-              "Parking Map",
+            Text(
+              AppLocalizations.of(context)!.parkingMap,
               style: TextStyle(
                 fontSize: 26,
                 fontWeight: FontWeight.bold,
@@ -195,8 +196,8 @@ class _FindMyRidePageState extends State<FindMyRidePage> {
 
                 label: Text(
                   showNavigation
-                      ? "Navigation Active"
-                      : "Navigate To Slot",
+                      ? AppLocalizations.of(context)!.navigationActive
+                      : AppLocalizations.of(context)!.navigateToSlot,
                 ),
 
                 onPressed: () {
@@ -228,8 +229,8 @@ class _FindMyRidePageState extends State<FindMyRidePage> {
                     CrossAxisAlignment.start,
 
                 children: [
-                  const Text(
-                    "Navigation Route",
+                  Text(
+                    AppLocalizations.of(context)!.navigationRoute,
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight:
@@ -324,10 +325,10 @@ class _FindMyRidePageState extends State<FindMyRidePage> {
                       ),
                     ),
 
-                    child: const Column(
+                    child: Column(
                       children: [
                         Text(
-                          "Directions",
+                          AppLocalizations.of(context)!.directions,
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight:
@@ -338,19 +339,19 @@ class _FindMyRidePageState extends State<FindMyRidePage> {
                         SizedBox(height: 15),
 
                         Text(
-                          "1. Walk straight for 20 meters",
+                          AppLocalizations.of(context)!.direction1,
                         ),
 
                         SizedBox(height: 8),
 
                         Text(
-                          "2. Turn right to Row A",
+                           AppLocalizations.of(context)!.direction2,
                         ),
 
                         SizedBox(height: 8),
 
                         Text(
-                          "3. Your vehicle is located at Slot A-27",
+                           AppLocalizations.of(context)!.direction3,
                         ),
                       ],
                     ),

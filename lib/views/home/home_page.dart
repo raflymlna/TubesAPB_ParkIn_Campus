@@ -1,6 +1,12 @@
+import '../../l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'registrasi_kendaraan_section.dart';
 import '../../parking/parking_status_page.dart'; // <-- Tambahan Import Halaman Status Parkir
+import '../../parking/history_page.dart'; // <-- Tambahin ini buat History
+import 'registrasi_kendaraan_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import '../../parking/find_my_ride.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -17,69 +23,121 @@ class HomePage extends StatelessWidget {
           child: Column(
             children: [
               const SizedBox(height: 60),
-              const Text(
-                "Simplifying your journey",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.w900,
-                  color: Colors.black,
-                ),
-              ),
-              const SizedBox(height: 24),
-              const RegistrasiKendaraanSection(),
-              const SizedBox(height: 40),
+              StreamBuilder<DocumentSnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('users') // Pastiin nama collection-nya 'users'
+                    .doc(FirebaseAuth.instance.currentUser?.uid)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  // Default kalau data belum ada
+                  String displayName = "User";
 
-              // Section 2: Barisan Card (Horizontal Scroll)
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Row(
-                  children: [
-                    _buildWebStyleCard(
-                      "Parking Slot",
-                      "Available Parking Slot",
-                      "https://images.unsplash.com/photo-1506521781263-d8422e82f27a?q=80&w=600",
-                      // <-- Tambahan fungsi navigasi ke ParkingStatusPage
-                      onPrimaryTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ParkingStatusPage(),
-                          ),
-                        );
-                      },
+                  if (snapshot.hasData && snapshot.data!.exists) {
+                    var data = snapshot.data!.data() as Map<String, dynamic>;
+                    displayName =
+                        data['full_name'] ?? "User"; // Ambil field 'full_name'
+                  }
+
+                  return Text(
+                    AppLocalizations.of(context)!.helloUser(displayName),
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.w900,
+                      color: Colors.black,
                     ),
-                    const SizedBox(width: 20),
-                    _buildWebStyleCard(
-                      "Parking History",
-                      "See History",
-                      "https://images.unsplash.com/photo-1648823161626-0e839927401b?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-                      // Biarkan kosong dulu untuk History
-                      onPrimaryTap: () {},
+                  );
+                },
+              ),
+              StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('vehicles')
+                    .where(
+                      'userId',
+                      isEqualTo: FirebaseAuth.instance.currentUser?.uid,
+                    )
+                    .limit(1)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  // Mencegah layar kedip pas lagi loading ngecek database
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const SizedBox(height: 60);
+                  }
+
+                  // JIKA KOSONG (Belum daftar kendaraan): Tampilkan bannernya
+                  if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                    return Column(
+                      children: [
+                        // <-- Nggak pakai const di sini
+                        const SizedBox(height: 24), // SizedBox aman pakai const
+                        RegistrasiKendaraanSection(), // <-- Bener-bener polos tanpa const
+                        const SizedBox(height: 40), // SizedBox aman pakai const
+                      ],
+                    );
+                  }
+
+                  // JIKA SUDAH ADA KENDARAAN: Banner hilang, sisa jarak kosong aja ke menu
+                  return const SizedBox(height: 60);
+                },
+              ),
+              // Section 2: Barisan Card (Horizontal Scroll)
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: GridView.count(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  crossAxisCount: 2, // Tetap 2 kolom buat HP
+                  crossAxisSpacing: 16,
+                  mainAxisSpacing: 16,
+                  mainAxisExtent:
+                      260, // <-- KUNCI: Kasih tinggi tetap yang cukup buat teks biar gak overflow
+                  children: [
+                    _buildMenuCard(
+                      icon: Icons.local_parking_rounded,
+                     title: AppLocalizations.of(context)!.parking,
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ParkingStatusPage(),
+                        ),
+                      ),
+                      isMobile: isMobile,
+                    ),
+                    _buildMenuCard(
+                      icon: Icons.history_rounded,
+                      title: AppLocalizations.of(context)!.history,
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => HistoryPage()),
+                      ),
+                      isMobile: isMobile,
+                    ),
+                    _buildMenuCard(
+                      icon: Icons.directions_car_filled_rounded,
+                      title: AppLocalizations.of(context)!.vehicle,
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => RegistrasiKendaraanPage(),
+                        ),
+                      ),
+                      isMobile: isMobile,
+                    ),
+                    _buildMenuCard(
+                      icon: Icons.location_on_rounded,
+                      title:
+                          AppLocalizations.of(context)!.findMyRide,
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => FindMyRidePage(),
+                        ),
+                      ),
+                      isMobile: isMobile,
                     ),
                   ],
                 ),
               ),
-
-              const SizedBox(height: 100),
-
-              Container(
-                width: double.infinity,
-                color: const Color(0xFF800000).withOpacity(0.05),
-                padding: EdgeInsets.symmetric(
-                  vertical: 80,
-                  horizontal: isMobile ? 30 : 100,
-                ),
-                child: isMobile
-                    ? Column(children: _buildHeroContent(isMobile))
-                    : Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: _buildHeroContent(isMobile),
-                      ),
-              ),
-
-              const SizedBox(height: 100),
 
               Padding(
                 padding: EdgeInsets.symmetric(
@@ -87,10 +145,10 @@ class HomePage extends StatelessWidget {
                   vertical: 60,
                 ),
                 child: isMobile
-                    ? Column(children: _buildMapContent(isMobile))
+                    ? Column(children: _buildMapContent(context, isMobile))
                     : Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: _buildMapContent(isMobile),
+                        children: _buildMapContent(context, isMobile),
                       ),
               ),
 
@@ -106,7 +164,7 @@ class HomePage extends StatelessWidget {
                 child: Column(
                   children: [
                     Text(
-                      "ParkInCampus is simple to use",
+                      AppLocalizations.of(context)!.parkInCampusSimple,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: isMobile ? 32 : 40,
@@ -116,11 +174,11 @@ class HomePage extends StatelessWidget {
                     ),
                     const SizedBox(height: 60),
                     isMobile
-                        ? Column(children: _buildFeatureItems(isMobile))
+                        ? Column(children: _buildFeatureItems(context, isMobile))
                         : Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: _buildFeatureItems(isMobile),
+                            children: _buildFeatureItems(context, isMobile),
                           ),
                   ],
                 ),
@@ -134,13 +192,13 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  List<Widget> _buildFeatureItems(bool isMobile) {
+  List<Widget> _buildFeatureItems(BuildContext context, bool isMobile) {
     return [
       _buildFeatureCard(
         icon: Icons.check_circle_rounded,
-        title: "Easy to register",
+        title: AppLocalizations.of(context)!.easyToRegister,
         description:
-            "Unlock added benefits when you register on our app. Registering is simple and straightforward. It takes less than 30 seconds.",
+            AppLocalizations.of(context)!.easyToRegisterDesc,
         isMobile: isMobile,
       ),
       if (!isMobile) const SizedBox(width: 40),
@@ -148,9 +206,9 @@ class HomePage extends StatelessWidget {
 
       _buildFeatureCard(
         icon: Icons.ads_click_rounded,
-        title: "Easy to use",
+        title: AppLocalizations.of(context)!.easyToUse,
         description:
-            "Get access to parking spots instantly with our seamless interface. No complicated forms or long queues—just open the app, find your spot, and start your journey within seconds.",
+            AppLocalizations.of(context)!.easyToUseDesc,
         isMobile: isMobile,
       ),
       if (!isMobile) const SizedBox(width: 40),
@@ -158,9 +216,9 @@ class HomePage extends StatelessWidget {
 
       _buildFeatureCard(
         icon: Icons.local_parking_rounded,
-        title: "Smart Slot Finder",
+        title: AppLocalizations.of(context)!.smartSlotFinder,
         description:
-            "No more circling around the block. View live parking occupancy through our app and navigate directly to an empty slot, ensuring a stress-free parking experience.",
+            AppLocalizations.of(context)!.smartSlotFinderDesc,
         isMobile: isMobile,
       ),
     ];
@@ -213,7 +271,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  List<Widget> _buildMapContent(bool isMobile) {
+  List<Widget> _buildMapContent(BuildContext context, bool isMobile) {
     return [
       Container(
         width: 450,
@@ -247,26 +305,26 @@ class HomePage extends StatelessWidget {
           children: [
             RichText(
               textAlign: isMobile ? TextAlign.center : TextAlign.start,
-              text: const TextSpan(
-                style: TextStyle(
+              text: TextSpan(
+                style: const TextStyle(
                   fontSize: 42,
                   fontWeight: FontWeight.w900,
                   color: Colors.black,
                   height: 1.1,
                 ),
                 children: [
-                  TextSpan(text: "We're "),
+                  TextSpan(text:  AppLocalizations.of(context)!.weAre,),
                   TextSpan(
-                    text: "everywhere",
-                    style: TextStyle(color: Color(0xFF800000)),
+                    text: AppLocalizations.of(context)!.everywhere,
+                    style: const TextStyle(color: Color(0xFF800000)),
                   ),
-                  TextSpan(text: " you need us to be"),
+                  TextSpan(text:  AppLocalizations.of(context)!.youNeedUs),
                 ],
               ),
             ),
             const SizedBox(height: 24),
             Text(
-              "Work. Gym. Class. Hang Out. ParkInCampus is with you on your journey each day. We are available in over 1,000 Parking Slot on Telkom University. You can choose us to simplify their journey.",
+              AppLocalizations.of(context)!.journeyDescription,
               textAlign: isMobile ? TextAlign.center : TextAlign.start,
               style: const TextStyle(
                 fontSize: 16,
@@ -274,7 +332,7 @@ class HomePage extends StatelessWidget {
                 height: 1.6,
               ),
             ),
-            const SizedBox(height: 32),
+            /*const SizedBox(height: 32),
             ElevatedButton(
               onPressed: () {},
               style: ElevatedButton.styleFrom(
@@ -288,146 +346,76 @@ class HomePage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
-              child: const Text(
-                "Our locations",
+              child: Text(
+                AppLocalizations.of(context)!.ourLocations,
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
-            ),
+            ),*/
           ],
-        ),
-      ),
-    ];
-  }
-
-  List<Widget> _buildHeroContent(bool isMobile) {
-    return [
-      SizedBox(
-        width: isMobile ? double.infinity : 500,
-        child: Column(
-          crossAxisAlignment: isMobile
-              ? CrossAxisAlignment.center
-              : CrossAxisAlignment.start,
-          children: [
-            RichText(
-              textAlign: isMobile ? TextAlign.center : TextAlign.start,
-              text: const TextSpan(
-                style: TextStyle(
-                  fontSize: 42,
-                  fontWeight: FontWeight.w900,
-                  color: Colors.black,
-                  height: 1.1,
-                ),
-                children: [
-                  TextSpan(text: "We're here to "),
-                  TextSpan(
-                    text: "simplify your journey",
-                    style: TextStyle(color: Color(0xFF800000)),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 24),
-            Text(
-              "We know you have better things to worry about than paying for your parking. That's why our smart, intuitive technology delivers a world-class digital payment experience for millions of drivers.",
-              textAlign: isMobile ? TextAlign.center : TextAlign.start,
-              style: const TextStyle(
-                fontSize: 16,
-                color: Colors.black54,
-                height: 1.6,
-              ),
-            ),
-            const SizedBox(height: 32),
-            ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF800000),
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 32,
-                  vertical: 20,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              child: const Text(
-                "How it works",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ),
-          ],
-        ),
-      ),
-      isMobile ? const SizedBox(height: 60) : const SizedBox(width: 80),
-      Container(
-        width: 320,
-        height: 600,
-        decoration: BoxDecoration(
-          color: const Color(0xFF800000).withOpacity(0.05),
-          borderRadius: BorderRadius.circular(40),
-          border: Border.all(color: Colors.black.withOpacity(0.05), width: 1),
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(40),
-          child: Image.network(
-            "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?q=80&w=600",
-            fit: BoxFit.cover,
-          ),
         ),
       ),
     ];
   }
 
   // <-- Tambahan parameter onPrimaryTap di sini
-  Widget _buildWebStyleCard(
-    String title,
-    String buttonLabel,
-    String imageUrl, {
-    VoidCallback? onPrimaryTap,
+  Widget _buildMenuCard({
+    required IconData icon,
+    required String title,
+    required VoidCallback onTap,
+    required bool isMobile,
   }) {
+    // Disesuaikan biar kalau di web, kotaknya cukup besar dan pas di tengah
+    final cardWidth = isMobile ? double.infinity : 400.0;
+
     return Container(
-      width: 300,
-      height: 450,
+      width: cardWidth,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        image: DecorationImage(
-          image: NetworkImage(imageUrl),
-          fit: BoxFit.cover,
-          colorFilter: ColorFilter.mode(
-            const Color(0xFF800000).withOpacity(0.3),
-            BlendMode.darken,
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.08),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
           ),
-        ),
+        ],
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Text(
-              title,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 20),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap:
+              onTap, // <-- Biar kotaknya ada efek klik (ripple) dan bisa navigasi
+          borderRadius: BorderRadius.circular(16),
+          child: Padding(
+            padding: const EdgeInsets.all(30),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: isMobile
+                  ? CrossAxisAlignment.center
+                  : CrossAxisAlignment.start,
               children: [
-                _customButton(
-                  buttonLabel,
-                  const Color(0xFF800000),
-                  Colors.white,
-                  onTap: onPrimaryTap, // <-- Pasang fungsinya ke tombol utama
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Color(0xFF800000), // Warna background merah solid
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(icon, size: 40, color: Colors.white),
                 ),
-                const SizedBox(height: 10),
-                _customButton("Learn more", Colors.white, Colors.black),
+                const SizedBox(height: 24),
+                Text(
+                  title,
+                  textAlign: isMobile ? TextAlign.center : TextAlign.start,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+                const SizedBox(height: 16),
               ],
             ),
-          ],
+          ),
         ),
       ),
     );
