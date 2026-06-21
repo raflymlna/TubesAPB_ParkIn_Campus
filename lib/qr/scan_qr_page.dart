@@ -58,7 +58,7 @@ class _QRPageState extends State<QRPage> {
           final currentParkLocation = activeParking.docs.first
               .data()['location'];
 
-          throw Exception(AppLocalizations.of(context)!.alreadyParkedAt(currentParkLocation),);
+          throw Exception("Anda sedang parkir di $currentParkLocation");
         }
         await validateParkingAccess(building);
 
@@ -101,7 +101,7 @@ class _QRPageState extends State<QRPage> {
             .get();
 
         if (slotKosong.docs.isEmpty) {
-          throw Exception(AppLocalizations.of(context)!.parkingFull(userVehicleType,building,),);
+          throw Exception("Parkiran $userVehicleType di $building penuh!");
         }
 
         final slotDoc = slotKosong.docs.first;
@@ -133,7 +133,7 @@ class _QRPageState extends State<QRPage> {
             .get();
 
         if (activeParking.docs.isEmpty) {
-          throw Exception("not_parked");
+          throw Exception("Anda belum parkir!");
         }
 
         final historyData = activeParking.docs.first.data();
@@ -141,7 +141,7 @@ class _QRPageState extends State<QRPage> {
         final parkedLocation = historyData['location'];
 
         if (parkedLocation != building) {
-          throw Exception("wrong_location:$parkedLocation");
+          throw Exception("Anda parkir di $parkedLocation, bukan di sini!");
         }
 
         if (parkedSlotName != null) {
@@ -155,7 +155,7 @@ class _QRPageState extends State<QRPage> {
 
         showResult(AppLocalizations.of(context)!.parkOutSuccess(building));
       } else {
-        showResult(AppLocalizations.of(context)!.unknownQr,);
+        showResult("QR tidak dikenali");
       }
     } catch (e) {
       String error = e.toString();
@@ -174,7 +174,7 @@ class _QRPageState extends State<QRPage> {
       } else if (error.contains("motorcycleOnlyArea")) {
         showResult(AppLocalizations.of(context)!.motorcycleOnlyArea,);
       } else {
-         showResult(error.replaceFirst("Exception: ", ""),);
+         showResult(error);
       }
     }
   }

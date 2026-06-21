@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../core/constants/colors.dart';
 import '../models/parking_model.dart';
 import '../services/parking_service.dart';
-import '../l10n/app_localizations.dart';
 
 class ParkingStatusPage extends StatelessWidget {
   final ParkingService _parkingService = ParkingService();
@@ -13,8 +12,8 @@ class ParkingStatusPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-           AppLocalizations.of(context)!.parkingAvailability,
+        title: const Text(
+          'Ketersediaan Parkir',
           style: TextStyle(color: AppColors.textWhite),
         ),
         backgroundColor: AppColors.primary,
@@ -24,7 +23,7 @@ class ParkingStatusPage extends StatelessWidget {
         stream: _parkingService.streamParkingSlots(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return Center(child: Text(AppLocalizations.of(context)!.errorMessage(snapshot.error.toString())));
+            return Center(child: Text('Terjadi kesalahan: ${snapshot.error}'));
           }
 
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -34,9 +33,9 @@ class ParkingStatusPage extends StatelessWidget {
           final slots = snapshot.data ?? [];
 
           if (slots.isEmpty) {
-            return Center(
+            return const Center(
               child: Text(
-                AppLocalizations.of(context)!.noParkingData,
+                'Belum ada data slot parkir di Firebase.',
                 style: TextStyle(fontSize: 16),
               ),
             );
@@ -47,16 +46,8 @@ class ParkingStatusPage extends StatelessWidget {
           Map<String, List<ParkingSlot>> groupedSlots = {};
 
           for (var slot in slots) {
-
-            final vehicleType =slot.vehicleType.toLowerCase();
-
-             final translatedType = 
-              vehicleType.contains('motor')
-                ? AppLocalizations.of(context)!.motorcycle
-                : AppLocalizations.of(context)!.car;
-
             // Bikin judul grupnya, misal: "Gedung TULT - Motor"
-            String groupKey = '${slot.locationName} - $translatedType';
+            String groupKey = '${slot.locationName} - ${slot.vehicleType}';
 
             if (!groupedSlots.containsKey(groupKey)) {
               groupedSlots[groupKey] = [];
@@ -74,9 +65,6 @@ class ParkingStatusPage extends StatelessWidget {
             itemBuilder: (context, index) {
               String key = sortedKeys[index];
               List<ParkingSlot> groupData = groupedSlots[key]!;
-
-              final vehicleType =
-                groupData.first.vehicleType.toLowerCase();
 
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -98,7 +86,7 @@ class ParkingStatusPage extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(
-                           vehicleType.contains('motor')
+                          key.toLowerCase().contains('motor')
                               ? Icons.motorcycle
                               : Icons.directions_car,
                           color: AppColors.primary,
