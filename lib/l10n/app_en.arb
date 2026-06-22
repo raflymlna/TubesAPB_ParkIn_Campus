@@ -27,7 +27,6 @@
   "wrongLocation": "You are parked at {location}",
   "parkingHistory": "Parking History",
   "yourParkingActivity": "Your Parking Activity",
-  "findMyRide": "Find My Ride",
   "noParkingHistory": "No parking history yet",
 
   "parkingDetail": "Parking Detail",
@@ -35,25 +34,28 @@
   "parkIn": "Park In",
   "parkOut": "Park Out",
   "close": "Close",
-
   "parking": "Parking",
   "out": "Out",
-
   "now": "Now",
-  "email": "Email",
+
   "password": "Password",
   "confirmPassword": "Confirm Password",
   "fullName": "Full Name",
-  "phoneNumber": "Phone Number",
   "forgotPassword": "Forgot Password?",
   "dontHaveAccount": "Don't have an account?",
-  "alreadyHaveAccount": "Already have an account?",
+  "alreadyHaveAccount": "Already have an account? Login",
   "createAccount": "Create Account",
   "signIn": "Sign In",
   "signUp": "Sign Up",
-  "logout": "Logout",
-  "emailRequired": "Email is required",
-  "passwordRequired": "Password is required",
+  "emailRequired": "Email cannot be empty",
+  "emailInvalid": "Invalid email format",
+  "passwordRequired": "Password cannot be empty",
+  "passwordMinLength": "Password must be at least 6 characters",
+  "fullNameRequired": "Full name is required",
+  "phoneRequired": "Phone number is required",
+  "phoneMinLength": "Phone number must be at least 10 digits",
+  "confirmPasswordRequired": "Confirm password is required",
+  "passwordNotMatch": "Passwords do not match",
   "loginSuccess": "Login successful",
   "registerSuccess": "Registration successful",
 
@@ -62,37 +64,11 @@
   "pleaseLogin": "Please login to continue.",
   "login": "Login",
   "register": "Register",
-
-  "email": "Email",
-  "password": "Password",
-  "confirmPassword": "Confirm Password",
-  "fullName": "Full Name",
-  "phoneNumber": "Phone Number",
-
-  "forgotPassword": "Forgot Password?",
-  "dontHaveAccount": "Don't have an account?",
-  "alreadyHaveAccount": "Already have an account? Login",
-
   "resetPassword": "Reset Password",
   "enterEmail": "Enter email",
   "cancel": "Cancel",
   "send": "Send",
-
-  "emailRequired": "Email cannot be empty",
-  "emailInvalid": "Invalid email format",
-
-  "passwordRequired": "Password cannot be empty",
-  "passwordMinLength": "Password must be at least 6 characters",
-
-  "fullNameRequired": "Full name is required",
-  "phoneRequired": "Phone number is required",
-  "phoneMinLength": "Phone number must be at least 10 digits",
-
-  "confirmPasswordRequired": "Confirm password is required",
-  "passwordNotMatch": "Passwords do not match",
-
   "resetPasswordSent": "Password reset link has been sent to your email",
-
   "createNewAccount": "Create New Account",
   "registration": "Registration",
   "registrationSubtitle": "Please make sure all information is correct.",
@@ -103,70 +79,64 @@
   "emailAlreadyUsed": "Email is already registered",
   "weakPassword": "Password is too weak",
   "unknownError": "An unexpected error occurred",
+
   "registerVehicleFirst": "Please register a vehicle first",
   "carOnlyArea": "This parking area is for cars only",
   "motorcycleOnlyArea": "This parking area is for motorcycles only",
   "vehicleRegistration": "Vehicle Registration",
-"addNewVehicle": "Add New Vehicle",
-"editVehicle": "Edit Vehicle",
-
-"vehicleType": "Vehicle Type",
-"car": "Car",
-"motorcycle": "Motorcycle",
-
-"vehicleBrand": "Vehicle Brand",
-"vehicleModel": "Vehicle Model",
-
-"vehicleBrandRequired": "Vehicle brand is required",
-"vehicleModelRequired": "Vehicle model is required",
-
-"vehicleRequired": "Vehicle plate number is required",
-"invalidPlateFormat": "Invalid plate format. Example: B 1234 AMN",
-
-"cancel": "Cancel",
-"saving": "Saving...",
-"addVehicle": "Add Vehicle",
-"update": "Update",
-
-"registeredVehicles": "Registered Vehicles",
-"noRegisteredVehicle": "No registered vehicles",
-
-"vehicleAdded": "Vehicle added successfully",
-"vehicleUpdated": "Vehicle updated successfully",
-"vehicleDeleted": "Vehicle deleted successfully",
-
-"deleteVehicle": "Delete Vehicle",
-"deleteVehicleConfirm": "Are you sure you want to delete {plate}?",
-
-"delete": "Delete",
-"edit": "Edit",
- "viewProfile": "View Profile",
-  "manageVehicle": "Manage Vehicle",
+  "addNewVehicle": "Add New Vehicle",
+  "editVehicle": "Edit Vehicle",
+  "car": "Car",
+  "motorcycle": "Motorcycle",
+  "vehicleBrand": "Vehicle Brand",
+  "vehicleModel": "Vehicle Model",
+  "vehicleBrandRequired": "Vehicle brand is required",
+  "vehicleModelRequired": "Vehicle model is required",
+  "vehicleRequired": "Vehicle plate number is required",
+  "invalidPlateFormat": "Invalid plate format. Example: B 1234 AMN",
+  "saving": "Saving...",
+  "addVehicle": "Add Vehicle",
+  "update": "Update",
+  "registeredVehicles": "Registered Vehicles",
+  "noRegisteredVehicle": "No registered vehicles",
+  "vehicleAdded": "Vehicle added successfully",
+  "vehicleUpdated": "Vehicle updated successfully",
+  "vehicleDeleted": "Vehicle deleted successfully",
+  "deleteVehicle": "Delete Vehicle",
+  "deleteVehicleConfirm": "Are you sure you want to delete {plate}?",
+  "delete": "Delete",
   "edit": "Edit",
+  "vehicle": "Vehicle",
+  "vehicles": "Vehicles",
+  "noVehicle": "No vehicle registered",
+  "vehicleFound": "Vehicle Found",
+  "selectVehicle": "Select Vehicle",
+
+  "viewProfile": "View Profile",
+  "manageVehicle": "Manage Vehicle",
   "save": "Save",
   "profileDetail": "Profile Detail",
-  "profileDetail": "Profile Detail",
-"viewProfile": "View Profile",
-"editProfile": "Edit Profile",
-"save": "Save",
-"nameRequired": "Name is required",
-"profileUpdated": "Profile updated successfully",
-"save": "Save",
-"vehicles": "Vehicles",
-"vehicles": "Vehicles",
-"noVehicle": "No vehicle registered",
-"language": "Language",
-"easyToRegister": "Easy to register",
-"easyToUse": "Easy to use",
-"smartSlotFinder": "Smart Slot Finder",
-"findMyRide": "Find My Ride",
-"errorMessage": "Error: {error}",
-"parkingDatabaseGenerated": "Parking database regenerated successfully!",
-"addVehicle": "Add Vehicle",
-"addNewVehicle": "Add New Vehicle",
-  "vehicleFound": "Vehicle Found",
+  "editProfile": "Edit Profile",
+  "nameRequired": "Name is required",
+  "profileUpdated": "Profile updated successfully",
+  "language": "Language",
+
+  "easyToRegister": "Easy to register",
+  "easyToUse": "Easy to use",
+  "smartSlotFinder": "Smart Slot Finder",
+  "parkInCampusSimple": "ParkInCampus is simple to use",
+  "easyToRegisterDesc": "Unlock added benefits when you register on our app. Registering is simple and straightforward. It takes less than 30 seconds.",
+  "easyToUseDesc": "Get access to parking spots instantly with our seamless interface. No complicated forms or long queues-just open the app, find your spot, and start your journey within seconds.",
+  "smartSlotFinderDesc": "No more circling around the block. View live parking occupancy through our app and navigate directly to an empty slot, ensuring a stress-free parking experience.",
+  "weAre": "We're ",
+  "everywhere": "everywhere",
+  "youNeedUs": " you need us to be",
+  "journeyDescription": "Work. Gym. Class. Hang Out. ParkInCampus is with you on your journey each day. We are available in over 1,000 parking slots at Telkom University. You can choose us to simplify your journey.",
+  "ourLocations": "Our Locations",
+
+  "errorMessage": "Error: {error}",
+  "parkingDatabaseGenerated": "Parking database regenerated successfully.",
   "currentlyParked": "Currently Parked",
-  "location": "Location",
   "slot": "Slot",
   "parkedSince": "Parked Since",
   "parkingMap": "Parking Map",
@@ -178,47 +148,15 @@
   "direction2": "2. Turn right to Row A",
   "direction3": "3. Your vehicle is located at Slot A-27",
   "parkingAvailability": "Parking Availability",
-"noParkingData": "No parking slot data available.",
-"car": "Car",
-"motorcycle": "Motorcycle",
-"parkingDatabaseGenerated": "Parking database regenerated successfully.",
-"vehicle": "Vehicle",
-"findMyRide": "Find My Ride",
-
-  "parkInCampusSimple": "ParkInCampus is simple to use",
-
-  "easyToRegister": "Easy to register",
-
-  "easyToRegisterDesc": "Unlock added benefits when you register on our app. Registering is simple and straightforward. It takes less than 30 seconds.",
-
-  "easyToUse": "Easy to use",
-
-  "easyToUseDesc": "Get access to parking spots instantly with our seamless interface. No complicated forms or long queues—just open the app, find your spot, and start your journey within seconds.",
-
-  "smartSlotFinder": "Smart Slot Finder",
-
-  "smartSlotFinderDesc": "No more circling around the block. View live parking occupancy through our app and navigate directly to an empty slot, ensuring a stress-free parking experience.",
-
-  "weAre": "We're ",
-
-  "everywhere": "everywhere",
-
-  "youNeedUs": " you need us to be",
+  "noParkingData": "No parking slot data available.",
   "home": "Home",
-"qr": "QR",
-"profile": "Profile",
-"selectVehicle": "Select Vehicle",
-  "cancel": "Cancel",
-
-  "journeyDescription": "Work. Gym. Class. Hang Out. ParkInCampus is with you on your journey each day. We are available in over 1,000 parking slots at Telkom University. You can choose us to simplify your journey.",
+  "qr": "QR",
   "alreadyParkedAt": "You are currently parked at {location}",
   "parkingFull": "{vehicleType} parking at {building} is full!",
-
-  "ourLocations": "Our Locations",
   "helloUser": "Hello, {name}",
-"@helloUser": {
-  "placeholders": {
-    "name": {}
+  "@helloUser": {
+    "placeholders": {
+      "name": {}
+    }
   }
-}
 }
