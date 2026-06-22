@@ -763,6 +763,216 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Language'**
   String get language;
+
+  /// No description provided for @easyToRegister.
+  ///
+  /// In en, this message translates to:
+  /// **'Easy to register'**
+  String get easyToRegister;
+
+  /// No description provided for @easyToUse.
+  ///
+  /// In en, this message translates to:
+  /// **'Easy to use'**
+  String get easyToUse;
+
+  /// No description provided for @smartSlotFinder.
+  ///
+  /// In en, this message translates to:
+  /// **'Smart Slot Finder'**
+  String get smartSlotFinder;
+
+  /// No description provided for @errorMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Error: {error}'**
+  String errorMessage(Object error);
+
+  /// No description provided for @parkingDatabaseGenerated.
+  ///
+  /// In en, this message translates to:
+  /// **'Parking database regenerated successfully.'**
+  String get parkingDatabaseGenerated;
+
+  /// No description provided for @vehicleFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Vehicle Found'**
+  String get vehicleFound;
+
+  /// No description provided for @currentlyParked.
+  ///
+  /// In en, this message translates to:
+  /// **'Currently Parked'**
+  String get currentlyParked;
+
+  /// No description provided for @slot.
+  ///
+  /// In en, this message translates to:
+  /// **'Slot'**
+  String get slot;
+
+  /// No description provided for @parkedSince.
+  ///
+  /// In en, this message translates to:
+  /// **'Parked Since'**
+  String get parkedSince;
+
+  /// No description provided for @parkingMap.
+  ///
+  /// In en, this message translates to:
+  /// **'Parking Map'**
+  String get parkingMap;
+
+  /// No description provided for @navigationActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Navigation Active'**
+  String get navigationActive;
+
+  /// No description provided for @navigateToSlot.
+  ///
+  /// In en, this message translates to:
+  /// **'Navigate To Slot'**
+  String get navigateToSlot;
+
+  /// No description provided for @navigationRoute.
+  ///
+  /// In en, this message translates to:
+  /// **'Navigation Route'**
+  String get navigationRoute;
+
+  /// No description provided for @directions.
+  ///
+  /// In en, this message translates to:
+  /// **'Directions'**
+  String get directions;
+
+  /// No description provided for @direction1.
+  ///
+  /// In en, this message translates to:
+  /// **'1. Walk straight for 20 meters'**
+  String get direction1;
+
+  /// No description provided for @direction2.
+  ///
+  /// In en, this message translates to:
+  /// **'2. Turn right to Row A'**
+  String get direction2;
+
+  /// No description provided for @direction3.
+  ///
+  /// In en, this message translates to:
+  /// **'3. Your vehicle is located at Slot A-27'**
+  String get direction3;
+
+  /// No description provided for @parkingAvailability.
+  ///
+  /// In en, this message translates to:
+  /// **'Parking Availability'**
+  String get parkingAvailability;
+
+  /// No description provided for @noParkingData.
+  ///
+  /// In en, this message translates to:
+  /// **'No parking slot data available.'**
+  String get noParkingData;
+
+  /// No description provided for @vehicle.
+  ///
+  /// In en, this message translates to:
+  /// **'Vehicle'**
+  String get vehicle;
+
+  /// No description provided for @parkInCampusSimple.
+  ///
+  /// In en, this message translates to:
+  /// **'ParkInCampus is simple to use'**
+  String get parkInCampusSimple;
+
+  /// No description provided for @easyToRegisterDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock added benefits when you register on our app. Registering is simple and straightforward. It takes less than 30 seconds.'**
+  String get easyToRegisterDesc;
+
+  /// No description provided for @easyToUseDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Get access to parking spots instantly with our seamless interface. No complicated forms or long queues—just open the app, find your spot, and start your journey within seconds.'**
+  String get easyToUseDesc;
+
+  /// No description provided for @smartSlotFinderDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'No more circling around the block. View live parking occupancy through our app and navigate directly to an empty slot, ensuring a stress-free parking experience.'**
+  String get smartSlotFinderDesc;
+
+  /// No description provided for @weAre.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'re '**
+  String get weAre;
+
+  /// No description provided for @everywhere.
+  ///
+  /// In en, this message translates to:
+  /// **'everywhere'**
+  String get everywhere;
+
+  /// No description provided for @youNeedUs.
+  ///
+  /// In en, this message translates to:
+  /// **' you need us to be'**
+  String get youNeedUs;
+
+  /// No description provided for @home.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get home;
+
+  /// No description provided for @qr.
+  ///
+  /// In en, this message translates to:
+  /// **'QR'**
+  String get qr;
+
+  /// No description provided for @selectVehicle.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Vehicle'**
+  String get selectVehicle;
+
+  /// No description provided for @journeyDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Work. Gym. Class. Hang Out. ParkInCampus is with you on your journey each day. We are available in over 1,000 parking slots at Telkom University. You can choose us to simplify your journey.'**
+  String get journeyDescription;
+
+  /// No description provided for @alreadyParkedAt.
+  ///
+  /// In en, this message translates to:
+  /// **'You are currently parked at {location}'**
+  String alreadyParkedAt(Object location);
+
+  /// No description provided for @parkingFull.
+  ///
+  /// In en, this message translates to:
+  /// **'{vehicleType} parking at {building} is full!'**
+  String parkingFull(Object building, Object vehicleType);
+
+  /// No description provided for @ourLocations.
+  ///
+  /// In en, this message translates to:
+  /// **'Our Locations'**
+  String get ourLocations;
+
+  /// No description provided for @helloUser.
+  ///
+  /// In en, this message translates to:
+  /// **'Hello, {name}'**
+  String helloUser(Object name);
 }
 
 class _AppLocalizationsDelegate
