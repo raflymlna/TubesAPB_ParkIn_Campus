@@ -439,6 +439,15 @@ class AppLocalizationsId extends AppLocalizations {
   String get youNeedUs => ' yang Anda butuhkan';
 
   @override
+  String get home => 'Beranda';
+
+  @override
+  String get qr => 'QR';
+
+  @override
+  String get selectVehicle => 'Select Vehicle';
+
+  @override
   String get journeyDescription =>
       'Kerja. Gym. Kuliah. ParkInCampus menemani perjalanan Anda setiap hari. Tersedia lebih dari 1.000 slot parkir di Telkom University untuk membantu perjalanan Anda menjadi lebih mudah.';
 

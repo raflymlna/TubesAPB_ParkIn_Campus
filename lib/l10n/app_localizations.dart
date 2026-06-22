@@ -926,6 +926,24 @@ abstract class AppLocalizations {
   /// **' you need us to be'**
   String get youNeedUs;
 
+  /// No description provided for @home.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get home;
+
+  /// No description provided for @qr.
+  ///
+  /// In en, this message translates to:
+  /// **'QR'**
+  String get qr;
+
+  /// No description provided for @selectVehicle.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Vehicle'**
+  String get selectVehicle;
+
   /// No description provided for @journeyDescription.
   ///
   /// In en, this message translates to:

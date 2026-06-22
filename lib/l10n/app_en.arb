@@ -203,6 +203,11 @@
   "everywhere": "everywhere",
 
   "youNeedUs": " you need us to be",
+  "home": "Home",
+"qr": "QR",
+"profile": "Profile",
+"selectVehicle": "Select Vehicle",
+  "cancel": "Cancel",
 
   "journeyDescription": "Work. Gym. Class. Hang Out. ParkInCampus is with you on your journey each day. We are available in over 1,000 parking slots at Telkom University. You can choose us to simplify your journey.",
   "alreadyParkedAt": "You are currently parked at {location}",

@@ -5,9 +5,15 @@ import '../../l10n/app_localizations.dart';
 import '../services/vehicle_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../views/main_nav/main_page.dart';
 
 class QRPage extends StatefulWidget {
-  const QRPage({super.key});
+   final int previousTab;
+
+   const QRPage({
+    super.key,
+    required this.previousTab,
+  });
 
   @override
   State<QRPage> createState() => _QRPageState();
@@ -15,10 +21,159 @@ class QRPage extends StatefulWidget {
 
 class _QRPageState extends State<QRPage> {
   bool isScanned = false;
+  bool vehicleReady = false;
+
+  final MobileScannerController cameraController =
+      MobileScannerController();
+
+  QueryDocumentSnapshot? selectedVehicle;
+  bool vehicleSelected = false;
 
   final ParkingHistoryService historyService = ParkingHistoryService();
   final VehicleService vehicleService = VehicleService();
 
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final active = await hasActiveParking();
+
+      print("Active parking = $active");
+
+      if (!active) {
+        await chooseVehicleOnOpen();
+      } else {
+        setState(() {
+          vehicleReady = true;
+        });
+      }
+    });
+  }
+
+   @override
+  void dispose() {
+    cameraController.dispose();
+    super.dispose();
+  }
+
+  Future<QueryDocumentSnapshot?> selectVehicleDialog() async {
+    final vehicles = await FirebaseFirestore.instance
+        .collection('vehicles')
+        .where(
+          'userId',
+          isEqualTo: FirebaseAuth.instance.currentUser?.uid,
+        )
+        .get();
+
+    print("Jumlah kendaraan = ${vehicles.docs.length}");
+
+    for (var doc in vehicles.docs) {
+      print(doc.data());
+    }
+
+    if (vehicles.docs.isEmpty) return null;
+
+     if (vehicles.docs.length == 1) {
+      return vehicles.docs.first;
+    }
+
+   final result = await showDialog<QueryDocumentSnapshot>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(AppLocalizations.of(context)!.selectVehicle,),
+          content: SizedBox(
+            width: double.maxFinite,
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: vehicles.docs.length,
+              itemBuilder: (context, index) {
+                final vehicle = vehicles.docs[index].data();
+
+                return ListTile(
+                  leading: Icon(
+                    vehicle['type']
+                            .toString()
+                            .toLowerCase()
+                            .contains('motor')
+                        ? Icons.motorcycle
+                        : Icons.directions_car,
+                  ),
+                  title: Text(
+                    vehicle['licensePlate'] ?? '-',
+                  ),
+                  subtitle: Text(
+                    '${vehicle['brand']} ${vehicle['model']}',
+                  ),
+                  onTap: () {
+                    Navigator.pop(
+                      context,
+                      vehicles.docs[index],
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+
+           actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => MainPage(
+                      initialIndex: MainPage.lastTab,
+                    ),
+                  ),
+                );
+              },
+              child: Text(AppLocalizations.of(context)!.cancel,),
+            ),
+          ],
+        );
+      },
+    );
+    return result;
+  }
+
+  Future<void> chooseVehicleOnOpen() async {
+    final vehicle = await selectVehicleDialog();
+
+    if (!mounted) return;
+
+   if (vehicle == null) {
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (_) => const MainPage(),
+      ),
+    );
+    return;
+  }
+
+    setState(() {
+      selectedVehicle = vehicle;
+      vehicleSelected = true;
+      vehicleReady = true;
+    });
+  }
+
+  Future<bool> hasActiveParking() async {
+    final activeParking = await FirebaseFirestore.instance
+        .collection('parking_history')
+        .where(
+          'userId',
+          isEqualTo: FirebaseAuth.instance.currentUser?.uid,
+        )
+        .where('status', isEqualTo: 'Park')
+        .limit(1)
+        .get();
+
+    return activeParking.docs.isNotEmpty;
+  }
+  
   Future<void> handleScan(String? code) async {
     if (code == null || isScanned) return;
 
@@ -60,7 +215,6 @@ class _QRPageState extends State<QRPage> {
 
           throw Exception(AppLocalizations.of(context)!.alreadyParkedAt(currentParkLocation),);
         }
-        await validateParkingAccess(building);
 
         String userVehicleType = 'Motor';
         String? vehicleId;
@@ -69,18 +223,15 @@ class _QRPageState extends State<QRPage> {
         String? vehicleModel;
         String? vehicleRawType;
 
-        final vehicleQuery = await firestore
-            .collection('vehicles')
-            .where('userId', isEqualTo: auth.currentUser?.uid)
-            .limit(1)
-            .get();
-
-        if (vehicleQuery.docs.isNotEmpty) {
-          final vDoc = vehicleQuery.docs.first;
-          final vData = vDoc.data();
+        if (selectedVehicle == null) {
+          throw Exception("registerVehicleFirst");
+        }
+          final vDoc = selectedVehicle!;
+          final vData = vDoc.data() as Map<String, dynamic>;
           vehicleId = vDoc.id;
           vehicleRawType = (vData['type'] ?? 'Motor').toString();
           vehicleLicensePlate = vData['licensePlate']?.toString();
+          await validateParkingAccess(building,vehicleRawType,);
           vehicleBrand = vData['brand']?.toString();
           vehicleModel = vData['model']?.toString();
 
@@ -89,7 +240,7 @@ class _QRPageState extends State<QRPage> {
           } else if (vehicleRawType.toLowerCase().contains('mobil')) {
             userVehicleType = 'Mobil';
           }
-        }
+
 
         final slotKosong = await firestore
             .collection('parking_slots')
@@ -123,7 +274,6 @@ class _QRPageState extends State<QRPage> {
       }
       // PARK OUT
       else if (action == "park out") {
-        await validateParkingAccess(building);
 
         final activeParking = await firestore
             .collection('parking_history')
@@ -179,30 +329,34 @@ class _QRPageState extends State<QRPage> {
     }
   }
 
-  Future<void> validateParkingAccess(String location) async {
-    final vehicleTypes = await vehicleService.getUserVehicleTypes();
+    Future<void> validateParkingAccess(
+    String location,
+    String vehicleType,
+  ) async {
+    const motorAreas = [
+      'Gate 4',
+      'GKU',
+      'TULT',
+      'FIT-FIK',
+      'FKS-FEB'
+    ];
 
-    if (vehicleTypes.isEmpty) {
-      throw Exception("registerVehicleFirst");
-    }
+    const carAreas = [
+      'Gate 2',
+      'Gate 3'
+    ];
 
-    const motorAreas = ['Gate 4', 'GKU', 'TULT', 'FIT-FIK', 'FKS-FEB'];
+    final isMotor =
+        vehicleType.toLowerCase().contains('motor');
 
-    const carAreas = ['Gate 2', 'Gate 3'];
+    final isCar =
+        vehicleType.toLowerCase().contains('mobil');
 
-    final hasMotor = vehicleTypes.contains('motor');
-
-    final hasCar = vehicleTypes.contains('mobil');
-
-    if (hasMotor && hasCar) {
-      return;
-    }
-
-    if (hasMotor && carAreas.contains(location)) {
+    if (isMotor && carAreas.contains(location)) {
       throw Exception("carOnlyArea");
     }
 
-    if (hasCar && motorAreas.contains(location)) {
+    if (isCar && motorAreas.contains(location)) {
       throw Exception("motorcycleOnlyArea");
     }
   }
@@ -230,9 +384,12 @@ class _QRPageState extends State<QRPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(AppLocalizations.of(context)!.scanQrParking)),
-      body: Stack(
+      body: !vehicleReady ? const Center(child: CircularProgressIndicator(),
+      )
+      : Stack(
         children: [
           MobileScanner(
+            controller: cameraController,
             onDetect: (barcodeCapture) {
               final List<Barcode> barcodes = barcodeCapture.barcodes;
 

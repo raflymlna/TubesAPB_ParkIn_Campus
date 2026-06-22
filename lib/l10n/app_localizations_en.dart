@@ -439,6 +439,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get youNeedUs => ' you need us to be';
 
   @override
+  String get home => 'Home';
+
+  @override
+  String get qr => 'QR';
+
+  @override
+  String get selectVehicle => 'Select Vehicle';
+
+  @override
   String get journeyDescription =>
       'Work. Gym. Class. Hang Out. ParkInCampus is with you on your journey each day. We are available in over 1,000 parking slots at Telkom University. You can choose us to simplify your journey.';
 
