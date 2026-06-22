@@ -27,8 +27,6 @@
   "wrongLocation": "Anda sedang parkir di {location}",
   "parkingHistory": "Riwayat Parkir",
   "yourParkingActivity": "Aktivitas Parkir Anda",
-  "findMyRide": "Cari Kendaraan",
-
   "noParkingHistory": "Belum ada riwayat parkir",
 
   "parkingDetail": "Detail Parkir",
@@ -36,25 +34,28 @@
   "parkIn": "Jam Masuk",
   "parkOut": "Jam Keluar",
   "close": "Tutup",
-
   "parking": "Parkir",
   "out": "Keluar",
-
   "now": "Sekarang",
-  "email": "Email",
+
   "password": "Kata Sandi",
   "confirmPassword": "Konfirmasi Kata Sandi",
   "fullName": "Nama Lengkap",
-  "phoneNumber": "Nomor Telepon",
-  "forgotPassword": "Lupa Kata Sandi?",
+  "forgotPassword": "Lupa Password?",
   "dontHaveAccount": "Belum punya akun?",
-  "alreadyHaveAccount": "Sudah punya akun?",
+  "alreadyHaveAccount": "Sudah punya akun? Login",
   "createAccount": "Buat Akun",
   "signIn": "Masuk",
   "signUp": "Daftar",
-  "logout": "Keluar",
-  "emailRequired": "Email wajib diisi",
-  "passwordRequired": "Kata sandi wajib diisi",
+  "emailRequired": "Email tidak boleh kosong",
+  "emailInvalid": "Format email tidak valid",
+  "passwordRequired": "Password tidak boleh kosong",
+  "passwordMinLength": "Password minimal 6 karakter",
+  "fullNameRequired": "Nama lengkap wajib diisi",
+  "phoneRequired": "Nomor telepon wajib diisi",
+  "phoneMinLength": "Nomor telepon minimal 10 karakter",
+  "confirmPasswordRequired": "Konfirmasi password wajib diisi",
+  "passwordNotMatch": "Password tidak sama",
   "loginSuccess": "Berhasil masuk",
   "registerSuccess": "Registrasi berhasil",
 
@@ -63,37 +64,11 @@
   "pleaseLogin": "Silakan login untuk melanjutkan.",
   "login": "Masuk",
   "register": "Daftar",
-
-  "email": "Email",
-  "password": "Kata Sandi",
-  "confirmPassword": "Konfirmasi Kata Sandi",
-  "fullName": "Nama Lengkap",
-  "phoneNumber": "Nomor Telepon",
-
-  "forgotPassword": "Lupa Password?",
-  "dontHaveAccount": "Belum punya akun?",
-  "alreadyHaveAccount": "Sudah punya akun? Login",
-
   "resetPassword": "Reset Password",
   "enterEmail": "Masukkan email",
   "cancel": "Batal",
   "send": "Kirim",
-
-  "emailRequired": "Email tidak boleh kosong",
-  "emailInvalid": "Format email tidak valid",
-
-  "passwordRequired": "Password tidak boleh kosong",
-  "passwordMinLength": "Password minimal 6 karakter",
-
-  "fullNameRequired": "Nama lengkap wajib diisi",
-  "phoneRequired": "Nomor telepon wajib diisi",
-  "phoneMinLength": "Nomor telepon minimal 10 karakter",
-
-  "confirmPasswordRequired": "Konfirmasi password wajib diisi",
-  "passwordNotMatch": "Password tidak sama",
-
   "resetPasswordSent": "Link reset password telah dikirim ke email",
-
   "createNewAccount": "Buat Akun Baru",
   "registration": "Registrasi",
   "registrationSubtitle": "Pastikan data yang dimasukkan benar.",
@@ -104,70 +79,64 @@
   "emailAlreadyUsed": "Email sudah terdaftar",
   "weakPassword": "Password terlalu lemah",
   "unknownError": "Terjadi kesalahan",
+
   "registerVehicleFirst": "Silakan registrasikan kendaraan terlebih dahulu",
   "carOnlyArea": "Area parkir ini hanya untuk mobil",
   "motorcycleOnlyArea": "Area parkir ini hanya untuk motor",
   "vehicleRegistration": "Registrasi Kendaraan",
-"addNewVehicle": "Tambah Kendaraan Baru",
-"editVehicle": "Edit Kendaraan",
-
-"vehicleType": "Jenis Kendaraan",
-"car": "Mobil",
-"motorcycle": "Motor",
-
-"vehicleBrand": "Merk Kendaraan",
-"vehicleModel": "Model Kendaraan",
-
-"vehicleBrandRequired": "Merk kendaraan wajib diisi",
-"vehicleModelRequired": "Model kendaraan wajib diisi",
-
-"vehicleRequired": "Nomor kendaraan wajib diisi",
-"invalidPlateFormat": "Format plat tidak valid. Contoh: B 1234 AMN",
-
-"cancel": "Batal",
-"saving": "Menyimpan...",
-"addVehicle": "Tambah Kendaraan",
-"update": "Perbarui",
-
-"registeredVehicles": "Kendaraan Terdaftar",
-"noRegisteredVehicle": "Belum ada kendaraan terdaftar",
-
-"vehicleAdded": "Kendaraan berhasil ditambahkan",
-"vehicleUpdated": "Kendaraan berhasil diubah",
-"vehicleDeleted": "Kendaraan berhasil dihapus",
-
-"deleteVehicle": "Hapus Kendaraan",
-"deleteVehicleConfirm": "Yakin hapus {plate}?",
-
-"delete": "Hapus",
-"edit": "Edit",
-"viewProfile": "Lihat Profil",
-  "manageVehicle": "Kelola Kendaraan",
+  "addNewVehicle": "Tambah Kendaraan Baru",
+  "editVehicle": "Edit Kendaraan",
+  "car": "Mobil",
+  "motorcycle": "Motor",
+  "vehicleBrand": "Merk Kendaraan",
+  "vehicleModel": "Model Kendaraan",
+  "vehicleBrandRequired": "Merk kendaraan wajib diisi",
+  "vehicleModelRequired": "Model kendaraan wajib diisi",
+  "vehicleRequired": "Nomor kendaraan wajib diisi",
+  "invalidPlateFormat": "Format plat tidak valid. Contoh: B 1234 AMN",
+  "saving": "Menyimpan...",
+  "addVehicle": "Tambah Kendaraan",
+  "update": "Perbarui",
+  "registeredVehicles": "Kendaraan Terdaftar",
+  "noRegisteredVehicle": "Belum ada kendaraan terdaftar",
+  "vehicleAdded": "Kendaraan berhasil ditambahkan",
+  "vehicleUpdated": "Kendaraan berhasil diubah",
+  "vehicleDeleted": "Kendaraan berhasil dihapus",
+  "deleteVehicle": "Hapus Kendaraan",
+  "deleteVehicleConfirm": "Yakin hapus {plate}?",
+  "delete": "Hapus",
   "edit": "Ubah",
+  "vehicle": "Kendaraan",
+  "vehicles": "Kendaraan",
+  "noVehicle": "Belum ada kendaraan terdaftar",
+  "vehicleFound": "Kendaraan Ditemukan",
+  "selectVehicle": "Pilih Kendaraan",
+
+  "viewProfile": "Lihat Profil",
+  "manageVehicle": "Kelola Kendaraan",
   "save": "Simpan",
   "profileDetail": "Detail Profil",
-  "profileDetail": "Detail Profil",
-"viewProfile": "Lihat Profil",
-"editProfile": "Ubah Profil",
-"save": "Simpan",
-"nameRequired": "Nama wajib diisi",
-"profileUpdated": "Profil berhasil diperbarui",
-"save": "Simpan",
-"vehicles": "Kendaraan",
-"vehicles": "Kendaraan",
-"noVehicle": "Belum ada kendaraan terdaftar",
-"language": "Bahasa",
-"easyToRegister": "Mudah untuk mendaftar",
-"easyToUse": "Mudah digunakan",
-"smartSlotFinder": "Pencari Slot Parkir Pintar",
-"findMyRide": "Cari Kendaraan",
-"errorMessage": "Terjadi kesalahan: {error}",
-"parkingDatabaseGenerated": "Database parkir berhasil dibuat ulang!",
-"addVehicle": "Tambah Kendaraan",
-"addNewVehicle": "Tambah Kendaraan Baru",
-"vehicleFound": "Kendaraan Ditemukan",
+  "editProfile": "Ubah Profil",
+  "nameRequired": "Nama wajib diisi",
+  "profileUpdated": "Profil berhasil diperbarui",
+  "language": "Bahasa",
+
+  "easyToRegister": "Mudah untuk Mendaftar",
+  "easyToUse": "Mudah Digunakan",
+  "smartSlotFinder": "Pencari Slot Pintar",
+  "parkInCampusSimple": "ParkInCampus Mudah Digunakan",
+  "easyToRegisterDesc": "Dapatkan berbagai manfaat tambahan setelah mendaftar di aplikasi kami. Proses pendaftaran sederhana dan hanya membutuhkan waktu kurang dari 30 detik.",
+  "easyToUseDesc": "Dapatkan akses ke tempat parkir secara instan melalui antarmuka yang mudah digunakan. Tidak perlu proses yang rumit, cukup buka aplikasi, temukan slot parkir, dan mulai perjalanan Anda.",
+  "smartSlotFinderDesc": "Tidak perlu lagi berkeliling mencari tempat parkir. Lihat ketersediaan parkir secara langsung melalui aplikasi dan navigasikan kendaraan Anda ke slot kosong terdekat.",
+  "weAre": "Kami hadir ",
+  "everywhere": "di mana saja",
+  "youNeedUs": " yang Anda butuhkan",
+  "journeyDescription": "Kerja. Gym. Kuliah. ParkInCampus menemani perjalanan Anda setiap hari. Tersedia lebih dari 1.000 slot parkir di Telkom University untuk membantu perjalanan Anda menjadi lebih mudah.",
+  "ourLocations": "Lokasi Kami",
+
+  "errorMessage": "Terjadi kesalahan: {error}",
+  "parkingDatabaseGenerated": "Database parkir berhasil dibuat ulang.",
   "currentlyParked": "Sedang Terparkir",
-  "location": "Lokasi",
   "slot": "Slot",
   "parkedSince": "Parkir Sejak",
   "parkingMap": "Peta Parkir",
@@ -179,49 +148,15 @@
   "direction2": "2. Belok kanan ke Baris A",
   "direction3": "3. Kendaraan Anda berada di Slot A-27",
   "parkingAvailability": "Ketersediaan Parkir",
-"noParkingData": "Belum ada data slot parkir di Firebase.",
-"car": "Mobil",
-"motorcycle": "Motor",
-"parkingDatabaseGenerated": "Database parkir berhasil dibuat ulang.",
-"vehicle": "Kendaraan",
-"findMyRide": "Cari Kendaraan",
-
-  "parkInCampusSimple": "ParkInCampus Mudah Digunakan",
-
-  "easyToRegister": "Mudah untuk Mendaftar",
-
-  "easyToRegisterDesc": "Dapatkan berbagai manfaat tambahan setelah mendaftar di aplikasi kami. Proses pendaftaran sederhana dan hanya membutuhkan waktu kurang dari 30 detik.",
-
-  "easyToUse": "Mudah Digunakan",
-
-  "easyToUseDesc": "Dapatkan akses ke tempat parkir secara instan melalui antarmuka yang mudah digunakan. Tidak perlu proses yang rumit, cukup buka aplikasi, temukan slot parkir, dan mulai perjalanan Anda.",
-
-  "smartSlotFinder": "Pencari Slot Pintar",
-
-  "smartSlotFinderDesc": "Tidak perlu lagi berkeliling mencari tempat parkir. Lihat ketersediaan parkir secara langsung melalui aplikasi dan navigasikan kendaraan Anda ke slot kosong terdekat.",
-
-  "weAre": "Kami hadir ",
-
-  "everywhere": "di mana saja",
-
-  "youNeedUs": " yang Anda butuhkan",
+  "noParkingData": "Belum ada data slot parkir di Firebase.",
   "home": "Beranda",
-"qr": "QR",
-"profile": "Profil",
-"selectVehicle": "Pilih Kendaraan",
-  "cancel": "Batal",
-
-  "journeyDescription": "Kerja. Gym. Kuliah. ParkInCampus menemani perjalanan Anda setiap hari. Tersedia lebih dari 1.000 slot parkir di Telkom University untuk membantu perjalanan Anda menjadi lebih mudah.",
-
+  "qr": "QR",
   "alreadyParkedAt": "Anda sedang parkir di {location}",
   "parkingFull": "Parkiran {vehicleType} di {building} penuh!",
-
-  "ourLocations": "Lokasi Kami",
   "helloUser": "Halo, {name}",
-"@helloUser": {
-  "placeholders": {
-    "name": {}
+  "@helloUser": {
+    "placeholders": {
+      "name": {}
+    }
   }
-}
-
 }
