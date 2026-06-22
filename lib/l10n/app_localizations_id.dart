@@ -445,7 +445,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get qr => 'QR';
 
   @override
-  String get selectVehicle => 'Select Vehicle';
+  String get selectVehicle => 'Pilih Kendaraan';
 
   @override
   String get journeyDescription =>
