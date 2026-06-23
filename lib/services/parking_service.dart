@@ -4,21 +4,35 @@ import '../models/parking_model.dart';
 class ParkingService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Stream<List<ParkingSlot>> streamParkingSlots() {
-    return _firestore
-        .collection('parking_slots')
-        .orderBy('slotName')
-        .snapshots()
-        .map((snapshot) {
-          return snapshot.docs.map((doc) {
-            return ParkingSlot.fromMap(doc.data(), doc.id);
-          }).toList();
-        });
+  // 1. Fungsi stream diubah biar nerima parameter kategori
+  Stream<List<ParkingSlot>> streamParkingSlots({
+    String category = 'Semua',
+    String location = 'Semua',
+  }) {
+    Query query = _firestore.collection('parking_slots');
+
+    // Filter tipe kendaraan (Motor/Mobil)
+    if (category != 'Semua') {
+      query = query.where('vehicleType', isEqualTo: category);
+    }
+
+    // Filter nama lokasi gedung/gate
+    if (location != 'Semua') {
+      query = query.where('locationName', isEqualTo: location);
+    }
+
+    return query.orderBy('slotName').snapshots().map((snapshot) {
+      return snapshot.docs.map((doc) {
+        return ParkingSlot.fromMap(doc.data() as Map<String, dynamic>, doc.id);
+      }).toList();
+    });
   }
 
   // --- Tambahan Fungsi untuk Seeding Database ---
   Future<void> seedParkingDatabase() async {
     final batch = _firestore.batch();
+
+    // Variabel selectedCategory yang nyasar di sini udah gua hapus ya!
 
     // Setup lokasi, kode slot, kapasitas, dan tipe kendaraan
     final List<Map<String, dynamic>> locations = [
@@ -37,7 +51,6 @@ class ParkingService {
         String slotName = '${loc['prefix']}-$slotNumber';
 
         // Buat referensi dokumen baru
-        // Ubah baris referensinya jadi begini:
         DocumentReference docRef = _firestore
             .collection('parking_slots')
             .doc(slotName);
@@ -47,7 +60,8 @@ class ParkingService {
           'slotName': slotName,
           'isAvailable': true, // Semua slot kosong saat inisialisasi
           'locationName': loc['name'],
-          'vehicleType': loc['type'],
+          'vehicleType':
+              loc['type'], // KUNCI: Ini yang dipake buat nge-filter nanti
         });
       }
     }
