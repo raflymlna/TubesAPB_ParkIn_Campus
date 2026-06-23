@@ -213,7 +213,7 @@ class _QRPageState extends State<QRPage> {
           final currentParkLocation = activeParking.docs.first
               .data()['location'];
 
-          throw Exception("Anda sedang parkir di $currentParkLocation");
+          throw Exception(AppLocalizations.of(context)!.alreadyParkedAt(currentParkLocation),);
         }
 
         String userVehicleType = 'Motor';
@@ -252,7 +252,7 @@ class _QRPageState extends State<QRPage> {
             .get();
 
         if (slotKosong.docs.isEmpty) {
-          throw Exception("Parkiran $userVehicleType di $building penuh!");
+          throw Exception(AppLocalizations.of(context)!.parkingFull(userVehicleType,building,),);
         }
 
         final slotDoc = slotKosong.docs.first;
@@ -270,7 +270,7 @@ class _QRPageState extends State<QRPage> {
           type: vehicleRawType,
         );
 
-        showResult(AppLocalizations.of(context)!.parkInSuccess(building));
+        showSuccessAndGoHistory(AppLocalizations.of(context)!.parkInSuccess(building),);
       }
       // PARK OUT
       else if (action == "park out") {
@@ -283,7 +283,7 @@ class _QRPageState extends State<QRPage> {
             .get();
 
         if (activeParking.docs.isEmpty) {
-          throw Exception("Anda belum parkir!");
+          throw Exception("not_parked");
         }
 
         final historyData = activeParking.docs.first.data();
@@ -291,7 +291,7 @@ class _QRPageState extends State<QRPage> {
         final parkedLocation = historyData['location'];
 
         if (parkedLocation != building) {
-          throw Exception("Anda parkir di $parkedLocation, bukan di sini!");
+          throw Exception("wrong_location:$parkedLocation");
         }
 
         if (parkedSlotName != null) {
@@ -303,9 +303,9 @@ class _QRPageState extends State<QRPage> {
 
         await historyService.parkOut(building);
 
-        showResult(AppLocalizations.of(context)!.parkOutSuccess(building));
+        showSuccessAndGoHistory(AppLocalizations.of(context)!.parkOutSuccess(building));
       } else {
-        showResult("QR tidak dikenali");
+        showResult(AppLocalizations.of(context)!.unknownQr,);
       }
     } catch (e) {
       String error = e.toString();
@@ -324,7 +324,7 @@ class _QRPageState extends State<QRPage> {
       } else if (error.contains("motorcycleOnlyArea")) {
         showResult(AppLocalizations.of(context)!.motorcycleOnlyArea,);
       } else {
-         showResult(error);
+         showResult(error.replaceFirst("Exception: ", ""),);
       }
     }
   }
@@ -359,6 +359,37 @@ class _QRPageState extends State<QRPage> {
     if (isCar && motorAreas.contains(location)) {
       throw Exception("motorcycleOnlyArea");
     }
+  }
+  void showSuccessAndGoHistory(String message) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => AlertDialog(
+        title: Text(
+          AppLocalizations.of(context)!.info,
+        ),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const MainPage(
+                    initialIndex: 2,
+                  ),
+                ),
+              );
+            },
+            child: Text(
+              AppLocalizations.of(context)!.ok,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   void showResult(String message) {
@@ -486,6 +517,47 @@ class ScannerOverlay extends CustomPainter {
       ..color = Colors.black.withOpacity(0.7)
       ..style = PaintingStyle.fill;
 
+    final rect = Rect.fromLTWH(
+      0,
+      0,
+      size.width,
+      size.height,
+    );
+
+    const double boxSize = 250;
+
+    final left = (size.width - boxSize) / 2;
+    final top = (size.height - boxSize) / 2;
+
+    final cutoutRect = Rect.fromLTWH(
+      left,
+      top,
+      boxSize,
+      boxSize,
+    );
+
+    final path = Path()
+      ..addRect(rect)
+      ..addRect(cutoutRect)
+      ..fillType = PathFillType.evenOdd;
+
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(
+    CustomPainter oldDelegate,
+  ) =>
+      false;
+}
+
+    
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.black.withOpacity(0.7)
+      ..style = PaintingStyle.fill;
+
     final rect = Rect.fromLTWH(0, 0, size.width, size.height);
 
     const double boxSize = 250;
@@ -504,4 +576,4 @@ class ScannerOverlay extends CustomPainter {
 
   @override
   bool shouldRepaint(CustomPainter oldDelegate) => false;
-}
+
